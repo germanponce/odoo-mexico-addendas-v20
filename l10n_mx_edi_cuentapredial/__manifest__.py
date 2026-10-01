@@ -2,7 +2,7 @@
 
 {
     'name': 'EDI for Mexico (Cuenta Predial)',
-    'version': '0.3',
+    "version"   : "20.0.1.0",
     "author" : "German Ponce Dominguez",
     'category': 'Accounting/Localizations/EDI',
     'summary': 'Adds the CuentaPredial to CFDI v4.0',

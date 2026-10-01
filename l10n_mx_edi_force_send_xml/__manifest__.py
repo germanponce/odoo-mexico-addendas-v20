@@ -17,7 +17,7 @@
     "support": "german.poncce@outlook.com",
 
     'category': 'Accounting/Localizations/EDI',
-    'version': '18.0.1.0.0',
+    "version"   : "20.0.1.0",
     'depends': [
         'account',
         'l10n_mx_edi',

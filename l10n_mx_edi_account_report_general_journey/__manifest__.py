@@ -57,7 +57,7 @@ Este modulo esta enfocado cuando se maneja multicompany y permite consolidar cue
     "author" : "German Ponce Dominguez",
     "website" : "https://www.fixdoo.mx",
     'category': 'Account',
-    'version': '1.7',
+    "version"   : "20.0.1.0",
     'depends':
         [
             "account",

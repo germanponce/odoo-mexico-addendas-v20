@@ -10,7 +10,7 @@
     'author': "TuOdoo México",
     'website': "https://tuodoomexico.com",
     'category': 'Contabilidad',
-    'version': '18.5',
+    "version"   : "20.0.1.0",
     'depends': ['base','account','l10n_mx_edi'],
     'data': [
         'security/ir.model.access.csv',

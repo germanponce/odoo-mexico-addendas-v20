@@ -18,7 +18,7 @@
 
 {
     "name"      : "Ejercicio Fiscal y Periodos Mensuales", 
-    "version"   : "1.0", 
+    "version"   : "20.0.1.0",
     'summary'   : 'Ejercicio Fiscal y Periodos Mensuales',
     'sequence'  : 20,
     "author"    : "German Ponce Dominguez", 

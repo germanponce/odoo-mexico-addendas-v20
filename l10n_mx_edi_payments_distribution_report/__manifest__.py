@@ -19,7 +19,7 @@
 {
     'name' : 'Reporte - Resumen Distribución Pagos',
     'category': 'Accounting',
-    'version': '1.0',
+    "version"   : "20.0.1.0",
     'author': 'German Ponce Dominguez',
     'website': 'https://poncesoft.blogspot.com',
     'description': """

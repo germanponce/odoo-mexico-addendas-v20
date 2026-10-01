@@ -13,7 +13,7 @@
     "website": "https://poncesoft.blogspot.com",
     "license": "LGPL-3",
     "category": "Installer",
-    "version": "1.8",
+    "version"   : "20.0.1.0",
     "depends": [
         "account",
     ],

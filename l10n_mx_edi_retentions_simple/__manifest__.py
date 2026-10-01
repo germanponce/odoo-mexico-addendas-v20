@@ -6,7 +6,7 @@
     'sequence': 50,
     'summary': 'Retentions CFDI — Complemento de Retenciones e Información de Pagos (SAT)',
     'website': 'https://poncesoft.blogspot.com',
-    'version': '19.0.1.0.0',
+    "version"   : "20.0.1.0",
     'description': """
 Retentions CFDI
 -------------------------------------------------

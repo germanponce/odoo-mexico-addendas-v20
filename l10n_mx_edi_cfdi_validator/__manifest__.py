@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'MX CFDI — Validador Facturas Proveedor',
-    'version': '19.0.1.0.0',
+    "version"   : "20.0.1.0",
     'category': 'Accounting/Localizations/EDI',
     'summary': 'Pestaña CFDI con lectura de XML y validaciones SAT en facturas de proveedor',
     'description': """

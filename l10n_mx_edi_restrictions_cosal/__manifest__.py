@@ -9,7 +9,7 @@
     "support": "german.poncce@outlook.com",
 
     'category': 'Point of Sale',
-    'version': '1.7',
+    "version"   : "20.0.1.0",
     'depends': ['account','l10n_mx_edi', 'account_edi', 'account_financial_risk'],
 
     'data': [

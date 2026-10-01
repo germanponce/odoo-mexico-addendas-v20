@@ -27,7 +27,7 @@ Key features
 Author: ANFEPI - Roberto Requejo Jimenez
 Website: https://www.anfepi.com
 """,
-    "version": "19.0.1.0.53",
+    "version"   : "20.0.1.0",
     "author": "ANFEPI - Roberto Requejo Jimenez",
     "maintainer": "ANFEPI",
     "website": "https://www.anfepi.com",

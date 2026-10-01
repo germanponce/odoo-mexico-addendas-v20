@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Análisis de Auditor (Metadatos SAT)',
-    'version': '19.0.1.8.0',
+    "version"   : "20.0.1.0",
     'category': 'Accounting/Localizations',
     'summary': 'Análisis de Facturación Electrónica - Auditoría SAT vs Odoo',
     'description': """

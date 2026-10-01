@@ -4,7 +4,7 @@
 ###################### german.ponce@outlook.com ###########################
 {
     'name': 'Validacion de la lista del SAT EFOS y EDOS',
-    'version': '1.8',
+    "version"   : "20.0.1.0",
     "author" : "German Ponce Dominguez",
     "category" : "Localización Mexicana",
     'description': """

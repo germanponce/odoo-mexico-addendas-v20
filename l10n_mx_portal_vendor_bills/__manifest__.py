@@ -12,7 +12,7 @@
         - Purchase order
         - Acknowledgment of receipt
     """,
-    "version": "19.0.1.0.0",
+    "version"   : "20.0.1.0",
     "author": "German Ponce Dominguez & Vauxoo",
     "category": "Localization/Mexico",
     "website": "https://poncesoft.blogspot.com",

@@ -3,7 +3,7 @@
 
 {
     "name": "Estructura Jerárquica de cuentas",
-    "version": "1.0",
+    "version"   : "20.0.1.0",
     "depends": [
         'account', 'analytic'
     ],

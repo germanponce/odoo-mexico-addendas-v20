@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Reporte de Facturas Custom Odoo 17",
-    "version": "1.8",
+    "version"   : "20.0.1.0",
     "category": "Report",
     "website": "http://poncesoft.blogspot.com",
     "author": "German Ponce Dominguez (Desarrollador)",

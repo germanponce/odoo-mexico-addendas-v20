@@ -8,7 +8,7 @@
 {
     'name' : 'Factura Global',
     'category': 'Sales',
-    'version': '19.0.1.7',
+    "version"   : "20.0.1.0",
     'author': 'German Ponce Dominguez',
     'website': 'https://poncesoft.blogspot.com',
     'description': """

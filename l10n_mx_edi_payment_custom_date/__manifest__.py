@@ -9,7 +9,7 @@
     'support': 'german.ponce@outlook.com',
 
     'category': 'Accounting/Localizations/EDI',
-    'version': '19.0.1.0.0',
+    "version"   : "20.0.1.0",
     'depends': ['account', 'l10n_mx_edi'],
 
     'data': [

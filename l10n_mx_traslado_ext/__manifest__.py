@@ -6,7 +6,7 @@
 
 {
     'name': 'CFDI Traslado Ext',
-    'version': '19.01',
+    "version"   : "20.0.1.0",
     'description': ''' Cambia al módulo de inventarios el módulo de traslado.
     ''',
     'category': 'Stock',

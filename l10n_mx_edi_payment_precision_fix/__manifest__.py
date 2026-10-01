@@ -9,7 +9,7 @@
     "support": "german.poncce@outlook.com",
 
     'category': 'Timbrado Fiscal',
-    'version': '1.9',
+    "version"   : "20.0.1.0",
     'depends': ['account','l10n_mx_edi', 'account_edi'],
 
     'data': [

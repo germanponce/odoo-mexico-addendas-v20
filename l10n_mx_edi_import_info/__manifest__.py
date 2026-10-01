@@ -2,7 +2,7 @@
 
 {
     "name" : "Pedimentos Aduanales en CFDI",
-    "version" : "1.0",
+    "version"   : "20.0.1.0",
     "author" : "German Ponce Dominguez",
     "category"  : "Localization",
     "website": "http://poncesfot.blogspot.com",

@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Reporte de Facturas Dinámicas (Selector de Reporte)",
-    "version": "19.0.2.0.0",
+    "version"   : "20.0.1.0",
     "category": "Report",
     "website": "http://poncesoft.blogspot.com",
     "author": "German Ponce Dominguez (Desarrollador)",

@@ -7,7 +7,7 @@
     "website": "https://www.vauxoo.com",
     "license": "OPL-1",
     "category": "Accounting/Localizations/Reporting",
-    "version": "18.0.1.0.1",
+    "version"   : "20.0.1.0",
     "depends": [
         "l10n_mx_reports",
     ],

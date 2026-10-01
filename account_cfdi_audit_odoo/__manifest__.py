@@ -2,7 +2,7 @@
 
 {
     "name"      : "Auditoría de Facturas vs. SAT",
-    "version"   : "1.0",
+    "version"   : "20.0.1.0",
     "depends"   : ["account_accountant",
                    #"l10n_mx_einvoice",
                    #"asti_eaccounting_mx_base",

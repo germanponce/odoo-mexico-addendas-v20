@@ -6,7 +6,7 @@
 
 {
     'name': 'CFDI Traslado',
-    'version': '19.2.1',
+    "version"   : "20.0.1.0",
     'description': ''' Agrega campos para generar CFDI de tipo traslado con el complemento de carta porte.
     ''',
     'category': 'Accounting',

@@ -1,6 +1,6 @@
 {
     "name": "Partner Contacts Organized",
-    "version": "19.0.1.1.0",
+    "version"   : "20.0.1.0",
     "category": "Contacts",
     "summary": "Organiza contactos, direcciones de entrega y factura en secciones claras",
     "description": """

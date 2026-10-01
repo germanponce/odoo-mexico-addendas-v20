@@ -30,7 +30,7 @@
 
 
     """,
-    'version': '1.8',
+    "version"   : "20.0.1.0",
     "author" : "German Ponce Dominguez",
     'category': 'Accounting/Localizations/EDI',
     'summary': 'Complementos CFDI',

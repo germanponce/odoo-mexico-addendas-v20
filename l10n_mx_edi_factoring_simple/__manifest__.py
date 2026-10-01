@@ -2,7 +2,7 @@
 {
     'name': 'EDI Factoraje Financiero',
     'summary': 'Mexican Localization for EDI documents — Financial Factoring',
-    'version': '19.0.1.0.0',
+    "version"   : "20.0.1.0",
     'author': 'German Ponce',
     'category': 'Hidden',
     'website': 'http://poncesoft.blogspot.com',

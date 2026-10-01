@@ -2,7 +2,7 @@
 
 {
     "name" : "Tipo de Cambio Manual en Odoo",
-    "version" : "19.0.1.0.0",
+    "version"   : "20.0.1.0",
     "depends" : [
                     'base',
                     'account',

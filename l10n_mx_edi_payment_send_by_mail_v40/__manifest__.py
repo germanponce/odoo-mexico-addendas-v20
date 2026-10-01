@@ -4,7 +4,7 @@
 
 {
     'name': 'Envio Automatico de Correo (Pagos)',
-    'version': '3.1.2',
+    "version"   : "20.0.1.0",
     'category': 'Invoices & Payments',
     'price': 130.0,
     'currency': 'USD',

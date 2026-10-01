@@ -13,7 +13,7 @@
     'author': "German Ponce Dominguez",
     'website': "http://poncesoft.blogspot.com",
     'category': 'Invoicing',
-    'version': '1.8',
+    "version"   : "20.0.1.0",
 
     'maintainer':"German Ponce Dominguez",
 

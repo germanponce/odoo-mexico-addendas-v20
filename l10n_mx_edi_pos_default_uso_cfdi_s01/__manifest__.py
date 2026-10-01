@@ -6,7 +6,7 @@
 
 {
     'name': "Pregunta Simple POS",
-    "version" : "1.8",
+    "version"   : "20.0.1.0",
     "license": "LGPL-3",
     "category" : "Point of Sale",
     'summary': 'Facturación POS con el Uso S01 por defecto.',

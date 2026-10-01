@@ -6,7 +6,7 @@
 
 {
     'name': 'Refacturación de tickets incluidos en Factura Global (México)',
-    'version': '19.0.1.0.0',
+    "version"   : "20.0.1.0",
     'category': 'Accounting/Localizations/EDI',
     'author': 'ANFEPI: Roberto Requejo Jiménez',
     'maintainer': 'Asesores y Soluciones ANFEPI',

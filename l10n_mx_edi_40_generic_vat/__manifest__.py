@@ -8,7 +8,7 @@
 {
     'name' : 'Reglas Genericas para CFDI 4.0 en facturas a publico en general.',
     'category': 'Sales',
-    'version': '19.0.1.0',
+    "version"   : "20.0.1.0",
     'author': 'German Ponce Dominguez',
     'website': 'https://poncesoft.blogspot.com',
     'description': """
