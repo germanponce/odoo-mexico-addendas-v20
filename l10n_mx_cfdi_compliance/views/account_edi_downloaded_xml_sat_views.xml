@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_edi_downloaded_xml_sat_list_inherit_compliance" model="ir.ui.view">
+        <field name="name">account.edi.downloaded.xml.sat.list.compliance</field>
+        <field name="model">account.edi.downloaded.xml.sat</field>
+        <field name="inherit_id" ref="l10n_mx_xml_massive_download.view_account_edi_downloaded_xml_sat_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='estatus_69b']" position="after">
+                <field name="compliance_state" optional="show"/>
+                <field name="compliance_score" optional="hide" widget="progressbar"/>
+                <field name="cfdi_document_id" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_edi_downloaded_xml_sat_form_inherit_compliance" model="ir.ui.view">
+        <field name="name">account.edi.downloaded.xml.sat.form.compliance</field>
+        <field name="model">account.edi.downloaded.xml.sat</field>
+        <field name="inherit_id" ref="l10n_mx_xml_massive_download.view_account_edi_downloaded_xml_sat_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="CFDI Compliance Engine (ANFEPI)">
+                    <group>
+                        <field name="cfdi_document_id"/>
+                        <field name="compliance_state"/>
+                    </group>
+                    <group>
+                        <field name="compliance_score" widget="progressbar"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

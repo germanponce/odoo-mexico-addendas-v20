@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Odoo 18 migration notes:
+    - The settings view inherits from `website.res_config_settings_view_form`.
+    - In Odoo 17/18 the `<block>` and `<setting>` elements use the same
+      structural conventions.  `website_info_settings` block still exists.
+    - If this xpath fails, inspect the base view and use a different anchor
+      such as `//div[@id='website_info_settings']` or another stable id.
+    - Bootstrap utility classes updated (col-xs-* removed; use only col-*).
+-->
+<odoo>
+
+    <record id="res_config_settings_website_portal_vendor_bills_view_form"
+            model="ir.ui.view">
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="website.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//block[@id='website_info_settings']" position="after">
+
+                <block title="Portal de Proveedores" id="vendor_portal_settings">
+
+                    <!-- ── Opciones generales ──────────────────────────── -->
+                    <setting id="my_account_vendor_portal"
+                             string="Restringir Opciones del Portal"
+                             help="Oculta cualquier otra opción que no esté relacionada a Compras dentro del portal Mi Cuenta.">
+                        <field name="show_only_purchase_on_my_account"/>
+                    </setting>
+
+                    <setting id="requerir_orden_compra"
+                             string="Requerir Orden de Compra (Docto)"
+                             help="Permite habilitar y solicitar la Orden de Compra (Archivo).">
+                        <field name="show_document_purchase_order"/>
+                    </setting>
+
+                    <setting id="requerir_orden_compra_acuse"
+                             string="Requerir Acuse de la Orden de Compra (Docto)"
+                             help="Permite habilitar y solicitar el Acuse de la Orden de Compra (Archivo).">
+                        <field name="show_document_purchase_order_acuse"/>
+                    </setting>
+
+                    <!-- ── Validaciones XML ───────────────────────────── -->
+                    <h3 class="mt-4">Validaciones XML</h3>
+
+                    <setting id="validations_sat"
+                             string="Validar Status SAT"
+                             help="Valida si el XML se encuentra vigente; de no estarlo no permite continuar.">
+                        <field name="validate_sat_status"/>
+                    </setting>
+
+                    <setting id="validate_rfc_company_setting"
+                             string="Validar RFC Compañía Receptora"
+                             help="Valida que el comprobante y la Compañía que recibe el CFDI coincidan con el XML.">
+                        <field name="validate_rfc_company"/>
+                    </setting>
+
+                    <setting id="validate_amount_total_setting"
+                             string="Validar Monto Total"
+                             help="Valida que el total del comprobante coincida con el Total del XML (tolerancia 2 centavos).">
+                        <field name="validate_amount_total"/>
+                    </setting>
+
+                    <setting id="validate_rfc_partner_setting"
+                             string="Validar RFC Proveedor"
+                             help="Valida que el comprobante y el contacto coincidan con el valor descrito en el XML.">
+                        <field name="validate_rfc_partner"/>
+                    </setting>
+
+                    <setting id="validate_unique_uuid_setting"
+                             string="Validar UUID Único"
+                             help="Valida que el comprobante no esté registrado en el sistema para otra OC.">
+                        <field name="validate_unique_uuid"/>
+                    </setting>
+
+                    <setting id="validate_fiscal_year_setting"
+                             string="Validar Año Fiscal"
+                             help="Valida que el comprobante y el año en curso coincidan.">
+                        <field name="validate_fiscal_year"/>
+                    </setting>
+
+                </block>
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

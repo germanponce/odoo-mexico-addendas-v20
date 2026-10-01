@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Pestaña "Permisos XML SAT" en la ficha de usuario.
+         Solo visible si el usuario tiene el grupo "Acceso a Descarga XML del SAT". -->
+    <record id="view_users_form_cfdi_permissions" model="ir.ui.view">
+        <field name="name">res.users.form.cfdi.permissions</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="before">
+                <field name="has_xml_sat_access" invisible="1"/>
+            </xpath>
+            <notebook position="inside">
+                <page name="xml_sat_permissions" string="Permisos XML SAT"
+                      invisible="not has_xml_sat_access">
+                    <group name="xml_sat_visibility">
+                        <group string="Tipos de CFDI Visibles">
+                            <field name="can_see_cfdi_ingreso"/>
+                            <field name="can_see_cfdi_egreso"/>
+                            <field name="can_see_cfdi_pago"/>
+                        </group>
+                        <group string="Tipos Sensibles / Especiales">
+                            <field name="can_see_cfdi_nomina"/>
+                            <field name="can_see_cfdi_traslado"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-warning" role="alert">
+                        <strong>⚠️ Importante:</strong> Los XMLs de Nómina contienen información sensible
+                        de empleados (sueldos, percepciones, deducciones). Actívalo solo para usuarios
+                        de confianza.
+                    </div>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

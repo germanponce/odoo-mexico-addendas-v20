@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>l10n_mx_edi_account_move_report_dynamic — Reportes de Factura Dinámica CFDI</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; background-color: #f4f6f9;">
+
+    <!-- ══ CABECERA ══ -->
+    <div style="text-align: center; background: linear-gradient(135deg, #1a3a5c 0%, #2980b9 100%); color: white; padding: 40px 20px; border-radius: 10px; margin-bottom: 30px;">
+        <div style="width: 70px; height: 70px; background: rgba(255,255,255,0.15); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 15px;">🧾</div>
+        <h1 style="margin: 0 0 10px 0; font-size: 2rem; font-weight: 700;">Reportes de Factura Dinámica CFDI</h1>
+        <p style="margin: 0 0 15px 0; font-size: 1rem; opacity: 0.9;">l10n_mx_edi_account_move_report_dynamic — Odoo 19 Enterprise</p>
+        <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">Versión 19.0.2.0.0</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">AGPL-3</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">Odoo 19 Enterprise</span>
+        </div>
+    </div>
+
+    <!-- ══ DESCRIPCIÓN ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea;">
+        <h2 style="margin: 0 0 15px 0; color: #1a3a5c; font-size: 1.4rem; text-align: center;">¿Qué hace este módulo?</h2>
+        <p style="color: #5d6d7e; text-align: center; max-width: 860px; margin: 0 auto 15px auto;">
+            Permite <strong>seleccionar dinámicamente</strong> el reporte QWeb-PDF a utilizar al imprimir o enviar facturas,
+            configurándolo por <strong>diario contable</strong>. Incluye cuatro estilos de factura/pago CFDI 4.0
+            y el nuevo <strong>Reporte de Factura Transporte (Carta Porte 3.1)</strong> con su anexo de condiciones de servicio.
+        </p>
+        <div style="background: #eaf4fb; border-left: 4px solid #2980b9; padding: 15px 20px; border-radius: 4px; max-width: 860px; margin: 0 auto;">
+            <strong style="color: #1a5276;">Dependencias:</strong>
+            <span style="color: #5d6d7e;"> account, stock, sale, sale_stock, sale_management, <strong>l10n_mx_edi</strong> (Enterprise).
+            Migrado de Odoo 17 a <strong>Odoo 19</strong>. Compatible con CFDI 4.0 y Carta Porte 3.1.</span>
+        </div>
+    </div>
+
+    <!-- ══ REPORTES DISPONIBLES ══ -->
+    <h2 style="color: #1a3a5c; font-size: 1.4rem; margin-bottom: 20px; padding-left: 5px;">📄 Reportes Disponibles</h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+
+        <!-- EST-01 Factura -->
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea; border-top: 4px solid #2c3e50;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #2c3e50, #34495e); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem; margin-bottom: 12px;">F01</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.05rem;">Factura CFDI (EST-01)</h3>
+            <p style="color: #7f8c8d; margin: 0 0 10px 0; font-size: 0.85rem;">Estilo clásico con cabecera negra. Header alto (margin_top: 65).</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Logo + RFC + UUID + Certificados</li>
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Cargalo a / Envíalo a (shipping)</li>
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Cliente, Almacén, Pedido, Vendedor, Vía Embarque</li>
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Conceptos con detalle de impuestos por línea</li>
+                <li style="padding: 2px 0;">✓ QR + Sello SAT + Cadena Original</li>
+            </ul>
+            <div style="margin-top: 10px; background: #f8f9fa; border-radius: 5px; padding: 8px; font-size: 0.8rem;">
+                <code style="color: #c0392b;">report_benotto_invoice_cfdi</code>
+            </div>
+        </div>
+
+        <!-- EST-02 Factura -->
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea; border-top: 4px solid #8e44ad;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #8e44ad, #9b59b6); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem; margin-bottom: 12px;">F02</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.05rem;">Factura CFDI (EST-02)</h3>
+            <p style="color: #7f8c8d; margin: 0 0 10px 0; font-size: 0.85rem;">Estilo moderno gris (#afafaf). Header compacto (margin_top: 43). Panel "I - Factura VERSIÓN 4.0".</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Emisor / Receptor en tabla</li>
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Fecha certificación, CSD SAT, Forma Pago en header</li>
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Conceptos con detalle de impuestos por línea</li>
+                <li style="padding: 2px 0;">✓ QR + Sellos + Cadena Original</li>
+            </ul>
+            <div style="margin-top: 10px; background: #f8f9fa; border-radius: 5px; padding: 8px; font-size: 0.8rem;">
+                <code style="color: #c0392b;">report_benotto_invoice_cfdi_02</code>
+            </div>
+        </div>
+
+        <!-- EST-01 Pago -->
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea; border-top: 4px solid #16a085;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #16a085, #1abc9c); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem; margin-bottom: 12px;">P01</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.05rem;">Pago CFDI (EST-01)</h3>
+            <p style="color: #7f8c8d; margin: 0 0 10px 0; font-size: 0.85rem;">Comprobante de pago estilo clásico negro. Modelo: account.payment.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Emisor / Receptor con domicilio completo</li>
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Complemento de Pagos (RFC cuentas)</li>
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Documentos Relacionados (UUID, parcialidades)</li>
+                <li style="padding: 2px 0;">✓ Tabla resumen fecha / importe / saldo</li>
+            </ul>
+            <div style="margin-top: 10px; background: #f8f9fa; border-radius: 5px; padding: 8px; font-size: 0.8rem;">
+                <code style="color: #c0392b;">report_benotto_payment_cfdi</code>
+            </div>
+        </div>
+
+        <!-- EST-02 Pago -->
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea; border-top: 4px solid #d35400;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #d35400, #e67e22); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem; margin-bottom: 12px;">P02</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.05rem;">Pago CFDI (EST-02)</h3>
+            <p style="color: #7f8c8d; margin: 0 0 10px 0; font-size: 0.85rem;">Estilo gris moderno. Panel "P - Pagos VERSIÓN 4.0". Header compacto.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Mismo contenido que EST-01</li>
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Cabeceras grises (#afafaf)</li>
+                <li style="padding: 2px 0;">✓ Header compacto (margin_top: 43)</li>
+            </ul>
+            <div style="margin-top: 10px; background: #f8f9fa; border-radius: 5px; padding: 8px; font-size: 0.8rem;">
+                <code style="color: #c0392b;">report_benotto_payment_cfdi_02</code>
+            </div>
+        </div>
+
+        <!-- Transporte -->
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea; border-top: 4px solid #c0392b; grid-column: span 2;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #c0392b, #e74c3c); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 22px; margin-bottom: 12px;">🚛</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">Factura Transporte CFDI (Carta Porte 3.1) — <span style="color:#c0392b;">NUEVO</span></h3>
+            <p style="color: #7f8c8d; margin: 0 0 12px 0; font-size: 0.85rem;">Reporte especializado para empresas de autotransporte federal. Lee el complemento Carta Porte 3.1 directamente del XML firmado del CFDI.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
+                <div style="background: #fef5f5; border-left: 3px solid #c0392b; padding: 10px 12px; border-radius: 4px; font-size: 0.82rem; color: #5d6d7e;">
+                    <strong style="color: #c0392b;">Sección Origen / Cliente</strong><br/>
+                    Lee nodo Ubicacion TipoUbicacion="Origen": domicilio, RFC remitente, FechaHoraSalida. Fallback a datos de la empresa si no hay Carta Porte.
+                </div>
+                <div style="background: #fef5f5; border-left: 3px solid #c0392b; padding: 10px 12px; border-radius: 4px; font-size: 0.82rem; color: #5d6d7e;">
+                    <strong style="color: #c0392b;">Sección Destino / Operador-Vehículo</strong><br/>
+                    Lee Ubicacion TipoUbicacion="Destino". Lee AutotransporteFederal: PermSCT, ConfigVehicular, Placas, PesoBruto, Seguros, Remolques. Lee FiguraTransporte tipo 01 (operador).
+                </div>
+                <div style="background: #fef5f5; border-left: 3px solid #c0392b; padding: 10px 12px; border-radius: 4px; font-size: 0.82rem; color: #5d6d7e;">
+                    <strong style="color: #c0392b;">Bultos / Mercancias</strong><br/>
+                    Tabla de líneas de factura (Bultos). Tabla Mercancias del nodo CartaPorte31: PesoBrutoTotal, UnidadPeso, NumTotalMercancias y detalle por mercancía (Cantidad, Descripcion, PesoEnKg, MaterialPeligroso).
+                </div>
+                <div style="background: #fef5f5; border-left: 3px solid #c0392b; padding: 10px 12px; border-radius: 4px; font-size: 0.82rem; color: #5d6d7e;">
+                    <strong style="color: #c0392b;">Información CFDI + Totales</strong><br/>
+                    Forma pago, Método pago, Moneda, Tipo cambio, Uso CFDI, Régimen Fiscal. Totales fiscales via account.document_tax_totals. Cantidad con letra.
+                </div>
+                <div style="background: #fef5f5; border-left: 3px solid #c0392b; padding: 10px 12px; border-radius: 4px; font-size: 0.82rem; color: #5d6d7e;">
+                    <strong style="color: #c0392b;">Leyenda Pagaré + Firmas</strong><br/>
+                    Texto legal del pagaré mercantil. Espacio para "Recibimos de conformidad" y "Firma Transportista".
+                </div>
+                <div style="background: #fef5f5; border-left: 3px solid #c0392b; padding: 10px 12px; border-radius: 4px; font-size: 0.82rem; color: #5d6d7e;">
+                    <strong style="color: #c0392b;">QR + Sellos + ANEXO</strong><br/>
+                    Código QR, Sello emisor, Sello SAT, Cadena Original. Después del QR: <strong>Anexo completo de 15 condiciones</strong> de prestación de servicios de Carta Porte (NOM-012-SCT-2-2017).
+                </div>
+            </div>
+            <div style="margin-top: 14px; background: #f8f9fa; border-radius: 5px; padding: 10px; font-size: 0.82rem;">
+                <strong>Template ID: </strong><code style="color: #c0392b;">report_transporte_cfdi</code>
+                <![CDATA[&nbsp;&nbsp;|&nbsp;&nbsp;]]>
+                <strong>Acción: </strong><code style="color: #c0392b;">report_transporte_cfdi_act</code>
+                <![CDATA[&nbsp;&nbsp;|&nbsp;&nbsp;]]>
+                <strong>Paper: </strong>Letter, 110 dpi, margin_top: 55
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ══ MODELOS PYTHON ══ -->
+    <h2 style="color: #1a3a5c; font-size: 1.4rem; margin-bottom: 20px; padding-left: 5px;">🐍 Modelos Python</h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea; border-top: 4px solid #2980b9;">
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">account.move.send</h3>
+            <p style="color: #7f8c8d; margin: 0 0 10px 0; font-size: 0.84rem;">Sobreescribe <code>_prepare_invoice_pdf_report</code> para seleccionar el reporte según el diario.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Si <code>journal_id.cfdi_report_id</code> está configurado → usa ese reporte</li>
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Si no → usa <code>account.account_invoices</code> (estándar Odoo)</li>
+                <li style="padding: 2px 0;">✓ Compatible con flujo de envío de correo de Odoo 19</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea; border-top: 4px solid #27ae60;">
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">account.journal</h3>
+            <p style="color: #7f8c8d; margin: 0 0 10px 0; font-size: 0.84rem;">Agrega campo <code>cfdi_report_id</code> (Many2one a ir.actions.report).</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Dominio filtrado a reportes de account.move tipo qweb-pdf</li>
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Visible en el formulario del diario (antes del notebook)</li>
+                <li style="padding: 2px 0;">✓ Opcional — si vacío usa el reporte predeterminado</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea; border-top: 4px solid #8e44ad;">
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">account.move</h3>
+            <p style="color: #7f8c8d; margin: 0 0 10px 0; font-size: 0.84rem;">Agrega el método <code>get_tipo_cambio()</code> para usar en reportes QWeb.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Retorna 1.0 si moneda == moneda empresa</li>
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Usa <code>invoice_date</code> o <code>date</code> como referencia</li>
+                <li style="padding: 2px 0;">✓ Llama a <code>currency._convert()</code> con round=False</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea; border-top: 4px solid #d35400;">
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">account.move.line</h3>
+            <p style="color: #7f8c8d; margin: 0 0 10px 0; font-size: 0.84rem;">Agrega <code>get_taxes_line_details()</code> para el detalle de impuestos en cada línea del reporte.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Retorna lista: [nombre, factor, base, tasa, importe]</li>
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ Usa TAX_TYPE_TO_CFDI_CODE: isr→001, iva→002, ieps→003</li>
+                <li style="padding: 2px 0;">✓ Soporta facturas y notas de crédito (is_refund)</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea; border-top: 4px solid #16a085;">
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">sale.order</h3>
+            <p style="color: #7f8c8d; margin: 0 0 10px 0; font-size: 0.84rem;">Agrega campos logísticos usados en el reporte EST-01.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0; border-bottom: 1px dashed #eee;">✓ <code>via_embarque</code> (Char) — Vía / modo de transporte</li>
+                <li style="padding: 2px 0;">✓ <code>no_orden</code> (Char) — Número de orden del cliente</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ══ ARCHIVOS DEL MÓDULO ══ -->
+    <h2 style="color: #1a3a5c; font-size: 1.4rem; margin-bottom: 20px; padding-left: 5px;">📁 Estructura de Archivos</h2>
+
+    <div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea;">
+        <div style="background: #1e272e; border-radius: 8px; padding: 20px; font-family: monospace; font-size: 0.84rem; color: #ecf0f1;">
+            <div style="color: #f39c12; margin-bottom: 6px;">l10n_mx_edi_account_move_report_dynamic/</div>
+            <div style="margin-left: 20px; color: #bdc3c7;">├── __init__.py</div>
+            <div style="margin-left: 20px; color: #bdc3c7;">├── __manifest__.py</div>
+            <div style="margin-left: 20px; color: #f39c12;">├── models/</div>
+            <div style="margin-left: 40px; color: #bdc3c7;">├── __init__.py</div>
+            <div style="margin-left: 40px; color: #3498db;">├── account_journal.py</div>
+            <div style="margin-left: 60px; color: #95a5a6; font-size: 0.78rem;">└─ campo cfdi_report_id</div>
+            <div style="margin-left: 40px; color: #3498db;">├── account_move.py</div>
+            <div style="margin-left: 60px; color: #95a5a6; font-size: 0.78rem;">└─ get_tipo_cambio()</div>
+            <div style="margin-left: 40px; color: #3498db;">├── account_move_line.py</div>
+            <div style="margin-left: 60px; color: #95a5a6; font-size: 0.78rem;">└─ get_taxes_line_details()</div>
+            <div style="margin-left: 40px; color: #3498db;">├── account_move_send.py</div>
+            <div style="margin-left: 60px; color: #95a5a6; font-size: 0.78rem;">└─ _prepare_invoice_pdf_report()</div>
+            <div style="margin-left: 40px; color: #3498db;">└── sale_order.py</div>
+            <div style="margin-left: 60px; color: #95a5a6; font-size: 0.78rem;">└─ via_embarque, no_orden</div>
+            <div style="margin-left: 20px; color: #f39c12;">├── reports/</div>
+            <div style="margin-left: 40px; color: #27ae60;">├── cfdi_report_view.xml</div>
+            <div style="margin-left: 60px; color: #95a5a6; font-size: 0.78rem;">└─ Factura EST-01 (negro)</div>
+            <div style="margin-left: 40px; color: #27ae60;">├── cfdi_report_02_view.xml</div>
+            <div style="margin-left: 60px; color: #95a5a6; font-size: 0.78rem;">└─ Factura EST-02 (gris moderno)</div>
+            <div style="margin-left: 40px; color: #27ae60;">├── cfdi_report_payment_view.xml</div>
+            <div style="margin-left: 60px; color: #95a5a6; font-size: 0.78rem;">└─ Pago EST-01</div>
+            <div style="margin-left: 40px; color: #27ae60;">├── cfdi_report_payment_02_view.xml</div>
+            <div style="margin-left: 60px; color: #95a5a6; font-size: 0.78rem;">└─ Pago EST-02</div>
+            <div style="margin-left: 40px; color: #e74c3c; font-weight: bold;">└── cfdi_report_transporte_view.xml</div>
+            <div style="margin-left: 60px; color: #95a5a6; font-size: 0.78rem;">└─ Factura Transporte / Carta Porte 3.1 ← NUEVO</div>
+            <div style="margin-left: 20px; color: #f39c12;">├── views/</div>
+            <div style="margin-left: 40px; color: #27ae60;">└── account_view.xml</div>
+            <div style="margin-left: 60px; color: #95a5a6; font-size: 0.78rem;">└─ Ext. diario (cfdi_report_id) + Ext. sale.order</div>
+            <div style="margin-left: 20px; color: #bdc3c7;">└── index.html</div>
+        </div>
+    </div>
+
+    <!-- ══ MIGRACIÓN V17 → V19 ══ -->
+    <h2 style="color: #1a3a5c; font-size: 1.4rem; margin-bottom: 20px; padding-left: 5px;">🔄 Cambios de Migración v17 → v19</h2>
+
+    <div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+
+            <div style="padding: 16px; background: #fef9e7; border-radius: 8px; border-left: 4px solid #f39c12;">
+                <h4 style="margin: 0 0 8px 0; color: #d68910; font-size: 0.95rem;">models.py → 5 archivos separados</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.84rem;">
+                    El archivo único <code>models.py</code> de v17 se dividió en archivos independientes por modelo,
+                    siguiendo las buenas prácticas de Odoo 19. Cada clase en su propio archivo.
+                </p>
+            </div>
+
+            <div style="padding: 16px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 8px 0; color: #1a6b3c; font-size: 0.95rem;">AccountMoveSend — método actualizado</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.84rem;">
+                    En v17 <code>_prepare_invoice_pdf_report</code> era en <code>AccountMoveSend(TransientModel)</code>.
+                    En v19 se hereda de <code>AbstractModel</code> (<code>account.move.send</code>), que es como lo maneja Odoo 19 Enterprise.
+                </p>
+            </div>
+
+            <div style="padding: 16px; background: #ebf5fb; border-radius: 8px; border-left: 4px solid #2980b9;">
+                <h4 style="margin: 0 0 8px 0; color: #1a5276; font-size: 0.95rem;">get_tipo_cambio() — simplificado</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.84rem;">
+                    El método v17 iteraba con <code>for rec in self</code>. En v19 usa <code>ensure_one()</code>
+                    y accede directamente a <code>self</code>, eliminando el bucle innecesario.
+                </p>
+            </div>
+
+            <div style="padding: 16px; background: #fdebd0; border-radius: 8px; border-left: 4px solid #e67e22;">
+                <h4 style="margin: 0 0 8px 0; color: #d35400; font-size: 0.95rem;">t-raw → t-out</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.84rem;">
+                    En Odoo 19 el atributo QWeb <code>t-raw</code> fue eliminado y reemplazado por <code>t-out</code>
+                    con sanitización automática. Todos los <code>t-raw</code> en los reportes deben actualizarse a <code>t-out</code>.
+                </p>
+            </div>
+
+            <div style="padding: 16px; background: #f9ebea; border-radius: 8px; border-left: 4px solid #c0392b;">
+                <h4 style="margin: 0 0 8px 0; color: #922b21; font-size: 0.95rem;">werkzeug.urls eliminado</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.84rem;">
+                    El import <code>from werkzeug.urls import url_encode</code> fue removido del código ya que
+                    no se usaba. En Odoo 19 usar <code>from urllib.parse import urlencode</code> si se necesita.
+                </p>
+            </div>
+
+            <div style="padding: 16px; background: #f4ecf7; border-radius: 8px; border-left: 4px solid #8e44ad;">
+                <h4 style="margin: 0 0 8px 0; color: #6c3483; font-size: 0.95rem;">Versión 19.0.2.0.0</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.84rem;">
+                    El manifiesto actualiza <code>version</code> a <code>19.0.2.0.0</code>, quita el key
+                    obsoleto <code>qweb</code> y actualiza <code>depends</code> eliminando <code>sale_stock</code>
+                    como dependencia redundante (ya incluida por <code>sale</code>).
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ CONFIGURACIÓN ══ -->
+    <h2 style="color: #1a3a5c; font-size: 1.4rem; margin-bottom: 20px; padding-left: 5px;">⚙️ Configuración y Uso</h2>
+
+    <div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea;">
+
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+
+            <div style="display: flex; gap: 14px; align-items: flex-start; padding: 14px; background: #f8f9fa; border-radius: 8px;">
+                <div style="width: 36px; height: 36px; background: #2980b9; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; flex-shrink: 0;">1</div>
+                <div>
+                    <strong style="color: #2c3e50;">Instalar el módulo</strong><br/>
+                    <span style="color: #5d6d7e; font-size: 0.88rem;">
+                        Asegurarse de que <code>l10n_mx_edi</code> (Enterprise) esté instalado. Instalar
+                        <code>l10n_mx_edi_account_move_report_dynamic</code> desde Aplicaciones.
+                    </span>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 14px; align-items: flex-start; padding: 14px; background: #f8f9fa; border-radius: 8px;">
+                <div style="width: 36px; height: 36px; background: #2980b9; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; flex-shrink: 0;">2</div>
+                <div>
+                    <strong style="color: #2c3e50;">Configurar el diario</strong><br/>
+                    <span style="color: #5d6d7e; font-size: 0.88rem;">
+                        Ir a <em>Facturación/Contabilidad → Configuración → Diarios</em>. Abrir el diario de ventas.
+                        En el campo <strong>Reporte CFDI</strong> seleccionar el reporte deseado (EST-01, EST-02 o Carta Porte 3.1).
+                    </span>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 14px; align-items: flex-start; padding: 14px; background: #f8f9fa; border-radius: 8px;">
+                <div style="width: 36px; height: 36px; background: #2980b9; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; flex-shrink: 0;">3</div>
+                <div>
+                    <strong style="color: #2c3e50;">Imprimir / Enviar factura</strong><br/>
+                    <span style="color: #5d6d7e; font-size: 0.88rem;">
+                        Al confirmar y enviar una factura, el sistema detecta el reporte configurado en el diario y
+                        genera el PDF automáticamente con ese estilo. También disponible desde el botón
+                        <em>Imprimir</em> en la factura.
+                    </span>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 14px; align-items: flex-start; padding: 14px; background: #fff3cd; border-radius: 8px; border: 1px solid #ffc107;">
+                <div style="width: 36px; height: 36px; background: #f39c12; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; flex-shrink: 0;">⚠</div>
+                <div>
+                    <strong style="color: #d68910;">Reporte Transporte — Requisito Carta Porte firmada</strong><br/>
+                    <span style="color: #5d6d7e; font-size: 0.88rem;">
+                        El reporte de Transporte lee el nodo XML del CFDI firmado (<code>cfdi_node</code>).
+                        Para que los datos de Origen, Destino, Operador y Vehículo aparezcan, la factura
+                        <strong>debe tener el complemento Carta Porte 3.1 timbrado por el PAC</strong>.
+                        Si la factura aún no está timbrada, los campos mostrarán los datos generales de la empresa/receptor como fallback.
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ RESUMEN ══ -->
+    <div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #dde3ea;">
+        <h2 style="margin: 0 0 20px 0; color: #1a3a5c; font-size: 1.3rem;">Resumen del Módulo</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
+            <div><div style="font-size: 2.2rem; font-weight: 700; color: #2980b9;">5</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Reportes QWeb PDF</p></div>
+            <div><div style="font-size: 2.2rem; font-weight: 700; color: #27ae60;">5</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Modelos Python</p></div>
+            <div><div style="font-size: 2.2rem; font-weight: 700; color: #8e44ad;">6</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Archivos XML</p></div>
+            <div><div style="font-size: 2rem;">🚛</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Carta Porte 3.1 integrada</p></div>
+            <div><div style="font-size: 2rem;">📋</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Anexo condiciones transporte</p></div>
+            <div><div style="font-size: 2rem;">⚙️</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Selector dinámico por diario</p></div>
+        </div>
+    </div>
+
+    <!-- ══ FOOTER ══ -->
+    <div style="text-align: center; padding: 25px; background: #1a3a5c; color: white; border-radius: 10px; margin-top: 10px;">
+        <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">
+            l10n_mx_edi_account_move_report_dynamic
+        </div>
+        <div style="font-size: 0.88rem; opacity: 0.85;">
+            Versión 19.0.2.0.0 | German Ponce Dominguez<br/>
+            Compatible con Odoo 19 Enterprise | CFDI 4.0 | Carta Porte 3.1 | Python 3.11+
+        </div>
+    </div>
+
+</body>
+</html>

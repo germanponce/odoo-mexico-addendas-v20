@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Template QWeb — CFDI de Retenciones e Información de Pagos v2.0
+    Tipo: NACIONAL (NacionalidadR="Nacional")
+    Namespace: http://www.sat.gob.mx/esquemas/retencionpago/2
+    XSD: http://www.sat.gob.mx/esquemas/retencionpago/2/retencionpagov2.xsd
+    Firmado: SHA-256 via certificate._sign() (Odoo v19)
+
+    Basado en XML de ejemplo oficial del SAT:
+      RfcE, RfcR, DomicilioFiscalR, NacionalidadR, Ejercicio
+      (atributos cambiados respecto a v1.0)
+-->
+<odoo>
+    <data>
+        <template id="retentions_nacionales_cfdi">
+            <retenciones:Retenciones
+                xmlns:retenciones="http://www.sat.gob.mx/esquemas/retencionpago/2"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.sat.gob.mx/esquemas/retencionpago/2 http://www.sat.gob.mx/esquemas/retencionpago/2/retencionpagov2.xsd"
+                Version="2.0"
+                t-att-FolioInt="folio_int"
+                Sello=""
+                t-att-NoCertificado="no_certificado"
+                t-att-Certificado="certificado"
+                t-att-FechaExp="fecha_exp"
+                t-att-LugarExpRetenc="lugar_exp"
+                t-att-CveRetenc="cve_retenc">
+
+                <!-- Emisor: empresa que genera la retención -->
+                <retenciones:Emisor
+                    t-att-RfcE="emisor_rfc"
+                    t-att-NomDenRazSocE="emisor_nombre"
+                    t-att-RegimenFiscalE="emisor_regimen"/>
+
+                <!-- Receptor Nacional -->
+                <retenciones:Receptor NacionalidadR="Nacional">
+                    <retenciones:Nacional
+                        t-att-RfcR="receptor_rfc"
+                        t-att-NomDenRazSocR="receptor_nombre"
+                        t-att-DomicilioFiscalR="receptor_domicilio"/>
+                </retenciones:Receptor>
+
+                <!-- Período fiscal -->
+                <retenciones:Periodo
+                    t-att-MesIni="mes_ini"
+                    t-att-MesFin="mes_fin"
+                    t-att-Ejercicio="ejercicio"/>
+
+                <!-- Totales e ImpRetenidos -->
+                <retenciones:Totales
+                    t-att-MontoTotOperacion="monto_tot_operacion"
+                    t-att-MontoTotGrav="monto_tot_grav"
+                    t-att-MontoTotExent="monto_tot_exent"
+                    t-att-MontoTotRet="monto_tot_ret">
+
+                    <t t-foreach="impuesto_ids" t-as="imp">
+                        <retenciones:ImpRetenidos
+                            t-att-BaseRet="format_float(imp.base_ret)"
+                            t-att-ImpuestoRet="imp.impuesto_ret"
+                            t-att-MontoRet="format_float(imp.monto_ret)"
+                            t-att-TipoPagoRet="imp.tipo_pago_ret"/>
+                    </t>
+
+                </retenciones:Totales>
+
+            </retenciones:Retenciones>
+        </template>
+    </data>
+</odoo>

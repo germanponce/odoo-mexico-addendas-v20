@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Default profile created per company at install via post_init_hook -->
+        <function model="res.company" name="_l10n_mx_cfdi_create_default_profile"/>
+    </data>
+</odoo>

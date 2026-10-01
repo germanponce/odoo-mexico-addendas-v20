@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- <template id="global_invoice_complement" inherit_id="l10n_mx_edi.cfdiv40">
+        <xpath expr="//*[name()='cfdi:Concepto']" position="attributes">
+              <attribute name="t-att-ClaveProdServ">record.get_unspsc_code_dynamic(line_values)</attribute>
+              <attribute name="t-att-Descripcion">record.get_edi_description_dynamic('descripcion',line_values)</attribute>
+              <attribute name="t-att-ClaveUnidad">record.get_edi_description_dynamic('claveunidad',line_values)</attribute>
+              <attribute name="t-att-Unidad">record.get_edi_description_dynamic('unidad',line_values)</attribute>
+        </xpath>
+
+    </template> -->
+
+
+</odoo>

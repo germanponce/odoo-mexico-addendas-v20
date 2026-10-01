@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_mx_cfdi_validator" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.mx.cfdi.validator</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//app[@name='account']" position="inside">
+
+                <!-- ═══════════════════════════════════════════════════════ -->
+                <!-- CFDI PROVEEDOR -->
+                <!-- ═══════════════════════════════════════════════════════ -->
+                <block title="CFDI Proveedor (Validaciones XML)">
+
+                    <!-- ── Receptor ───────────────────────────────────── -->
+                    <block title="Receptor (Empresa)">
+                        <setting string="Validar versión CFDI">
+                            <field name="l10n_mx_cfdi_val_version"/>
+                        </setting>
+
+                        <setting string="RFC receptor coincide">
+                            <field name="l10n_mx_cfdi_val_rfc_receptor"/>
+                        </setting>
+
+                        <setting string="Razón social receptor coincide">
+                            <field name="l10n_mx_cfdi_val_rs_receptor"/>
+                        </setting>
+
+                        <setting string="Código postal receptor coincide">
+                            <field name="l10n_mx_cfdi_val_cp_receptor"/>
+                        </setting>
+                    </block>
+
+                    <!-- ── Comprobante ─────────────────────────────────── -->
+                    <block title="Comprobante">
+                        <setting string="Tipo de comprobante correcto (I/E)">
+                            <field name="l10n_mx_cfdi_val_tipo_comprobante"/>
+                        </setting>
+
+                        <setting string="Moneda válida (MXN/USD)">
+                            <field name="l10n_mx_cfdi_val_moneda"/>
+                        </setting>
+
+                        <setting string="Evitar UUID duplicado">
+                            <field name="l10n_mx_cfdi_val_uuid_duplicado"/>
+                        </setting>
+
+                        <setting string="Validar Total XML">
+                            <field name="l10n_mx_cfdi_val_sat_amount"/>
+                        </setting>
+                    </block>
+
+                    <!-- ── Emisor ──────────────────────────────────────── -->
+                    <block title="Emisor (Proveedor)">
+                        <setting string="RFC emisor coincide">
+                            <field name="l10n_mx_cfdi_val_rfc_emisor"/>
+                        </setting>
+
+                        <setting string="Razón social emisor coincide">
+                            <field name="l10n_mx_cfdi_val_rs_emisor"/>
+                        </setting>
+
+                        <setting string="Régimen fiscal emisor">
+                            <field name="l10n_mx_cfdi_val_regimen_emisor"/>
+                        </setting>
+
+                        <setting string="Código postal emisor (LugarExpedición)">
+                            <field name="l10n_mx_cfdi_val_cp_emisor"/>
+                        </setting>
+                    </block>
+
+                    <!-- ── SAT ─────────────────────────────────────────── -->
+                    <block title="SAT">
+                        <setting string="CFDI en estado vigente">
+                            <field name="l10n_mx_cfdi_val_sat_status"/>
+                        </setting>
+                    </block>
+
+                </block>
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

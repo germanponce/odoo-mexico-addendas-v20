@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_move_form_inherited" model="ir.ui.view">
+        <field name="name">account.move.form.inherited</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="payment_method" invisible="move_type not in ('in_invoice')"/>
+                <field name="uso_sat" invisible="move_type not in ('in_invoice')"/>
+                <field name="cfdi_payment_form" invisible="move_type not in ('in_invoice') or not cfdi_payment_form" readonly="1"/>
+                <field name="wizard_imported" invisible="1"/>
+            </xpath>
+            <!-- Boton verde "Adjuntar XML": sube un .xml o elige uno del lote ya
+                 descargado del SAT y lo adjunta a la factura de proveedor (llena
+                 metodo/forma de pago, uso CFDI, fecha y referencia + valida totales). -->
+            <xpath expr="//header" position="inside">
+                <button name="action_open_upload_wizard"
+                        string="Adjuntar XML"
+                        type="object"
+                        class="btn-success"
+                        invisible="move_type != 'in_invoice' or wizard_imported"/>
+                <button name="action_erase_fields"
+                        string="Volver a subir XML"
+                        type="object"
+                        invisible="move_type != 'in_invoice' or not wizard_imported"/>
+                <button name="action_reset_to_draft"
+                        string="Regresar a borrador"
+                        type="object"
+                        invisible="move_type != 'in_invoice' or not wizard_imported or state != 'posted'"/>
+            </xpath>
+            <!-- xml_imported_id: campo invisible + botón inteligente "XML SAT" -->
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="xml_imported_id" invisible="1"/>
+            </xpath>
+            <!-- Botón inteligente XML SAT: visible en facturas proveedor con XML vinculado -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_xml_sat"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-file-code-o"
+                        invisible="not xml_imported_id">
+                    <span class="o_stat_text">XML SAT</span>
+                </button>
+            </xpath>
+            <!-- Boton para aplicar IEPS-en-base directo sobre la factura sin
+                 tener que navegar al XML descargado. Visible solo si la factura
+                 es de proveedor (in_invoice), esta en borrador y tiene XML vinculado.
+                 Restringido a admin por groups. -->
+            <xpath expr="//header" position="inside">
+                <button name="action_apply_ieps_in_base_from_move"
+                        string="Aplicar IEPS en la Base"
+                        type="object"
+                        class="btn-secondary"
+                        groups="base.group_system"
+                        invisible="move_type != 'in_invoice' or state != 'draft' or not xml_imported_id"
+                        help="Suma el IEPS Trasladado al precio unitario de cada linea y lo remueve del listado de impuestos. Util si activaste el setting 'IEPS en la base' despues de importar."/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

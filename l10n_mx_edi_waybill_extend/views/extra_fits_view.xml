@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+        <record id="waybill_materiales_peligrosos_tree" model="ir.ui.view">
+            <field name="name">waybill.materiales.peligrosos.tree</field>
+            <field name="model">waybill.materiales.peligrosos</field>
+            <field name="arch" type="xml">
+                <list string="Materiales Peligrosos" >
+                    <field name="code" />
+                    <field name="name" />
+                    <field name="class_div" />
+                    <field name="danger_sec" />
+                    <field name="group_env_onu" />
+                    <field name="group_env_onu_disp_esp" />
+                    <field name="qty_limit" />
+                    <field name="qty_except" />
+                    <field name="int_emb_env" />
+                    <field name="int_emb_env_disp_esp" />
+                    <field name="int_trasp" />
+                    <field name="int_trasp_disp_esp" />
+
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="waybill_materiales_peligrosos_form" model="ir.ui.view">
+            <field name="name">waybill.materiales.peligrosos.form</field>
+            <field name="model">waybill.materiales.peligrosos</field>
+            <field name="arch" type="xml">
+                <form string="Materiale Peligroso">
+                    <sheet>
+                         <div class="oe_title">
+                        <label class="oe_edit_only" for="code" string="Clave SAT"/>
+                        <h1><field name="code" placeholder="CVE0000"/></h1>
+                        
+                    </div>
+
+                        
+                        <group >
+                            <field name="name" />
+                        </group>
+                        <group>
+                            <group>
+                                <field name="code" />
+                                <field name="class_div" />
+                                <field name="group_env_onu" />
+                                <field name="qty_limit" />
+                                <field name="int_emb_env" />
+                                <field name="int_trasp" />
+                            </group>
+                            <group>
+                                <field name="name" />
+                                <field name="danger_sec" />
+                                <field name="group_env_onu_disp_esp" />
+                                <field name="qty_except" />
+                                <field name="int_emb_env_disp_esp" />
+                                <field name="int_trasp_disp_esp" />
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="start_date" />
+                            </group>
+                            <group>
+                                <field name="end_date" />
+                            </group>
+                        </group>
+                        
+                    </sheet>
+                    
+                </form>
+            </field>
+        </record>
+
+
+        <record id="waybill_materiales_peligrosos_search" model="ir.ui.view">
+            <field name="name">waybill.materiales.peligrosos.serch</field>
+            <field name="model">waybill.materiales.peligrosos</field>
+            <field name="arch" type="xml">
+                <search string="Materiales Peligrosos">
+                    <field name="code" />
+                    <field name="name" />
+                    <field name="class_div" />
+                    <field name="danger_sec" />
+                    <field name="group_env_onu" />
+                    <field name="group_env_onu_disp_esp" />
+                    <field name="qty_limit" />
+                    <field name="qty_except" />
+                    <field name="int_emb_env" />
+                    <field name="int_emb_env_disp_esp" />
+                    <field name="int_trasp" />
+                    <field name="int_trasp_disp_esp" />
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_waybill_materiales_peligrosos" model="ir.actions.act_window">
+            <field name="name">Materiales Peligrosos</field>
+            <field name="res_model">waybill.materiales.peligrosos</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="waybill_materiales_peligrosos_tree"/>
+        </record>
+
+        <!-- Tipo de Embalaje -->
+
+        <record id="waybill_tipo_embalaje_tree" model="ir.ui.view">
+            <field name="name">waybill.tipo.embalaje.tree</field>
+            <field name="model">waybill.tipo.embalaje</field>
+            <field name="arch" type="xml">
+                <list string="Tipos de Estacion" >
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="waybill_tipo_embalaje_form" model="ir.ui.view">
+            <field name="name">waybill.tipo.embalaje.form</field>
+            <field name="model">waybill.tipo.embalaje</field>
+            <field name="arch" type="xml">
+                <form string="Tipo de Embalaje">
+                    <sheet>
+                         <div class="oe_title">
+                        <label class="oe_edit_only" for="code" string="Clave SAT"/>
+                        <h1><field name="code" placeholder="CVE0000"/></h1>
+                        
+                    </div>
+                        
+                        <group >
+                            <field name="name" />
+                        </group>
+                        <group>
+                            <group>
+                                <field name="start_date" />
+                            </group>
+                            <group>
+                                <field name="end_date" />
+                            </group>
+                        </group>
+                        
+                    </sheet>
+                    
+                </form>
+            </field>
+        </record>
+
+
+        <record id="waybill_tipo_embalaje_search" model="ir.ui.view">
+            <field name="name">waybill.tipo.embalaje.serch</field>
+            <field name="model">waybill.tipo.embalaje</field>
+            <field name="arch" type="xml">
+                <search string="Tipos de Embalaje">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </search>
+            </field>
+        </record>
+        <record id="action_waybill_tipo_embalaje" model="ir.actions.act_window">
+            <field name="name">Tipos de Embalaje</field>
+            <field name="res_model">waybill.tipo.embalaje</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="waybill_tipo_embalaje_tree"/>
+        </record>
+
+        <!-- Extensiones Vistas -->
+        <record model="ir.ui.view" id="addenda_waybill_complement_product_fields_form">
+            <field name="name">complemento_carta_porte_extend</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.product_template_only_form_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="waybill" string="Carta Porte 2.0">
+                        <group>
+                            <field name="key_hazardous_material_sat" readonly="1"/>
+                            <field name="hazardous_material" />
+                        </group>
+                        <group>
+							<field name="hazardous_key_product_id" 
+                                required="hazardous_material == 'Si'" 
+                                readonly="hazardous_material == 'No'" 
+                                options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="tipo_embalaje_id" />
+                        </group>
+                    </group>
+                    
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="addenda_waybill_complement_vehicle_form">
+            <field name="name">complemento_carta_porte_extend</field>
+            <field name="model">l10n_mx_edi.vehicle</field>
+            <field name="inherit_id" ref="l10n_mx_edi_stock.vehicle_form_view"/>
+            <field name="arch" type="xml">
+                <field name="transport_insurance_policy" position="after">
+                	<field name="ambiental_transport_insurerance" />
+                	<field name="ambiental_transport_insurance_policy" />
+                </field>
+            </field>
+        </record>
+
+	</data>
+</odoo>

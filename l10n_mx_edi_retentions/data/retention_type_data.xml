@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ret_01" model="retention.type">
+            <field name="code">01</field>
+            <field name="name">Servicios profesionales</field>
+        </record>
+
+        <record id="ret_02" model="retention.type">
+            <field name="code">02</field>
+            <field name="name">Regalías por derechos de autor</field>
+        </record>
+
+        <record id="ret_03" model="retention.type">
+            <field name="code">03</field>
+            <field name="name">Autotransporte terrestre de carga</field>
+        </record>
+
+        <record id="ret_04" model="retention.type">
+            <field name="code">04</field>
+            <field name="name">Servicios prestados por comisionistas</field>
+        </record>
+
+        <record id="ret_05" model="retention.type">
+            <field name="code">05</field>
+            <field name="name">Arrendamiento</field>
+        </record>
+
+        <record id="ret_06" model="retention.type">
+            <field name="code">06</field>
+            <field name="name">Enajenación de acciones</field>
+        </record>
+
+        <record id="ret_07" model="retention.type">
+            <field name="code">07</field>
+            <field name="name">Enajenación de bienes objeto de la LIEPS (mediadores)</field>
+        </record>
+
+        <record id="ret_08" model="retention.type">
+            <field name="code">08</field>
+            <field name="name">Enajenación de bienes inmuebles en escritura pública</field>
+        </record>
+
+        <record id="ret_09" model="retention.type">
+            <field name="code">09</field>
+            <field name="name">Enajenación de otros bienes no en escritura pública</field>
+        </record>
+
+        <record id="ret_10" model="retention.type">
+            <field name="code">10</field>
+            <field name="name">Adquisición de desperdicios industriales</field>
+        </record>
+
+        <record id="ret_11" model="retention.type">
+            <field name="code">11</field>
+            <field name="name">Adquisición de bienes en escritura pública</field>
+        </record>
+
+        <record id="ret_12" model="retention.type">
+            <field name="code">12</field>
+            <field name="name">Adquisición de otros bienes no en escritura pública</field>
+        </record>
+
+        <record id="ret_13" model="retention.type">
+            <field name="code">13</field>
+            <field name="name">Otros retiros de AFORE</field>
+        </record>
+
+        <record id="ret_14" model="retention.type">
+            <field name="code">14</field>
+            <field name="name">Dividendos o utilidades distribuidas</field>
+        </record>
+
+        <record id="ret_15" model="retention.type">
+            <field name="code">15</field>
+            <field name="name">Remanente distribuible</field>
+        </record>
+
+        <record id="ret_16" model="retention.type">
+            <field name="code">16</field>
+            <field name="name">Intereses</field>
+        </record>
+
+        <record id="ret_17" model="retention.type">
+            <field name="code">17</field>
+            <field name="name">Arrendamiento en fideicomiso</field>
+        </record>
+
+        <record id="ret_18" model="retention.type">
+            <field name="code">18</field>
+            <field name="name">Pagos realizados a favor de residentes en el extranjero</field>
+        </record>
+
+        <record id="ret_19" model="retention.type">
+            <field name="code">19</field>
+            <field name="name">Enajenación de acciones u operaciones en bolsa</field>
+        </record>
+
+        <record id="ret_20" model="retention.type">
+            <field name="code">20</field>
+            <field name="name">Obtención de premios</field>
+        </record>
+
+        <record id="ret_21" model="retention.type">
+            <field name="code">21</field>
+            <field name="name">Fideicomisos que no realizan actividades empresariales</field>
+        </record>
+
+        <record id="ret_22" model="retention.type">
+            <field name="code">22</field>
+            <field name="name">Planes personales de retiro</field>
+        </record>
+
+        <record id="ret_23" model="retention.type">
+            <field name="code">23</field>
+            <field name="name">Intereses reales deducibles por créditos hipotecarios</field>
+        </record>
+
+        <record id="ret_24" model="retention.type">
+            <field name="code">24</field>
+            <field name="name">Operaciones Financieras Derivadas de Capital</field>
+        </record>
+
+        <record id="ret_25" model="retention.type">
+            <field name="code">25</field>
+            <field name="name">Otro tipo de retenciones</field>
+        </record>
+
+        <record id="ret_26" model="retention.type">
+            <field name="code">26</field>
+            <field name="name">Servicios mediante Plataformas Tecnológicas</field>
+        </record>
+
+        <record id="ret_27" model="retention.type">
+            <field name="code">27</field>
+            <field name="name">Sector Financiero</field>
+        </record>
+        
+        <record id="ret_28" model="retention.type">
+            <field name="code">28</field>
+            <field name="name">Pagos y retenciones a Contribuyentes del RIF</field>
+        </record>
+    </data>
+</odoo>

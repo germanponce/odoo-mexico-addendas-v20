@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_payment_factoring_section"
+              inherit_id="l10n_mx_edi.report_payment_cfdi">
+
+        <xpath expr="//table[@name='table_l10n_mx_edi_invoice_original_info']"
+               position="before">
+            <t t-set="factoring" t-value="values.get('factoring')"/>
+            <t t-if="factoring">
+
+                <!-- ══ Encabezado de sección ══════════════════════════════════ -->
+                <div class="row mt-3 mb-1">
+                    <div class="col-12">
+                        <div style="border-left: 4px solid #145a32; padding: 6px 12px; background: #eafaf1; border-radius: 4px;">
+                            <strong style="color: #145a32; font-size: 0.95rem;">
+                                Factoraje Financiero
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══ Datos del Factorante ════════════════════════════════════ -->
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr>
+                                <th class="text-muted" style="width:40%; font-size:0.82rem;">
+                                    Empresa Factorante
+                                </th>
+                                <td style="font-size:0.88rem;">
+                                    <strong t-out="factoring['partner'].name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted" style="font-size:0.82rem;">RFC Factorante</th>
+                                <td style="font-size:0.88rem;">
+                                    <span t-out="factoring['partner'].vat or '—'"/>
+                                </td>
+                            </tr>
+                            <tr t-if="factoring['partner'].street or factoring['partner'].city">
+                                <th class="text-muted" style="font-size:0.82rem;">Dirección</th>
+                                <td style="font-size:0.88rem;">
+                                    <span t-out="factoring['partner'].street or ''"/>
+                                    <t t-if="factoring['partner'].city">
+                                        , <span t-out="factoring['partner'].city"/>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr t-if="factoring['partner'].l10n_mx_edi_fiscal_regime">
+                                <th class="text-muted" style="font-size:0.82rem;">Régimen Fiscal</th>
+                                <td style="font-size:0.88rem;">
+                                    <span t-field="factoring['partner'].l10n_mx_edi_fiscal_regime"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-6">
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr>
+                                <th class="text-muted" style="width:40%; font-size:0.82rem;">
+                                    Monto Total Factoraje
+                                </th>
+                                <td style="font-size:0.88rem;">
+                                    <strong>
+                                        <span t-out="factoring['total_monto']"
+                                              t-options="{'widget': 'monetary',
+                                                          'display_currency': factoring['currency']}"/>
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted" style="font-size:0.82rem;">
+                                    Forma de Pago SAT
+                                </th>
+                                <td style="font-size:0.88rem;">
+                                    17 — Compensación de deudas
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted" style="font-size:0.82rem;">
+                                    No. Asientos
+                                </th>
+                                <td style="font-size:0.88rem;">
+                                    <span t-out="len(factoring['lines'])"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ══ Detalle de asientos de factoraje ═══════════════════════ -->
+                <table class="table table-sm" name="table_factoring_detail"
+                       style="font-size: 0.85rem;">
+                    <thead style="background-color: #eafaf1;">
+                        <tr>
+                            <th style="color: #145a32;">Asiento de Factoraje</th>
+                            <th style="color: #145a32;">Fecha</th>
+                            <th style="color: #145a32;">Diario</th>
+                            <th style="color: #145a32;">Factura Relacionada</th>
+                            <th class="text-end" style="color: #145a32;">
+                                Monto Compensado
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="factoring['lines']" t-as="fl">
+                            <td>
+                                <span t-out="fl['ref']"/>
+                            </td>
+                            <td>
+                                <span t-out="fl['fecha']"
+                                      t-options="{'widget': 'date'}"/>
+                            </td>
+                            <td>
+                                <span t-out="fl['journal']"/>
+                            </td>
+                            <td>
+                                <span t-out="fl['invoice'].name"/>
+                                <small class="text-muted ms-1">
+                                    (<span t-out="fl['invoice'].invoice_date"
+                                           t-options="{'widget': 'date'}"/>)
+                                </small>
+                            </td>
+                            <td class="text-end">
+                                <strong>
+                                    <span t-out="fl['monto']"
+                                          t-options="{'widget': 'monetary',
+                                                      'display_currency': factoring['currency']}"/>
+                                </strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot style="background-color: #f8f9fa; border-top: 2px solid #145a32;">
+                        <tr>
+                            <td colspan="4" class="text-end">
+                                <strong style="color: #145a32;">Total Factoraje:</strong>
+                            </td>
+                            <td class="text-end">
+                                <strong style="color: #145a32;">
+                                    <span t-out="factoring['total_monto']"
+                                          t-options="{'widget': 'monetary',
+                                                      'display_currency': factoring['currency']}"/>
+                                </strong>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <!-- ══ Leyenda legal ══════════════════════════════════════════ -->
+                <!-- <div class="row mb-3">
+                    <div class="col-12">
+                        <p class="text-muted mb-0" style="font-size: 0.78rem; font-style: italic;">
+                            Los derechos de cobro de las facturas listadas han sido cedidos a
+                            <strong><span t-out="factoring['partner'].name"/></strong>
+                            mediante operación de Factoraje Financiero (FDP 17 — Compensación de deudas).
+                            El CFDI de Pago fue emitido a nombre del Factorante.
+                        </p>
+                    </div>
+                </div> -->
+
+            </t>
+
+        </xpath>
+        <xpath expr="//table[@name='table_l10n_mx_edi_invoice_original_info']"
+               position="attributes">
+               <attribute name="t-if">not factoring</attribute>
+        </xpath>
+    </template>
+</odoo>

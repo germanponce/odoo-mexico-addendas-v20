@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_cfdi_import_wizard_form" model="ir.ui.view">
+        <field name="name">cfdi.import.wizard.form</field>
+        <field name="model">l10n_mx.cfdi.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Importar CFDIs">
+                <sheet>
+                    <group invisible="state == 'done'">
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="auto_run_pipeline"/>
+                        <field name="attachment_ids" widget="many2many_binary"/>
+                    </group>
+                    <group invisible="state != 'done'">
+                        <field name="line_ids" readonly="1">
+                            <list>
+                                <field name="attachment_id"/>
+                                <field name="document_id"/>
+                                <field name="status" decoration-success="status == 'ok'" decoration-danger="status == 'error'" decoration-muted="status == 'skipped'"/>
+                                <field name="message"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_import" type="object" string="Importar" class="btn-primary" invisible="state == 'done'"/>
+                    <button special="cancel" string="Cerrar" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cfdi_import_wizard" model="ir.actions.act_window">
+        <field name="name">Importar CFDIs (XML)</field>
+        <field name="res_model">l10n_mx.cfdi.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

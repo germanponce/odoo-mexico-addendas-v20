@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Reporte 03: Facturas Vigentes en Odoo pero no en SAT
+    Odoo 18 – t-esc → t-out
+-->
+<odoo>
+<data>
+
+    <template id="cegasa_report_audit_03_document">
+        <t t-call="web.basic_layout">
+            <t t-set="o" t-value="o.with_context({'lang': o.company_id.partner_id.lang}).sudo()"/>
+            <div class="page">
+                <title>Facturas Vigentes en Odoo pero no en SAT</title>
+                <style type="text/css">
+                    .tg2 { border-collapse:collapse; border-spacing:0; }
+                    .tg2 td { border:1px solid black; font-family:Arial,sans-serif;
+                               font-size:12px; overflow:hidden; padding:10px 5px; word-break:normal; }
+                    .tg2 th { border:1px solid black; font-family:Arial,sans-serif;
+                               font-size:14px; font-weight:normal; overflow:hidden;
+                               padding:10px 5px; word-break:normal; }
+                    .tg2 .tg-cy5f { background-color:#00566C; border-color:inherit;
+                                     color:#FFF; text-align:left; vertical-align:top; }
+                    .tg2 .tg-ktyi { background-color:#FFF; text-align:left; vertical-align:top; }
+
+                    .tg3 { border-collapse:collapse; border-spacing:0; }
+                    .tg3 td { border:1px solid black; font-family:Arial,sans-serif;
+                               font-size:14px; overflow:hidden; padding:10px 5px; word-break:normal; }
+                    .tg3 th { border:1px solid black; font-family:Arial,sans-serif;
+                               font-size:14px; font-weight:normal; overflow:hidden;
+                               padding:10px 5px; word-break:normal; }
+                    .tg3 .tg-p9ik { background-color:#FFF; font-size:12px;
+                                     text-align:left; vertical-align:top; }
+                    .tg3 .tg-venp { background-color:#1a5276; color:#FFF;
+                                     font-size:24px; text-align:left; vertical-align:top; }
+                </style>
+
+                <!-- Encabezado -->
+                <table class="tg3" style="width:100%;">
+                    <tbody>
+                        <tr>
+                            <th class="tg-venp" style="width:60%;">
+                                Facturas Vigentes en Odoo pero NO en SAT
+                            </th>
+                            <td class="tg-p9ik" style="width:40%; text-align:right;">
+                                <strong>Empresa:</strong>
+                                <t t-out="o.company_id.name"/><br/>
+                                <strong>Período:</strong>
+                                <t t-out="str(o.start_date)"/> al <t t-out="str(o.end_date)"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br/>
+
+                <!-- Tabla de detalle -->
+                <table class="tg2" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th class="tg-cy5f" style="width:5%;">#</th>
+                            <th class="tg-cy5f" style="width:25%;">UUID</th>
+                            <th class="tg-cy5f" style="width:15%;">RFC Emisor</th>
+                            <th class="tg-cy5f" style="width:20%;">Nombre Emisor</th>
+                            <th class="tg-cy5f" style="width:15%;">RFC Receptor</th>
+                            <th class="tg-cy5f" style="width:10%;">Fecha</th>
+                            <th class="tg-cy5f" style="width:10%; text-align:right;">Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="seq" t-value="1"/>
+                        <t t-foreach="o.records_posted_odoo_no_sat_ids" t-as="line">
+                            <tr>
+                                <td class="tg-ktyi"><t t-out="seq"/></td>
+                                <td class="tg-ktyi" style="font-size:9px;">
+                                    <t t-out="line.uuid or ''"/>
+                                </td>
+                                <td class="tg-ktyi"><t t-out="line.rfc_emisor or ''"/></td>
+                                <td class="tg-ktyi"><t t-out="line.nombre_emisor or ''"/></td>
+                                <td class="tg-ktyi"><t t-out="line.rfc_receptor or ''"/></td>
+                                <td class="tg-ktyi"><t t-out="str(line.fecha_emision or '')"/></td>
+                                <td class="tg-ktyi" style="text-align:right;">
+                                    <t t-out="'${:0,.2f}'.format(line.monto)"/>
+                                </td>
+                            </tr>
+                            <t t-set="seq" t-value="seq + 1"/>
+                        </t>
+                    </tbody>
+                </table>
+
+                <!-- Totales -->
+                <br/>
+                <table style="width:100%; border-collapse:collapse;">
+                    <tr>
+                        <td style="width:70%;"/>
+                        <td style="width:15%; text-align:right; border-top:1px solid #000; padding:4px;">
+                            <strong style="font-size:14px;">Registros:</strong>
+                        </td>
+                        <td style="width:15%; text-align:right; border-top:1px solid #000; padding:4px;">
+                            <strong style="font-size:14px;">
+                                <t t-out="o.records_posted_odoo_no_sat"/>
+                            </strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td style="text-align:right; padding:4px;">
+                            <strong style="font-size:14px;">Total:</strong>
+                        </td>
+                        <td style="text-align:right; padding:4px;">
+                            <strong style="font-size:14px;">
+                                <t t-out="'${:0,.2f}'.format(o.amount_posted_odoo_no_sat)"/>
+                            </strong>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+            </div>
+
+            <div class="footer">
+                <table style="width:100%;">
+                    <tr>
+                        <td style="font-size:10px; width:40%; text-align:left;">
+                            <t t-out="o.company_id.name"/>
+                        </td>
+                        <td style="width:45%; text-align:center; font-size:10px;">
+                            Facturas Vigentes en Odoo pero NO en SAT
+                        </td>
+                        <td style="width:15%; text-align:right; font-size:10px;">
+                            <strong>Página <span class="page"/> de <span class="topage"/></strong>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <template id="cegasa_report_audit_03">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="account_invoice_auditor_analysis.cegasa_report_audit_03_document"
+                   t-lang="o.company_id.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+</data>
+
+<data noupdate="1">
+    <record id="cegasa_report_audit_03_paper" model="report.paperformat">
+        <field name="name">Auditor Reporte 03 – Letter</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="header_spacing">35</field>
+        <field name="margin_top">10</field>
+        <field name="margin_right">7</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="orientation">Landscape</field>
+        <field name="dpi">140</field>
+        <field name="format">Letter</field>
+    </record>
+
+    <record id="cegasa_report_audit_03_act" model="ir.actions.report">
+        <field name="name">03. Facturas Vigentes en Odoo pero no en SAT</field>
+        <field name="model">move.audit.analysis</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">account_invoice_auditor_analysis.cegasa_report_audit_03</field>
+        <field name="report_file">account_invoice_auditor_analysis.cegasa_report_audit_03</field>
+        <field name="print_report_name">'Vigentes_Odoo_no_SAT_' + (str(object.id) or '')</field>
+        <field name="binding_model_id" ref="model_move_audit_analysis"/>
+        <field name="paperformat_id" ref="cegasa_report_audit_03_paper"/>
+    </record>
+</data>
+</odoo>

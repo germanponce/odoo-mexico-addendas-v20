@@ -1,0 +1,640 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_payment_split
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-14 08:27+0000\n"
+"PO-Revision-Date: 2022-04-14 04:31-0500\n"
+"Last-Translator: Humberto Arocha [Vauxoo] <hbto@vauxoo.com>\n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. module: account_payment_split
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+msgid ": to be booked as"
+msgstr ": se contabilizará como"
+
+#. module: account_payment_split
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+msgid "(Global Excess) to be booked as"
+msgstr "(Exceso Global) se contabilizará como"
+
+#. module: account_payment_split
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+msgid "(In Line Defect) as"
+msgstr "(Defecto en Línea) como"
+
+#. module: account_payment_split
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+msgid "(In Line Defect) to be booked as"
+msgstr "(Defecto en Línea) se contabilizará como"
+
+#. module: account_payment_split
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+msgid "(In Line Excess) to be booked as"
+msgstr "(Exceso en Línea) se contabilizará como"
+
+#. module: account_payment_split
+#: model:ir.model,name:account_payment_split.model_account_register_invoices
+msgid ""
+"A model to hold invoices being paid in payment register. This model works "
+"as\n"
+"                      account.payment.register lines."
+msgstr ""
+"Un model para contener facturas que se van a pagar en un registro de pago. "
+"Esto modelo funciona como\n"
+"                      líneas de account.payment.register."
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__writeoff_account_id
+msgid ""
+"Accounting where the difference is to be sent. Most likely a P&L Account."
+msgstr ""
+"Cuenta donde la diferencia se enviará. Muy probablemente una cuenta de "
+"Resultado."
+
+#. module: account_payment_split
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+msgid "Amount Currency"
+msgstr "Cantidad en Moneda"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_register_invoices__amount
+msgid "Amount Due"
+msgstr "Cantidad Adeudada"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_register_invoices__payment_amount
+msgid "Amount being paid"
+msgstr "Cantidad en Pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__company_currency_amount
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+msgid "Amount in Company Currency"
+msgstr "Cantidad en Moneda de la Compañía"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_register_invoices__company_currency_amount
+msgid "Amount in currency of Company"
+msgstr "Cantidad en moneda de la Compañía"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_register_invoices__payment_currency_amount
+msgid "Amount in currency of payment"
+msgstr "Cantidad en moneda del pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__amount
+msgid "Amount to be allocated/was allocated in the Invoices to be paid."
+msgstr "Cantidad que se colocará/se va a colocar en la factura para pagarse."
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__available_payment_method_line_ids
+msgid "Available Payment Method Line"
+msgstr "Línea de Método de Pago Disponible"
+
+#. module: account_payment_split
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__writeoff_label
+msgid "Change label of the counterpart that will hold the payment difference"
+msgstr ""
+"Cambia la etiqueta de la contrapartida que contendrá la diferencia en el pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__company_currency_id
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__company_currency_id
+msgid "Company Currency"
+msgstr "Moneda de la Compañía"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__company_currency_amount
+msgid "Company Currency Amount"
+msgstr "Cantidad en Moneda de la Compañía"
+
+#. module: account_payment_split
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+msgid "Create Payment"
+msgstr "Crear Pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__create_uid
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__create_date
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__currency_id
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__currency_id
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_register_invoices__currency_id
+msgid "Currency of this invoice"
+msgstr "Moneda de esta factura"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__currency_id
+msgid "Currency that will be used to make all the payments in the invoices."
+msgstr "Moneda que se usará para realizar todos los pagos en las facturas."
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__company_currency_id
+msgid "Currency to report the payment in company currency."
+msgstr "Moneda en la que se reporta el pago en moneda de la compañía."
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_register_invoices__payment_currency_id
+msgid "Currency which this payment is being done"
+msgstr "Moneda en la cual este pago se realiza"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__custom_rate
+msgid "Custom Rate"
+msgstr "Tasa Personalizada"
+
+#. module: account_payment_split
+#: model:ir.model.fields.selection,name:account_payment_split.selection__account_split_payment_register__partner_type__customer
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__writeoff_account_id
+msgid "Difference Account"
+msgstr "Cuenta para la diferencia"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__company_difference
+msgid "Difference in Company Currency"
+msgstr "Diferencia en Moneda de la Compañía"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__payment_difference
+msgid "Difference to be booked as an Open Balance or as a P&L record"
+msgstr ""
+"Diferencia a ser contabilizada como un Monto Abierto o como un registro de "
+"Resultado"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__display_name
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__display_name
+msgid "Display Name"
+msgstr "Nombre Mostrado"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__amount
+msgid "Due Amount"
+msgstr "Monto Adeudado"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__date_due
+msgid "Due Date"
+msgstr "Fecha de Vencimiento"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__dummy_amount
+msgid "Dummy Amount"
+msgstr "Monto Dummy"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__communication
+msgid "Field to be used when there is only one record to be paid"
+msgstr "Campo a usarse cuando solo hay un registro a pagarse"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__hide_payment_method_line
+msgid "Hide Payment Method Line"
+msgstr "Ocultar Línea de Método de Pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__payment_difference_handling
+msgid ""
+"How the difference is going to be handle. Shall be kept Open or May it be "
+"send a P&L Account."
+msgstr ""
+"Cómo se manejará la diferencia. Se mantendrá Abierta o se enviará a una "
+"cuenta de Resultados."
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__id
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__custom_rate
+msgid "If used. This rate will be written in all the invoices to pay"
+msgstr "Si se usa. Esta tasa se escribirá en todas las facturas a pagar"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__invoice_id
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_register_invoices__date
+msgid "Invoice Date"
+msgstr "Fecha de la Factura"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_register_invoices__invoice_id
+msgid "Invoice being paid"
+msgstr "Factura que se paga"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__payment_invoice_ids
+msgid "Invoices that were paid in mass"
+msgstr "Facturas que se pagarán en masa"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__journal_id
+msgid "Journal"
+msgstr "Diario"
+
+#. module: account_payment_split
+#: model:ir.model,name:account_payment_split.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento Contable"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__writeoff_label
+msgid "Journal Item Label"
+msgstr "Etiqueta del Apunte Contable"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__journal_id
+msgid "Journal that will be used to make all the payments in the invoices."
+msgstr "Diario que se usará para hacer todos los pagos en las facturas."
+
+#. module: account_payment_split
+#: model:ir.model.fields.selection,name:account_payment_split.selection__account_split_payment_register__payment_difference_handling__open
+#: selection:account.split.payment.register,payment_difference_handling:0
+msgid "Keep open"
+msgstr "Mantener abierto"
+
+#. module: account_payment_split
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+msgid "Label"
+msgstr "Etiqueta"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices____last_update
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register____last_update
+msgid "Last Modified on"
+msgstr "Última Modificación el"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__write_uid
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__write_uid
+msgid "Last Updated by"
+msgstr "Última Actualización por"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__write_date
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__write_date
+msgid "Last Updated on"
+msgstr "Última Actualización el"
+
+#. module: account_payment_split
+#: selection:account.split.payment.register,payment_difference_handling:0
+msgid "Mark as fully paid"
+msgstr "Marcar la factura como totalmente pagada"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__payment_method_line_id
+msgid ""
+"Manual: Pay or Get paid by any method outside of Odoo.\n"
+"Payment Acquirers: Each payment acquirer has its own Payment Method. Request "
+"a transaction on/to a card thanks to a payment token saved by the partner "
+"when buying or subscribing online.\n"
+"Check: Pay bills by check and print it from Odoo.\n"
+"Batch Deposit: Collect several customer checks at once generating and "
+"submitting a batch deposit to your bank. Module account_batch_payment is "
+"necessary.\n"
+"SEPA Credit Transfer: Pay in the SEPA zone by submitting a SEPA Credit "
+"Transfer file to your bank. Module account_sepa is necessary.\n"
+"SEPA Direct Debit: Get paid in the SEPA zone thanks to a mandate your "
+"partner will have granted to you. Module account_sepa is necessary.\n"
+msgstr ""
+"Manual: Pague u obtenga su pago con cualquier método fuera de Odoo.\n"
+"Métodos de pago: Cada sistema de pago en línea tiene su propio método de "
+"pago. Pida una transacción en/a una tarjeta gracias al token de pago que el "
+"partner guarda al hacer una compra o subscribirse en línea.\n"
+"Cheque: Pague las facturas con un cheque e imprímalo desde Odoo.\n"
+"Depósito en lotes: Genere y envíe un depósito en lotes a su banco para "
+"recolectar varios cheques de clientes a la vez. Se necesita el módulo "
+"account_batch_payment.\n"
+"Domiciliación bancaria SEPA: podrá obtener pagos en la zona SEPA gracias a "
+"un mandato que su partner le otorgará. Se necesita el módulo account_sepa.\n"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_register_invoices__date_due
+msgid "Maturity Date in the invoice"
+msgstr "Fecha de Vencimiento en la factura"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__communication
+msgid "Memo"
+msgstr "Comunicación"
+
+#. module: account_payment_split
+#: code:addons/account_payment_split/models/account_payment.py:0
+#, python-format
+msgid ""
+"No invoice info to import. Please make sure you're using a file with CSV "
+"format and comma (,) separator."
+msgstr ""
+"No hay info de factura que importar. Por favor, asegúrese de usar un archivo "
+"con un formato CSV y separado por comas (,)."
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__partner_id
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__partner_type
+msgid "Partner Type"
+msgstr "Tipo de Empresa"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_register_invoices__partner_id
+msgid "Partner involved in payment"
+msgstr "Partner involucrado en el pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__payment_amount
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__amount
+msgid "Payment Amount"
+msgstr "Cantidad del Pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__payment_currency_id
+msgid "Payment Currency"
+msgstr "Moneda del Pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__payment_currency_amount
+msgid "Payment Currency Amount"
+msgstr "Cantidad en Moneda del Pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__payment_date
+msgid "Payment Date"
+msgstr "Fecha de Pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__payment_difference
+msgid "Payment Difference"
+msgstr "Diferencia en Pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__payment_difference_handling
+msgid "Payment Difference Handling"
+msgstr "Manejo de Diferencia en Pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__payment_invoice_ids
+msgid "Payment Invoice"
+msgstr "Factura en Pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__payment_method_line_id
+msgid "Payment Method"
+msgstr "Metodo de Pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_split_payment_register__payment_type
+msgid "Payment Type"
+msgstr "Tipo de Pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_register_invoices__rate
+msgid "Payment rate of this Document"
+msgstr "Tasa de Pago en este Documento"
+
+#. module: account_payment_split
+#: code:addons/account_payment_split/models/account_payment.py:0
+#, python-format
+msgid "Payments"
+msgstr "Pagos"
+
+#. module: account_payment_split
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+msgid "Payments on Invoices"
+msgstr "Pagos en Facturas"
+
+#. module: account_payment_split
+#: code:addons/account_payment_split/models/account_payment.py:0
+#, python-format
+msgid "Please use a file with CSV format."
+msgstr "Por favor use un archivo con formato CSV."
+
+#. module: account_payment_split
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+msgid "Post Difference In"
+msgstr "Publicar Diferencia en"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__rate
+msgid "Rate"
+msgstr "Tasa"
+
+#. module: account_payment_split
+#: model:ir.model.fields.selection,name:account_payment_split.selection__account_split_payment_register__payment_type__inbound
+msgid "Receive Money"
+msgstr "Recibir Dinero"
+
+#. module: account_payment_split
+#: model:ir.model.fields,field_description:account_payment_split.field_account_register_invoices__register_id
+msgid "Register"
+msgstr "Registro"
+
+#. module: account_payment_split
+#: model:ir.actions.server,name:account_payment_split.action_account_invoice_from_list
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_invoice_tree
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_move_form
+msgid "Register a Split Payment"
+msgstr "Registrar un Pago en Parcialidades"
+
+#. module: account_payment_split
+#: model:ir.model.fields.selection,name:account_payment_split.selection__account_split_payment_register__payment_type__outbound
+msgid "Send Money"
+msgstr "Enviar Dinero"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__payment_date
+msgid "Settling Date for the Bills/Invoices"
+msgstr "Fecha de Liquidación de las Facturas"
+
+#. module: account_payment_split
+#: code:addons/account_payment_split/models/account_move.py:0
+#: model:ir.model,name:account_payment_split.model_account_split_payment_register
+#, python-format
+msgid "Split Payment"
+msgstr "Pago en Parcialidades"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__dummy_amount
+msgid "Technical field"
+msgstr "Campo técnico"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__available_payment_method_line_ids
+msgid "Technical field to be used to compute payment_method_line_id"
+msgstr "Campo técnico que se usará para computar payment_method_line_id"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_register_invoices__register_id
+msgid "Technical field to connect to Wizard"
+msgstr "Campo técnico para conectar el Asistente"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__company_difference
+msgid "Technical field to summarize the difference in Company Currency."
+msgstr "Campo técnico para sumarias la diferencia en Moneda de la Compañía."
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__company_currency_amount
+msgid ""
+"Technical field to summarize what was collected from the lines in "
+"company_currency_amount field."
+msgstr ""
+"Campo técnico para sumar lo que se acumuló de las líneas en el campo "
+"company_currency_amount."
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_register_invoices__company_currency_id
+msgid ""
+"Technical field used to display the payments been made in company's currency"
+msgstr ""
+"Campo técnico para mostrar el pago que se realiza en moneda de la compañía"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__hide_payment_method_line
+msgid ""
+"Technical field used to hide the payment method if the selected journal has "
+"only one available which is 'manual'"
+msgstr ""
+"Campo técnico para ocultar el método de pago si el diario seleccionado solo "
+"tiene uno disponible el cual es ‘manual’"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__company_id
+msgid "The contextual company"
+msgstr "La compañía en contexto"
+
+#. module: account_payment_split
+#: code:addons/account_payment_split/models/account_payment.py:0
+#, python-format
+msgid ""
+"The register payment wizard should only be called on account.move records."
+msgstr ""
+"El asistente de registro de pagos solo se debe llamar de registros account."
+"move."
+
+#. module: account_payment_split
+#: model_terms:ir.ui.view,arch_db:account_payment_split.view_account_payment_form_multi
+msgid "This amount will remain unpaid"
+msgstr "Este monto se mantendrá abierto"
+
+#. module: account_payment_split
+#: code:addons/account_payment_split/models/account_payment.py:0
+#, python-format
+msgid ""
+"Three Currency Custom Rate is not supported.\n"
+"For example,\n"
+"Having the following setting:\n"
+"- Company Currency MXN\n"
+"- Payment Currency USD\n"
+"- Invoice Currency EUR\n"
+"\n"
+"Because It is not possible to set One Custom Rate for two currencies at the "
+"Same Time\n"
+"\n"
+"A Custom Rate is supported when either the Payment or Invoice Currency\n"
+"is the same than that of the Company Currency\n"
+msgstr ""
+"Tasas Personalizadas para Tres Monedas no está soportado.\n"
+"Por ejemplo,\n"
+"Téngase la siguiente configuración:\n"
+"- Moneda de la Compañía en MXN\n"
+"- Moneda del Pago en USD\n"
+"- Moneda de al Factura en EUR\n"
+"\n"
+"Debido a que no es posible establecer un Tasa Personalizada para dos monedas "
+"al mismo tiempo\n"
+"\n"
+"Entonces una Tasa Personalizada se soporta cuando una de las Moneda de Pago "
+"o la Factura\n"
+"es igual que aquella de la Moneda de la Compañía\n"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__payment_type
+msgid "Type of Transaction: Collection or Payment"
+msgstr "Tipo de Transacción: Cobro o Pago"
+
+#. module: account_payment_split
+#: model:ir.model.fields.selection,name:account_payment_split.selection__account_split_payment_register__partner_type__supplier
+msgid "Vendor"
+msgstr "Proveedor"
+
+#. module: account_payment_split
+#: code:addons/account_payment_split/models/account_payment.py:0
+#, python-format
+msgid "When processing multiple payments Write-Off is not supported"
+msgstr ""
+"Cuando se procesan múltiples pagos las diferencias en pago no están "
+"soportadas"
+
+#. module: account_payment_split
+#: model:ir.model.fields,help:account_payment_split.field_account_split_payment_register__partner_type
+msgid "Which of Partner is being paid/collected"
+msgstr "Qué Empresa se está pagado/cobrando"
+
+#. module: account_payment_split
+#: code:addons/account_payment_split/models/account_payment.py:0
+#, python-format
+msgid "You can't create payments for entries belonging to different companies."
+msgstr ""
+"No puede crear pagos para registros pertenecientes a diferentes compañías."
+
+#. module: account_payment_split
+#: code:addons/account_payment_split/models/account_payment.py:0
+#, python-format
+msgid ""
+"You can't open the register payment wizard without at least one receivable/"
+"payable line."
+msgstr ""
+"No puede abrir el asistente de registro de pagos sin al menos una línea de "
+"cuentas por cobrar/pagar."

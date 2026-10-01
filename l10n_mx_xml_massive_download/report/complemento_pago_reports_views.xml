@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================
+         REPORTE 1: COMPLEMENTO PAGO CLIENTES (Emitidos)
+         ============================================================ -->
+
+    <record id="view_complemento_pago_cliente_list" model="ir.ui.view">
+        <field name="name">l10n_mx.complemento.pago.cliente.report.list</field>
+        <field name="model">l10n_mx.complemento.pago.cliente.report</field>
+        <field name="arch" type="xml">
+            <list string="Complementos de Pago - Clientes"
+                  create="0" edit="0" delete="0"
+                  decoration-success="resultado == 'success'"
+                  decoration-warning="resultado == 'warning'"
+                  decoration-danger="resultado == 'error'">
+                <field name="rfc"/>
+                <field name="razon_social"/>
+                <field name="invoice_id" string="Factura" options="{'no_create': True}"/>
+                <field name="invoice_number" optional="hide"/>
+                <field name="invoice_uuid" optional="hide"/>
+                <field name="payment_id" string="Complemento" options="{'no_create': True}" optional="show"/>
+                <field name="complement_uuid" optional="hide"/>
+                <field name="invoice_date"/>
+                <field name="complement_date" optional="show"/>
+                <field name="invoice_total" widget="monetary" sum="Total"/>
+                <field name="monto_pagado" widget="monetary" sum="Pagado"/>
+                <field name="saldo_insoluto" widget="monetary" sum="Saldo"/>
+                <field name="estado_odoo"/>
+                <field name="estado_sat_factura" optional="show"/>
+                <field name="estado_sat_complemento" optional="show"/>
+                <field name="resultado" widget="badge"
+                       decoration-success="resultado == 'success'"
+                       decoration-warning="resultado == 'warning'"
+                       decoration-danger="resultado == 'error'"/>
+                <field name="observaciones"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_complemento_pago_cliente_search" model="ir.ui.view">
+        <field name="name">l10n_mx.complemento.pago.cliente.report.search</field>
+        <field name="model">l10n_mx.complemento.pago.cliente.report</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Complementos de Pago - Clientes">
+                <field name="rfc"/>
+                <field name="razon_social"/>
+                <field name="invoice_number"/>
+                <field name="invoice_uuid"/>
+                <field name="complement_uuid"/>
+                <field name="partner_id"/>
+                <separator/>
+                <filter name="filter_red" string="Solo Errores (Rojo)"
+                        domain="[('resultado', '=', 'error')]"/>
+                <filter name="filter_yellow" string="Solo Advertencias (Amarillo)"
+                        domain="[('resultado', '=', 'warning')]"/>
+                <filter name="filter_green" string="Solo Correctos (Verde)"
+                        domain="[('resultado', '=', 'success')]"/>
+                <separator/>
+                <filter name="filter_diff" string="Con diferencias (Amarillo o Rojo)"
+                        domain="[('resultado', 'in', ('warning','error'))]"/>
+                <separator/>
+                <filter name="filter_last_90d" string="Últimos 90 días"
+                        domain="[('invoice_date', '&gt;=', (context_today() - relativedelta(days=90)).strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_last_year" string="Último año"
+                        domain="[('invoice_date', '&gt;=', (context_today() - relativedelta(years=1)).strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_this_year" string="Año actual"
+                        domain="[('invoice_date', '&gt;=', time.strftime('%Y-01-01'))]"/>
+                <separator/>
+                <filter name="group_resultado" string="Resultado"
+                        context="{'group_by': 'resultado'}"/>
+                <filter name="group_partner" string="Cliente"
+                        context="{'group_by': 'partner_id'}"/>
+                <filter name="group_estado_sat" string="Estado SAT Factura"
+                        context="{'group_by': 'estado_sat_factura'}"/>
+                <filter name="group_company" string="Empresa"
+                        context="{'group_by': 'company_id'}"
+                        groups="base.group_multi_company"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_complemento_pago_cliente_report" model="ir.actions.act_window">
+        <field name="name">Complemento Pago Clientes</field>
+        <field name="res_model">l10n_mx.complemento.pago.cliente.report</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_complemento_pago_cliente_search"/>
+        <field name="context">{'search_default_filter_last_90d': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Conciliacion de Complementos de Pago - Clientes
+            </p>
+            <p>
+                Valida que toda factura PPD cliente con pago(s) tenga su
+                Complemento de Pago (REP) y que coincida entre Odoo y SAT.
+                Filtro por defecto: últimos 90 días.
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         REPORTE 2: COMPLEMENTO PAGO PROVEEDORES (Recibidos)
+         ============================================================ -->
+
+    <record id="view_complemento_pago_proveedor_list" model="ir.ui.view">
+        <field name="name">l10n_mx.complemento.pago.proveedor.report.list</field>
+        <field name="model">l10n_mx.complemento.pago.proveedor.report</field>
+        <field name="arch" type="xml">
+            <list string="Complementos de Pago - Proveedores"
+                  create="0" edit="0" delete="0"
+                  decoration-success="resultado == 'success'"
+                  decoration-warning="resultado == 'warning'"
+                  decoration-danger="resultado == 'error'">
+                <field name="rfc"/>
+                <field name="razon_social"/>
+                <field name="invoice_id" string="Factura" options="{'no_create': True}"/>
+                <field name="invoice_number" optional="hide"/>
+                <field name="invoice_uuid" optional="hide"/>
+                <field name="payment_id" string="Complemento" options="{'no_create': True}" optional="show"/>
+                <field name="complement_uuid" optional="hide"/>
+                <field name="invoice_date"/>
+                <field name="complement_date" optional="show"/>
+                <field name="invoice_total" widget="monetary" sum="Total"/>
+                <field name="monto_pagado" widget="monetary" sum="Pagado"/>
+                <field name="saldo_insoluto" widget="monetary" sum="Saldo"/>
+                <field name="estado_odoo"/>
+                <field name="estado_sat_factura" optional="show"/>
+                <field name="estado_sat_complemento" optional="show"/>
+                <field name="resultado" widget="badge"
+                       decoration-success="resultado == 'success'"
+                       decoration-warning="resultado == 'warning'"
+                       decoration-danger="resultado == 'error'"/>
+                <field name="observaciones"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_complemento_pago_proveedor_search" model="ir.ui.view">
+        <field name="name">l10n_mx.complemento.pago.proveedor.report.search</field>
+        <field name="model">l10n_mx.complemento.pago.proveedor.report</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Complementos de Pago - Proveedores">
+                <field name="rfc"/>
+                <field name="razon_social"/>
+                <field name="invoice_number"/>
+                <field name="invoice_uuid"/>
+                <field name="complement_uuid"/>
+                <field name="partner_id"/>
+                <separator/>
+                <filter name="filter_red" string="Solo Errores (Rojo)"
+                        domain="[('resultado', '=', 'error')]"/>
+                <filter name="filter_yellow" string="Solo Advertencias (Amarillo)"
+                        domain="[('resultado', '=', 'warning')]"/>
+                <filter name="filter_green" string="Solo Correctos (Verde)"
+                        domain="[('resultado', '=', 'success')]"/>
+                <separator/>
+                <filter name="filter_diff" string="Con diferencias (Amarillo o Rojo)"
+                        domain="[('resultado', 'in', ('warning','error'))]"/>
+                <separator/>
+                <filter name="filter_last_90d" string="Últimos 90 días"
+                        domain="[('invoice_date', '&gt;=', (context_today() - relativedelta(days=90)).strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_last_year" string="Último año"
+                        domain="[('invoice_date', '&gt;=', (context_today() - relativedelta(years=1)).strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_this_year" string="Año actual"
+                        domain="[('invoice_date', '&gt;=', time.strftime('%Y-01-01'))]"/>
+                <separator/>
+                <filter name="group_resultado" string="Resultado"
+                        context="{'group_by': 'resultado'}"/>
+                <filter name="group_partner" string="Proveedor"
+                        context="{'group_by': 'partner_id'}"/>
+                <filter name="group_estado_sat" string="Estado SAT Factura"
+                        context="{'group_by': 'estado_sat_factura'}"/>
+                <filter name="group_company" string="Empresa"
+                        context="{'group_by': 'company_id'}"
+                        groups="base.group_multi_company"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_complemento_pago_proveedor_report" model="ir.actions.act_window">
+        <field name="name">Complemento Pago Proveedores</field>
+        <field name="res_model">l10n_mx.complemento.pago.proveedor.report</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_complemento_pago_proveedor_search"/>
+        <field name="context">{'search_default_filter_last_90d': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Conciliacion de Complementos de Pago - Proveedores
+            </p>
+            <p>
+                Valida que toda factura PPD proveedor con pago(s) tenga su
+                Complemento de Pago recibido y que coincida entre Odoo y SAT.
+                Filtro por defecto: últimos 90 días.
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         MENU ITEMS (debajo de "Reporte de Conciliacion")
+         Definidos aqui (no en views/l10n_mx_edi_view.xml) para
+         garantizar orden de carga: la action se carga antes del menuitem.
+         ============================================================ -->
+
+    <menuitem id="menu_complemento_pago_cliente"
+              parent="l10n_mx_xml_massive_download.menu_l10n_mx_xml_sat"
+              action="action_complemento_pago_cliente_report"
+              sequence="4"
+              name="Complemento Pago Clientes"
+              groups="l10n_mx_xml_massive_download.group_l10n_mx_xml_sat_user"/>
+
+    <menuitem id="menu_complemento_pago_proveedor"
+              parent="l10n_mx_xml_massive_download.menu_l10n_mx_xml_sat"
+              action="action_complemento_pago_proveedor_report"
+              sequence="5"
+              name="Complemento Pago Proveedores"
+              groups="l10n_mx_xml_massive_download.group_l10n_mx_xml_sat_user"/>
+
+</odoo>

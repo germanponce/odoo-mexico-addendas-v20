@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Template QWeb — CFDI de Retenciones e Información de Pagos v2.0
+    Tipo: EXTRANJERO (NacionalidadR="Extranjero")
+    Namespace: http://www.sat.gob.mx/esquemas/retencionpago/2
+
+    Diferencias vs Nacional:
+      - NacionalidadR="Extranjero"
+      - Receptor/Extranjero: NomDenRazSocR (sin RFC)
+      - NumRegIdTrib es opcional (si el extranjero tiene ID fiscal)
+-->
+<odoo>
+    <data>
+        <template id="retentions_extranjeros_cfdi">
+            <retenciones:Retenciones
+                xmlns:retenciones="http://www.sat.gob.mx/esquemas/retencionpago/2"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.sat.gob.mx/esquemas/retencionpago/2 http://www.sat.gob.mx/esquemas/retencionpago/2/retencionpagov2.xsd"
+                Version="2.0"
+                t-att-FolioInt="folio_int"
+                Sello=""
+                t-att-NoCertificado="no_certificado"
+                t-att-Certificado="certificado"
+                t-att-FechaExp="fecha_exp"
+                t-att-LugarExpRetenc="lugar_exp"
+                t-att-CveRetenc="cve_retenc">
+
+                <!-- Emisor -->
+                <retenciones:Emisor
+                    t-att-RfcE="emisor_rfc"
+                    t-att-NomDenRazSocE="emisor_nombre"
+                    t-att-RegimenFiscalE="emisor_regimen"/>
+
+                <!-- Receptor Extranjero -->
+                <retenciones:Receptor NacionalidadR="Extranjero">
+                    <!-- Con NumRegIdTrib (ID fiscal extranjero) -->
+                    <retenciones:Extranjero
+                        t-if="receptor_num_reg_id_trib"
+                        t-att-NumRegIdTrib="receptor_num_reg_id_trib"
+                        t-att-NomDenRazSocR="receptor_nombre"/>
+                    <!-- Sin NumRegIdTrib (como en el ejemplo oficial) -->
+                    <retenciones:Extranjero
+                        t-else=""
+                        t-att-NomDenRazSocR="receptor_nombre"/>
+                </retenciones:Receptor>
+
+                <!-- Período fiscal -->
+                <retenciones:Periodo
+                    t-att-MesIni="mes_ini"
+                    t-att-MesFin="mes_fin"
+                    t-att-Ejercicio="ejercicio"/>
+
+                <!-- Totales e ImpRetenidos -->
+                <retenciones:Totales
+                    t-att-MontoTotOperacion="monto_tot_operacion"
+                    t-att-MontoTotGrav="monto_tot_grav"
+                    t-att-MontoTotExent="monto_tot_exent"
+                    t-att-MontoTotRet="monto_tot_ret">
+
+                    <t t-foreach="impuesto_ids" t-as="imp">
+                        <retenciones:ImpRetenidos
+                            t-att-BaseRet="format_float(imp.base_ret)"
+                            t-att-ImpuestoRet="imp.impuesto_ret"
+                            t-att-MontoRet="format_float(imp.monto_ret)"
+                            t-att-TipoPagoRet="imp.tipo_pago_ret"/>
+                    </t>
+
+                </retenciones:Totales>
+
+            </retenciones:Retenciones>
+        </template>
+    </data>
+</odoo>

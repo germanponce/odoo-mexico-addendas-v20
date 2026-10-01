@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="account_report_column_paid_16_rda" model="account.report.column">
+        <field name="name">Paid 16% RDA</field>
+        <field name="expression_label">paid_16_rda</field>
+        <field name="report_id" ref="l10n_mx.diot_report" />
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="account_report_column_tax_paid_16" model="account.report.column">
+        <field name="name">Tax Paid 16%</field>
+        <field name="expression_label">tax_paid_16</field>
+        <field name="report_id" ref="l10n_mx.diot_report" />
+        <field name="sequence">11</field>
+    </record>
+
+    <record id="account_report_column_paid_8_rda" model="account.report.column">
+        <field name="name">RDA 8%</field>
+        <field name="expression_label">paid_8_rda</field>
+        <field name="report_id" ref="l10n_mx.diot_report" />
+        <field name="sequence">12</field>
+    </record>
+
+    <record id="account_report_column_importation_16_rda" model="account.report.column">
+        <field name="name">RDA Importation 16%</field>
+        <field name="expression_label">importation_16_rda</field>
+        <field name="report_id" ref="l10n_mx.diot_report" />
+        <field name="sequence">14</field>
+    </record>
+
+    <record id="account_report_column_tax_importation_16" model="account.report.column">
+        <field name="name">Tax Importation 16%</field>
+        <field name="expression_label">tax_importation_16</field>
+        <field name="report_id" ref="l10n_mx.diot_report" />
+        <field name="sequence">15</field>
+    </record>
+
+</odoo>

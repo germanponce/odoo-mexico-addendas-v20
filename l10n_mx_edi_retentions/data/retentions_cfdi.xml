@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Template QWeb ÚNICO — CFDI de Retenciones e Información de Pagos v2.0
+    =========================================================================
+    Namespace: http://www.sat.gob.mx/esquemas/retencionpago/2
+    XSD:       retencionpagov2.xsd
+    Firmado:   SHA-256 via certificate._sign() (Odoo v19)
+
+    Todos los namespaces de los 13 complementos se declaran en el root.
+    Los PACs aceptan namespaces no usados (comportamiento XML estándar).
+
+    El campo xsi:schemaLocation usa el placeholder "TO_BE_REPLACED"
+    que se inyecta en Python post-render según el complemento activo.
+    =========================================================================
+    Estructura:
+      ┌─ Retenciones [root]
+      ├─ CfdiRetenRelacionados (t-if complement == 'relacionados')
+      ├─ Emisor
+      ├─ Receptor
+      │    ├─ [t-if not is_foreign] → Nacional: RfcR, NomDenRazSocR, DomicilioFiscalR
+      │    └─ [t-if is_foreign]     → Extranjero: NomDenRazSocR (+ NumRegIdTrib si hay)
+      ├─ Periodo
+      ├─ Totales
+      │    └─ ImpRetenidos × n
+      └─ Complemento (t-if complement)
+           ├─ [pagosaextranjeros]        Pagosaextranjeros > NoBeneficiario | Beneficiario
+           ├─ [dividendos]              Dividendos > DividOUtil
+           ├─ [enajenaciondeacciones]   EnajenaciondeAcciones
+           ├─ [fideicomisonoempresarial] Fideicomisonoempresarial > IngresosOEntradas, DeduccOSalidas, RetEfectFideicomiso
+           ├─ [intereses]               Intereses
+           ├─ [intereseshipotecarios]   Intereseshipotecarios
+           ├─ [operacionesconderivados] Operacionesconderivados
+           ├─ [planesderetiro]          Planesderetiro > AportacionesODepositos
+           ├─ [plataformastecnologicas] ServiciosPlataformasTecnologicas > Servicios > DetallesDelServicio
+           ├─ [premios]                 Premios
+           ├─ [sectorfinanciero]        SectorFinanciero
+           └─ [arrendamientoenfideicomiso] Arrendamientoenfideicomiso
+-->
+<odoo>
+    <data>
+        <template id="retentions_cfdi">
+            <retenciones:Retenciones
+                xmlns:retenciones="http://www.sat.gob.mx/esquemas/retencionpago/2"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:arrendamientoenfideicomiso="http://www.sat.gob.mx/esquemas/retencionpago/1/arrendamientoenfideicomiso"
+                xmlns:dividendos="http://www.sat.gob.mx/esquemas/retencionpago/1/dividendos"
+                xmlns:enajenaciondeacciones="http://www.sat.gob.mx/esquemas/retencionpago/1/enajenaciondeacciones"
+                xmlns:fideicomisonoempresarial="http://www.sat.gob.mx/esquemas/retencionpago/1/fideicomisonoempresarial"
+                xmlns:intereses="http://www.sat.gob.mx/esquemas/retencionpago/1/intereses"
+                xmlns:intereseshipotecarios="http://www.sat.gob.mx/esquemas/retencionpago/1/intereseshipotecarios"
+                xmlns:operacionesconderivados="http://www.sat.gob.mx/esquemas/retencionpago/1/operacionesconderivados"
+                xmlns:pagosaextranjeros="http://www.sat.gob.mx/esquemas/retencionpago/1/pagosaextranjeros"
+                xmlns:planesderetiro11="http://www.sat.gob.mx/esquemas/retencionpago/1/planesderetiro11"
+                xmlns:plataformasTecnologicas="http://www.sat.gob.mx/esquemas/retencionpago/1/PlataformasTecnologicas10"
+                xmlns:premios="http://www.sat.gob.mx/esquemas/retencionpago/1/premios"
+                xmlns:sectorfinanciero="http://www.sat.gob.mx/esquemas/retencionpago/1/sectorfinanciero"
+                xsi:schemaLocation="TO_BE_REPLACED"
+                Version="2.0"
+                t-att-FolioInt="folio_int"
+                Sello=""
+                t-att-NoCertificado="no_certificado"
+                t-att-Certificado="certificado"
+                t-att-FechaExp="fecha_exp"
+                t-att-LugarExpRetenc="lugar_exp"
+                t-att-CveRetenc="cve_retenc">
+
+                <!-- ═══════════════════════════════════════════════════════════
+                     CfdiRetenRelacionados — solo para complement='relacionados'
+                     Referencia a un CFDI de Retenciones que sustituye/relaciona.
+                     Posición: ANTES del Emisor (según la especificación SAT v2.0)
+                     ═══════════════════════════════════════════════════════════ -->
+                <t t-if="complement == 'relacionados'
+                          and complement_values.get('tipo_relacion')
+                          and complement_values.get('uuid')">
+                    <retenciones:CfdiRetenRelacionados
+                        t-att-TipoRelacion="complement_values['tipo_relacion']"
+                        t-att-UUID="complement_values['uuid']"/>
+                </t>
+
+                <!-- ═══════════════════════════════════════════════════════════
+                     Emisor — empresa que genera la retención
+                     ═══════════════════════════════════════════════════════════ -->
+                <retenciones:Emisor
+                    t-att-RfcE="emisor_rfc"
+                    t-att-NomDenRazSocE="emisor_nombre"
+                    t-att-RegimenFiscalE="emisor_regimen"/>
+
+                <!-- ═══════════════════════════════════════════════════════════
+                     Receptor — Nacional vs Extranjero
+                     is_foreign: computed automático desde partner.country_id
+                       False → NacionalidadR="Nacional"  → nodo <Nacional>
+                       True  → NacionalidadR="Extranjero" → nodo <Extranjero>
+                     ═══════════════════════════════════════════════════════════ -->
+                <t t-if="not is_foreign">
+                    <!-- ── RECEPTOR NACIONAL ────────────────────────────── -->
+                    <retenciones:Receptor NacionalidadR="Nacional">
+                        <retenciones:Nacional
+                            t-att-RfcR="receptor_rfc"
+                            t-att-NomDenRazSocR="receptor_nombre"
+                            t-att-DomicilioFiscalR="receptor_domicilio"/>
+                    </retenciones:Receptor>
+                </t>
+
+                <t t-else="">
+                    <!-- ── RECEPTOR EXTRANJERO ─────────────────────────── -->
+                    <!--
+                        NumRegIdTrib es OPCIONAL para extranjeros:
+                          • Con NumRegIdTrib: cuando el extranjero tiene número
+                            de identificación fiscal en su país de residencia.
+                          • Sin NumRegIdTrib: cuando no tiene o no se conoce.
+                        Ejemplo XML oficial del SAT (extranjero sin NumRegIdTrib):
+                          <retenciones:Extranjero NomDenRazSocR="SW SAPIEN" />
+                    -->
+                    <retenciones:Receptor NacionalidadR="Extranjero">
+                        <retenciones:Extranjero
+                            t-if="receptor_num_reg_id_trib"
+                            t-att-NumRegIdTrib="receptor_num_reg_id_trib"
+                            t-att-NomDenRazSocR="receptor_nombre"/>
+                        <retenciones:Extranjero
+                            t-else=""
+                            t-att-NomDenRazSocR="receptor_nombre"/>
+                    </retenciones:Receptor>
+                </t>
+
+                <!-- ═══════════════════════════════════════════════════════════
+                     Periodo — período fiscal de la retención
+                     MesIni, MesFin: 01-12 (auto-calculados desde fecha del pago,
+                                     editables por el usuario)
+                     Ejercicio: año fiscal (int)
+                     ═══════════════════════════════════════════════════════════ -->
+                <retenciones:Periodo
+                    t-att-MesIni="mes_ini"
+                    t-att-MesFin="mes_fin"
+                    t-att-Ejercicio="ejercicio"/>
+
+                <!-- ═══════════════════════════════════════════════════════════
+                     Totales — montos del nodo Totales + ImpRetenidos
+                     ImpRetenidos: One2many desde l10n_mx_edi_retention_impuesto_ids
+                       • Un nodo por cada línea (ISR, IVA, IEPS pueden coexistir)
+                     ═══════════════════════════════════════════════════════════ -->
+                <retenciones:Totales
+                    t-att-MontoTotOperacion="monto_tot_operacion"
+                    t-att-MontoTotGrav="monto_tot_grav"
+                    t-att-MontoTotExent="monto_tot_exent"
+                    t-att-MontoTotRet="monto_tot_ret">
+
+                    <t t-foreach="impuesto_ids" t-as="imp">
+                        <retenciones:ImpRetenidos
+                            t-att-BaseRet="format_float(imp.base_ret)"
+                            t-att-ImpuestoRet="imp.impuesto_ret"
+                            t-att-MontoRet="format_float(imp.monto_ret)"
+                            t-att-TipoPagoRet="imp.tipo_pago_ret"/>
+                    </t>
+
+                </retenciones:Totales>
+
+                <!-- ═══════════════════════════════════════════════════════════
+                     COMPLEMENTO — nodo opcional según actividad económica
+                     Se activa cuando l10n_mx_edi_retention_complement != False
+                     El complement='relacionados' no genera nodo Complemento
+                     (usa CfdiRetenRelacionados antes del Emisor).
+                     ═══════════════════════════════════════════════════════════ -->
+                <retenciones:Complemento
+                    t-if="complement and complement != 'relacionados'">
+
+                    <!-- ── 1. PAGOS A EXTRANJEROS ─────────────────────────
+                         CveRetenc recomendado: 18
+                         Aplica cuando se hacen pagos a residentes en el extranjero.
+                         Ejemplo SAT:
+                           <pagosaextranjeros:Pagosaextranjeros Version="1.0"
+                               EsBenefEfectDelCobro="NO">
+                             <pagosaextranjeros:NoBeneficiario
+                               PaisDeResidParaEfecFisc="US"
+                               DescripcionConcepto="Artistas..."
+                               ConceptoPago="1"/>
+                           </pagosaextranjeros:Pagosaextranjeros>
+                    ─────────────────────────────────────────────────────── -->
+                    <t t-if="complement == 'pagosaextranjeros'">
+                        <pagosaextranjeros:Pagosaextranjeros
+                            Version="1.0"
+                            t-att-EsBenefEfectDelCobro="complement_values.get('es_benef', 'NO')">
+
+                            <!-- SI: hay beneficiario efectivo identificado -->
+                            <t t-if="complement_values.get('es_benef') == 'SI'">
+                                <pagosaextranjeros:Beneficiario
+                                    t-att-RFCBeneficiario="complement_values.get('rfc_benef', '')"
+                                    t-att-CURPBeneficiario="complement_values.get('curp_benef', '')"
+                                    t-att-NomBeneficiario="complement_values.get('nom_benef', '')"
+                                    t-att-ConceptoPago="complement_values.get('concepto_pago', '')"/>
+                            </t>
+
+                            <!-- NO: sin beneficiario efectivo identificado -->
+                            <t t-else="">
+                                <pagosaextranjeros:NoBeneficiario
+                                    t-att-PaisDeResidParaEfecFisc="complement_values.get('pais_resid', '')"
+                                    t-att-DescripcionConcepto="complement_values.get('descripcion', '')"
+                                    t-att-ConceptoPago="complement_values.get('concepto_pago', '')"/>
+                            </t>
+
+                        </pagosaextranjeros:Pagosaextranjeros>
+                    </t>
+
+                    <!-- ── 2. DIVIDENDOS ──────────────────────────────────
+                         CveRetenc recomendado: 14 (dividendos), 15 (remanente)
+                         Ejemplo SAT:
+                           <dividendos:Dividendos Version="1.0">
+                             <dividendos:DividOUtil
+                               CveTipDivOUtil="01"
+                               MontISRAcredRetMexico="74000"
+                               MontISRAcredRetExtranjero="0"
+                               TipoSocDistrDiv="Sociedad Nacional"
+                               MontISRAcredNal="31714"
+                               MontDivAcumNal="105714"/>
+                           </dividendos:Dividendos>
+                    ─────────────────────────────────────────────────────── -->
+                    <t t-elif="complement == 'dividendos'">
+                        <dividendos:Dividendos Version="1.0">
+                            <dividendos:DividOUtil
+                                t-att-CveTipDivOUtil="complement_values.get('cve_tipo', '')"
+                                t-att-MontISRAcredRetMexico="format_float(complement_values.get('monto_isr_mexico', 0))"
+                                t-att-MontISRAcredRetExtranjero="format_float(complement_values.get('monto_isr_extran', 0))"
+                                t-att-TipoSocDistrDiv="complement_values.get('tipo_soc', '')"
+                                t-att-MontISRAcredNal="format_float(complement_values.get('monto_isr_nal', 0))"
+                                t-att-MontDivAcumNal="format_float(complement_values.get('monto_div_acum', 0))"/>
+                        </dividendos:Dividendos>
+                    </t>
+
+                    <!-- ── 3. ENAJENACIÓN DE ACCIONES ─────────────────────
+                         CveRetenc recomendado: 06, 19
+                         Ejemplo SAT:
+                           <enajenaciondeacciones:EnajenaciondeAcciones Version="1.0"
+                             Perdida="0.00"
+                             ContratoIntermediacion="Contrato de intermedicación"
+                             Ganancia="1.00"/>
+                    ─────────────────────────────────────────────────────── -->
+                    <t t-elif="complement == 'enajenaciondeacciones'">
+                        <enajenaciondeacciones:EnajenaciondeAcciones
+                            Version="1.0"
+                            t-att-Perdida="format_float(complement_values.get('perdida', 0))"
+                            t-att-ContratoIntermediacion="complement_values.get('contrato', '')"
+                            t-att-Ganancia="format_float(complement_values.get('ganancia', 0))"/>
+                    </t>
+
+                    <!-- ── 4. FIDEICOMISOS NO EMPRESARIALES ───────────────
+                         CveRetenc recomendado: 21
+                         Ejemplo SAT:
+                           <fideicomisonoempresarial:Fideicomisonoempresarial Version="1.0">
+                             <fideicomisonoempresarial:IngresosOEntradas
+                               PropDelMontTot="622.6105"
+                               PartPropAcumDelFideicom="5.00"
+                               MontTotEntradasPeriodo="12452.21">
+                               <fideicomisonoempresarial:IntegracIngresos
+                                 Concepto="Concepto que describe los ingresos"/>
+                             </fideicomisonoempresarial:IngresosOEntradas>
+                             <fideicomisonoempresarial:DeduccOSalidas
+                               PropDelMontTot="432.11"
+                               PartPropDelFideicom="2.00"
+                               MontTotEgresPeriodo="2543.21">
+                               <fideicomisonoempresarial:IntegracEgresos
+                                 ConceptoS="Concepto que describe los egresos"/>
+                             </fideicomisonoempresarial:DeduccOSalidas>
+                             <fideicomisonoempresarial:RetEfectFideicomiso
+                               DescRetRelPagFideic="Descripción..."
+                               MontRetRelPagFideic="10652.83"/>
+                           </fideicomisonoempresarial:Fideicomisonoempresarial>
+                    ─────────────────────────────────────────────────────── -->
+                    <t t-elif="complement == 'fideicomisonoempresarial'">
+                        <fideicomisonoempresarial:Fideicomisonoempresarial Version="1.0">
+
+                            <fideicomisonoempresarial:IngresosOEntradas
+                                t-att-PropDelMontTot="format_float(complement_values.get('prop_mont_tot_ing', 0))"
+                                t-att-PartPropAcumDelFideicom="format_float(complement_values.get('part_prop_ing', 0))"
+                                t-att-MontTotEntradasPeriodo="format_float(complement_values.get('monto_tot_entradas', 0))">
+                                <fideicomisonoempresarial:IntegracIngresos
+                                    t-att-Concepto="complement_values.get('concepto_ingresos', '')"/>
+                            </fideicomisonoempresarial:IngresosOEntradas>
+
+                            <fideicomisonoempresarial:DeduccOSalidas
+                                t-att-PropDelMontTot="format_float(complement_values.get('prop_mont_tot_sal', 0))"
+                                t-att-PartPropDelFideicom="format_float(complement_values.get('part_prop_sal', 0))"
+                                t-att-MontTotEgresPeriodo="format_float(complement_values.get('monto_tot_egresos', 0))">
+                                <fideicomisonoempresarial:IntegracEgresos
+                                    t-att-ConceptoS="complement_values.get('concepto_egresos', '')"/>
+                            </fideicomisonoempresarial:DeduccOSalidas>
+
+                            <fideicomisonoempresarial:RetEfectFideicomiso
+                                t-att-DescRetRelPagFideic="complement_values.get('desc_ret', '')"
+                                t-att-MontRetRelPagFideic="format_float(complement_values.get('monto_ret_fide', 0))"/>
+
+                        </fideicomisonoempresarial:Fideicomisonoempresarial>
+                    </t>
+
+                    <!-- ── 5. INTERESES ───────────────────────────────────
+                         CveRetenc recomendado: 16
+                         Ejemplo SAT:
+                           <intereses:Intereses Version="1.0"
+                             SistFinanciero="NO"
+                             RetiroAORESRetInt="NO"
+                             OperFinancDerivad="NO"
+                             MontIntNominal="1.000"
+                             MontIntReal="2.000"
+                             Perdida="3.000"/>
+                    ─────────────────────────────────────────────────────── -->
+                    <t t-elif="complement == 'intereses'">
+                        <intereses:Intereses
+                            Version="1.0"
+                            t-att-SistFinanciero="complement_values.get('sist_financiero', 'NO')"
+                            t-att-RetiroAORESRetInt="complement_values.get('retiro_ores', 'NO')"
+                            t-att-OperFinancDerivad="complement_values.get('oper_financ', 'NO')"
+                            t-att-MontIntNominal="format_float(complement_values.get('monto_nominal', 0), 3)"
+                            t-att-MontIntReal="format_float(complement_values.get('monto_real', 0), 3)"
+                            t-att-Perdida="format_float(complement_values.get('perdida', 0), 3)"/>
+                    </t>
+
+                    <!-- ── 6. INTERESES HIPOTECARIOS ──────────────────────
+                         CveRetenc recomendado: 23
+                         Ejemplo SAT:
+                           <intereseshipotecarios:Intereseshipotecarios Version="1.0"
+                             CreditoDeInstFinanc="SI"
+                             SaldoInsoluto="2000.00"
+                             PropDeducDelCredit="1500.00"
+                             MontTotIntNominalesDev="100.00"
+                             MontTotIntNominalesDevYPag="100.00"
+                             MontTotIntRealPagDeduc="1500.00"
+                             NumContrato="123456789"/>
+                    ─────────────────────────────────────────────────────── -->
+                    <t t-elif="complement == 'intereseshipotecarios'">
+                        <intereseshipotecarios:Intereseshipotecarios
+                            Version="1.0"
+                            t-att-CreditoDeInstFinanc="complement_values.get('credito_inst', 'SI')"
+                            t-att-SaldoInsoluto="format_float(complement_values.get('saldo_insoluto', 0))"
+                            t-att-PropDeducDelCredit="format_float(complement_values.get('prop_deduc', 0))"
+                            t-att-MontTotIntNominalesDev="format_float(complement_values.get('monto_int_nom', 0))"
+                            t-att-MontTotIntNominalesDevYPag="format_float(complement_values.get('monto_int_nom_pag', 0))"
+                            t-att-MontTotIntRealPagDeduc="format_float(complement_values.get('monto_int_real', 0))"
+                            t-att-NumContrato="complement_values.get('num_contrato', '')"/>
+                    </t>
+
+                    <!-- ── 7. OPERACIONES CON DERIVADOS ───────────────────
+                         CveRetenc recomendado: 24
+                         Ejemplo SAT:
+                           <operacionesconderivados:Operacionesconderivados Version="1.0"
+                             MontGanAcum="1.00"
+                             MontPerdDed="1.00"/>
+                    ─────────────────────────────────────────────────────── -->
+                    <t t-elif="complement == 'operacionesconderivados'">
+                        <operacionesconderivados:Operacionesconderivados
+                            Version="1.0"
+                            t-att-MontGanAcum="format_float(complement_values.get('monto_ganancia', 0))"
+                            t-att-MontPerdDed="format_float(complement_values.get('monto_perdida', 0))"/>
+                    </t>
+
+                    <!-- ── 8. PLANES DE RETIRO ────────────────────────────
+                         CveRetenc recomendado: 22
+                         Ejemplo SAT:
+                           <planesderetiro11:Planesderetiro Version="1.1"
+                             SistemaFinanc="NO" MontTotAportAnioInmAnterior="1"
+                             MontIntRealesDevengAniooInmAnt="1"
+                             HuboRetirosAnioInmAntPer="NO" MontTotRetiradoAnioInmAntPer="1"
+                             MontTotExedenteAnioInmAnt="1" HuboRetirosAnioInmAnt="NO"
+                             MontTotRetiradoAnioInmAnt="1" MontTotExentRetiradoAnioInmAnt="0"
+                             NumReferencia="0001">
+                             <planesderetiro11:AportacionesODepositos
+                               TipoAportacionODeposito="a" MontAportODep="1"
+                               RFCFiduciaria="URE180429TM6"/>
+                           </planesderetiro11:Planesderetiro>
+                    ─────────────────────────────────────────────────────── -->
+                    <t t-elif="complement == 'planesderetiro'">
+                        <planesderetiro11:Planesderetiro
+                            Version="1.1"
+                            t-att-SistemaFinanc="complement_values.get('sistema_financ', 'NO')"
+                            t-att-MontTotAportAnioInmAnterior="format_float(complement_values.get('monto_aport', 0))"
+                            t-att-MontIntRealesDevengAniooInmAnt="format_float(complement_values.get('monto_int_reales', 0))"
+                            t-att-HuboRetirosAnioInmAntPer="complement_values.get('hubo_retiros_per', 'NO')"
+                            t-att-MontTotRetiradoAnioInmAntPer="format_float(complement_values.get('monto_retirado_per', 0))"
+                            t-att-MontTotExedenteAnioInmAnt="format_float(complement_values.get('monto_excedente', 0))"
+                            t-att-HuboRetirosAnioInmAnt="complement_values.get('hubo_retiros', 'NO')"
+                            t-att-MontTotRetiradoAnioInmAnt="format_float(complement_values.get('monto_retirado', 0))"
+                            t-att-MontTotExentRetiradoAnioInmAnt="format_float(complement_values.get('monto_exento', 0))"
+                            t-att-NumReferencia="complement_values.get('num_referencia', '')">
+
+                            <planesderetiro11:AportacionesODepositos
+                                t-if="complement_values.get('tipo_aportacion')"
+                                t-att-TipoAportacionODeposito="complement_values.get('tipo_aportacion', '')"
+                                t-att-MontAportODep="format_float(complement_values.get('monto_dep', 0))"
+                                t-att-RFCFiduciaria="complement_values.get('rfc_fiduciaria', '')"/>
+
+                        </planesderetiro11:Planesderetiro>
+                    </t>
+
+                    <!-- ── 9. PLATAFORMAS TECNOLÓGICAS ────────────────────
+                         CveRetenc recomendado: 26
+                         Ejemplo SAT:
+                           <plataformasTecnologicas:ServiciosPlataformasTecnologicas
+                             Version="1.0" Periodicidad="02" NumServ="1"
+                             MonTotServSIVA="1681.06" TotalIVATrasladado="268.9696"
+                             TotalIVARetenido="134.48" TotalISRRetenido="16.81"
+                             DifIVAEntregadoPrestServ="134.4896"
+                             MonTotalporUsoPlataforma="14.66">
+                             <plataformasTecnologicas:Servicios>
+                               <plataformasTecnologicas:DetallesDelServicio
+                                 FormaPagoServ="02" TipoDeServ="05"
+                                 FechaServ="2023-01-06" PrecioServSinIVA="1681.06">
+                                 <plataformasTecnologicas:ImpuestosTrasladadosdelServicio
+                                   Base="1681.06" Impuesto="02" TipoFactor="Tasa"
+                                   TasaCuota="0.160000" Importe="268.9696"/>
+                                 <plataformasTecnologicas:ComisionDelServicio
+                                   Base="1681.06" Importe="14.66"/>
+                               </plataformasTecnologicas:DetallesDelServicio>
+                             </plataformasTecnologicas:Servicios>
+                           </plataformasTecnologicas:ServiciosPlataformasTecnologicas>
+                    ─────────────────────────────────────────────────────── -->
+                    <t t-elif="complement == 'plataformastecnologicas'">
+                        <plataformasTecnologicas:ServiciosPlataformasTecnologicas
+                            Version="1.0"
+                            t-att-Periodicidad="complement_values.get('periodicidad', '04')"
+                            t-att-NumServ="str(complement_values.get('num_serv', 1))"
+                            t-att-MonTotServSIVA="format_float(complement_values.get('monto_tot_sin_iva', 0))"
+                            t-att-TotalIVATrasladado="format_float(complement_values.get('total_iva_trasladado', 0))"
+                            t-att-TotalIVARetenido="format_float(complement_values.get('total_iva_retenido', 0))"
+                            t-att-TotalISRRetenido="format_float(complement_values.get('total_isr_retenido', 0))"
+                            t-att-DifIVAEntregadoPrestServ="format_float(complement_values.get('dif_iva', 0))"
+                            t-att-MonTotalporUsoPlataforma="format_float(complement_values.get('monto_por_uso', 0))">
+
+                            <plataformasTecnologicas:Servicios>
+                                <plataformasTecnologicas:DetallesDelServicio
+                                    t-att-FormaPagoServ="complement_values.get('forma_pago_serv', '02')"
+                                    t-att-TipoDeServ="complement_values.get('tipo_serv', '05')"
+                                    t-att-FechaServ="complement_values.get('fecha_serv', '')"
+                                    t-att-PrecioServSinIVA="format_float(complement_values.get('precio_serv_sin_iva', 0))">
+
+                                    <plataformasTecnologicas:ImpuestosTrasladadosdelServicio
+                                        t-att-Base="format_float(complement_values.get('base_iva', 0))"
+                                        Impuesto="02"
+                                        TipoFactor="Tasa"
+                                        t-att-TasaCuota="format_float(complement_values.get('tasa_iva', 0.16), 6)"
+                                        t-att-Importe="format_float(complement_values.get('importe_iva', 0))"/>
+
+                                    <plataformasTecnologicas:ComisionDelServicio
+                                        t-att-Base="format_float(complement_values.get('base_comision', 0))"
+                                        t-att-Importe="format_float(complement_values.get('importe_comision', 0))"/>
+
+                                </plataformasTecnologicas:DetallesDelServicio>
+                            </plataformasTecnologicas:Servicios>
+
+                        </plataformasTecnologicas:ServiciosPlataformasTecnologicas>
+                    </t>
+
+                    <!-- ── 10. PREMIOS ────────────────────────────────────
+                         CveRetenc recomendado: 20
+                         Ejemplo SAT:
+                           <premios:Premios Version="1.0"
+                             EntidadFederativa="08"
+                             MontTotPago="10.00"
+                             MontTotPagoGrav="10.00"
+                             MontTotPagoExent="0.00"/>
+                    ─────────────────────────────────────────────────────── -->
+                    <t t-elif="complement == 'premios'">
+                        <premios:Premios
+                            Version="1.0"
+                            t-att-EntidadFederativa="complement_values.get('entidad_fed', '')"
+                            t-att-MontTotPago="format_float(complement_values.get('monto_tot_pago', 0))"
+                            t-att-MontTotPagoGrav="format_float(complement_values.get('monto_grav', 0))"
+                            t-att-MontTotPagoExent="format_float(complement_values.get('monto_exent', 0))"/>
+                    </t>
+
+                    <!-- ── 11. SECTOR FINANCIERO ──────────────────────────
+                         CveRetenc recomendado: 27
+                         Ejemplo SAT:
+                           <sectorfinanciero:SectorFinanciero Version="1.0"
+                             DescripFideicom="Fideicomiso"
+                             IdFideicom="123456789"
+                             NomFideicom="Fideicomiso"/>
+                    ─────────────────────────────────────────────────────── -->
+                    <t t-elif="complement == 'sectorfinanciero'">
+                        <sectorfinanciero:SectorFinanciero
+                            Version="1.0"
+                            t-att-DescripFideicom="complement_values.get('descrip_fideicom', '')"
+                            t-att-IdFideicom="complement_values.get('id_fideicom', '')"
+                            t-att-NomFideicom="complement_values.get('nom_fideicom', '')"/>
+                    </t>
+
+                    <!-- ── 12. ARRENDAMIENTO EN FIDEICOMISO ───────────────
+                         CveRetenc recomendado: 17
+                         Ejemplo SAT:
+                           <arrendamientoenfideicomiso:Arrendamientoenfideicomiso Version="1.0"
+                             PagProvEfecPorFiduc="1230.00" RendimFideicom="400.50"
+                             DeduccCorresp="356.00" MontTotRet="2000.00"
+                             MontResFiscDistFibras="400.50" MontOtrosConceptDistr="132.00"
+                             DescrMontOtrosConceptDistr="Fideicomiso de Inversión..."/>
+                    ─────────────────────────────────────────────────────── -->
+                    <t t-elif="complement == 'arrendamientoenfideicomiso'">
+                        <arrendamientoenfideicomiso:Arrendamientoenfideicomiso
+                            Version="1.0"
+                            t-att-PagProvEfecPorFiduc="format_float(complement_values.get('pag_prov', 0))"
+                            t-att-RendimFideicom="format_float(complement_values.get('rendim', 0))"
+                            t-att-DeduccCorresp="format_float(complement_values.get('deduc', 0))"
+                            t-att-MontTotRet="format_float(complement_values.get('monto_tot_ret_arren', 0))"
+                            t-att-MontResFiscDistFibras="format_float(complement_values.get('monto_res_fis', 0))"
+                            t-att-MontOtrosConceptDistr="format_float(complement_values.get('monto_otros', 0))"
+                            t-att-DescrMontOtrosConceptDistr="complement_values.get('desc_otros', '')"/>
+                    </t>
+
+                </retenciones:Complemento>
+
+            </retenciones:Retenciones>
+        </template>
+    </data>
+</odoo>

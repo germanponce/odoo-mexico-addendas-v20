@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+waybill_materiales_peligrosos_access,waybill.materiales.peligrosos,model_waybill_materiales_peligrosos,,1,1,1,1
+waybill_tipo_embalaje_access,waybill.tipo.embalaje,model_waybill_tipo_embalaje,,1,1,1,1

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_pos_default_s01_form_inherit" model="ir.ui.view">
+            <field name="name">view_pos_default_s01_form_inherit</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+            <field name="arch" type="xml">
+                 <notebook position="before">
+                    <group>
+                        <field name="pos_simple_question" />
+                    </group>
+                </notebook>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

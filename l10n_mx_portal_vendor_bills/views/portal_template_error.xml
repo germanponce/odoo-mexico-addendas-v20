@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Odoo 18 migration:
+    - `t-raw` is deprecated and removed; replaced with `t-out` throughout.
+-->
+<odoo>
+
+    <template id="portal_vendor_bill_error">
+        <t t-call="website.layout">
+            <t t-set="title">Error con la informacion de tu Factura.</t>
+            <div class="oe_structure">
+                <div class="container">
+                    <div class="s_website_form form-horizontal container-fluid mt-5">
+                        <h1 style="font-size:60px; color:gray; margin:10px;">Error en el XML</h1>
+
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Error:</strong> <t t-out="mensaje"/><br/>
+                            <strong>Orden de Compra: </strong> <t t-out="orden"/><br/>
+                            <strong>Importe: </strong>
+                            <t t-out="'$ {:0,.2f}'.format(importe)"/>
+                        </div>
+
+                        <p>
+                            Si piensas que esto es un error.<br/>
+                            Contáctanos por medio de nuestro correo electrónico, enviando:
+                        </p>
+                        <ul>
+                            <li>Nombre Completo</li>
+                            <li>RFC</li>
+                            <li>Orden de Compra</li>
+                            <li>Monto</li>
+                            <li>Archivos
+                                <ul>
+                                    <li>XML</li>
+                                    <li>PDF</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <br/>
+                        <div class="form-group">
+                            <button onclick="window.history.back();"
+                                    class="o_website_form_send btn btn-primary">
+                                <i class="fa fa-home" aria-hidden="true"/> Regresar
+                            </button>
+                        </div>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+            <div class="oe_structure"/>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- En Odoo 19 res.groups ya no tiene category_id: los grupos se declaran planos. -->
+    <record id="group_pos_reinvoice" model="res.groups">
+        <field name="name">Refacturar tickets incluidos en Factura Global</field>
+        <field name="comment">Permite emitir, desde una orden del punto de venta, la factura
+            nominativa y la nota de crédito contra la Factura Global. Son dos CFDI que se
+            timbran ante el SAT y deshacerlos requiere un trámite de cancelación, así que
+            conviene otorgarlo solo a quien deba hacer esta operación.</field>
+    </record>
+</odoo>

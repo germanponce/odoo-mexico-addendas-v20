@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+   <record id="view_invoice_extend_complemento_donaciones_ee" model="ir.ui.view">
+        <field name="name">account.move.form.leyendas.fiscales</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group//group[last()]" position="inside">
+                <field name="complemento_donaciones" 
+                    readonly="state != 'draft'" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

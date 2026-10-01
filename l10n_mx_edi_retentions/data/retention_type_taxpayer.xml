@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="tax_payer_01" model="retention.type.taxpayer">
+            <field name="code">1</field>
+            <field name="name">Artistas, deportistas y espectáculos públicos</field>
+        </record>
+
+        <record id="tax_payer_02" model="retention.type.taxpayer">
+            <field name="code">2</field>
+            <field name="name">Otras personas físicas</field>
+        </record>
+
+        <record id="tax_payer_03" model="retention.type.taxpayer">
+            <field name="code">3</field>
+            <field name="name">Persona moral</field>
+        </record>
+
+        <record id="tax_payer_04" model="retention.type.taxpayer">
+            <field name="code">4</field>
+            <field name="name">Fideicomiso</field>
+        </record>
+
+        <record id="tax_payer_05" model="retention.type.taxpayer">
+            <field name="code">5</field>
+            <field name="name">Asociación en participación</field>
+        </record>
+
+        <record id="tax_payer_06" model="retention.type.taxpayer">
+            <field name="code">6</field>
+            <field name="name">Organizaciones Internacionales o de gobierno</field>
+        </record>
+
+        <record id="tax_payer_07" model="retention.type.taxpayer">
+            <field name="code">7</field>
+            <field name="name">Organizaciones exentas</field>
+        </record>
+
+        <record id="tax_payer_08" model="retention.type.taxpayer">
+            <field name="code">8</field>
+            <field name="name">Agentes pagadores</field>
+        </record>
+
+        <record id="tax_payer_09" model="retention.type.taxpayer">
+            <field name="code">9</field>
+            <field name="name">Otros</field>
+        </record>
+
+    </data>
+</odoo>

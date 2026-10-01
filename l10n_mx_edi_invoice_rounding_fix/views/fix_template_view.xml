@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <template id="l10n_mx_edi_invoice_rounding_fix_inherit" inherit_id="l10n_mx_edi.cfdiv40">
+        <!-- Reemplazo de atributos en cfdi:Traslado -->
+
+        <xpath expr="//*[name()='cfdi:Traslado']" position="attributes">
+            <attribute name="t-att-Base">format_float(tax_values['base'], precision=2)</attribute>
+            <attribute name="t-att-Importe">format_float(tax_values['importe'], precision=2)</attribute>
+        </xpath>
+        <!-- Reemplazo de atributos en cfdi:Retencion -->
+        <xpath expr="//*[name()='cfdi:Retencion']" position="attributes">
+            <attribute name="t-att-Base">format_float(tax_values['base'], precision=2)</attribute>
+            <attribute name="t-att-Importe">format_float(tax_values['importe'], precision=2)</attribute>
+        </xpath>
+    </template>
+
+    </data>
+</odoo>

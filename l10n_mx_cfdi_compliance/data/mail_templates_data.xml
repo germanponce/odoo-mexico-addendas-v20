@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mail_template_cfdi_blocked" model="mail.template">
+            <field name="name">CFDI Compliance: CFDI bloqueado</field>
+            <field name="model_id" ref="model_l10n_mx_cfdi_document"/>
+            <field name="subject">CFDI bloqueado: {{ object.uuid or object.display_name }}</field>
+            <field name="email_from">{{ (object.company_id.email or user.email) }}</field>
+            <field name="body_html" type="html">
+                <div>
+                    <p>El siguiente CFDI no ha pasado las reglas de compliance fiscal y ha sido bloqueado:</p>
+                    <ul>
+                        <li>UUID: <t t-out="object.uuid"/></li>
+                        <li>Emisor: <t t-out="object.rfc_emisor"/> - <t t-out="object.nombre_emisor"/></li>
+                        <li>Total: <t t-out="object.total"/> <t t-out="object.moneda"/></li>
+                        <li>Score: <t t-out="object.compliance_score"/></li>
+                    </ul>
+                    <p>Revise los resultados en Odoo &gt; CFDI Compliance.</p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+    </data>
+</odoo>

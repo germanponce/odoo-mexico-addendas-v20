@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="l10n_mx_edi_40_generic_vat_payment_20_template" inherit_id="l10n_mx_edi.payment20">
+        <xpath expr="//*[name()='cfdi:Receptor']" position="attributes">
+            <attribute name="t-att-Rfc">record.get_edi_receptor_dynamic_info('rfc', receptor['rfc'])</attribute>
+            <attribute name="t-att-DomicilioFiscalReceptor">record.get_edi_receptor_dynamic_info('codigopostalreceptor', receptor['domicilio_fiscal_receptor'])</attribute>
+            <attribute name="t-att-RegimenFiscalReceptor">record.get_edi_receptor_dynamic_info('regimenfiscalreceptor', receptor['regimen_fiscal_receptor'])</attribute>
+            <attribute name="t-att-Nombre">record.get_edi_receptor_dynamic_info('nombre', format_string(receptor['nombre'], 254))</attribute>
+        </xpath>
+    </template>
+
+</odoo>

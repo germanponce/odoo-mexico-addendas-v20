@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="l10n_mx_edi_addenda_pepsico" model="l10n_mx_edi.addenda">
+            <field name="name">Pepsico</field>
+            <field name="arch" type="xml">
+                <t t-xml-node="addenda">
+                    <t t-set="sale_model" t-value="'sale_line_ids' in record.invoice_line_ids._fields"/>
+                    <t t-set="sale_id" t-value="record.mapped('invoice_line_ids.sale_line_ids.order_id') if sale_model else False"/>
+                    <t t-set="pickings" t-value="sale_id.picking_ids.filtered(lambda x: x.state == 'done' and x.date_done)" />
+                    <RequestCFD
+                        version="2.0"
+                        tipo="AddendaPCO"
+                        t-att-idPedido="record.x_pepsico_idPedido or ''"
+                        t-att-idSolicitudPago="record.x_payment_request or None">
+                        <Documento
+                            t-att-tipoDoc="{'out_invoice': 1, 'out_refund': 2}.get(record.move_type)"
+                            t-att-folioUUID="record.l10n_mx_edi_cfdi_uuid"
+                            t-att-referencia="record.l10n_mx_edi_origin if record.move_type == 'out_refund' else None"/>
+                        <Proveedor t-att-idProveedor="record.partner_id.ref"/>
+                        <Recepciones>
+                            <t t-set="invoice_lines" t-value="record.get_invoice_lines()"/>
+                            <Recepcion t-att-idRecepcion="record.x_reception">
+                                <t t-foreach="record.invoice_line_ids" t-as="line">
+                                    <Concepto
+                                        t-att-importe="'%.6f' % (line.price_unit * line.quantity)"
+                                        t-att-valorUnitario="line.price_unit"
+                                        t-att-cantidad="line.quantity"
+                                        t-att-descripcion="line.name"
+                                        t-att-unidad="line.product_uom_id.name"/>
+                                </t>
+                            </Recepcion>
+                        </Recepciones>
+                    </RequestCFD>
+                </t>
+            </field>
+        </record>
+    </data>
+</odoo>

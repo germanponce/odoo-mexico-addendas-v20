@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="l10n_mx_traslado.customer_sub_menu_factura_global" 
+                  name="CFDI Traslado" 
+                  action="l10n_mx_traslado.action_fatura_global_tree" 
+                  parent="stock.menu_stock_warehouse_mgmt" 
+                  sequence="111"/>
+
+    </data>
+</odoo>

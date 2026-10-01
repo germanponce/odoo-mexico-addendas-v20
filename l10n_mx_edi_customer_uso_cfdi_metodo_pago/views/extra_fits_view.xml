@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+         <record id="res_partner_uso_cfdi_form" model="ir.ui.view">
+            <field name="name">res.partner.view.form.inherit.ip</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='vat']" position="before">
+                    <field name="l10n_mx_edi_payment_method_id"/>
+                    <field name="l10n_mx_edi_usage"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

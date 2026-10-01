@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="external_addenda_fields_cfdiv33" inherit_id="l10n_mx_edi.cfdiv33">
+        <xpath expr="(//*[local-name()='Concepto'])" position="attributes" t-if="record.partner_id.commercial_partner_id.use_as_product_code == 'customer_product_code'">
+            <attribute name="t-att-NoIdentificacion">record._get_string_cfdi(line.product_id._get_customer_product_code(line.partner_id.commercial_partner_id.id))</attribute>
+        </xpath>
+    </template>
+</odoo>

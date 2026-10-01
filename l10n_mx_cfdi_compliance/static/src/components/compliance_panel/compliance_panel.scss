@@ -1,0 +1,17 @@
+.o_cfdi_compliance_panel {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+
+    .o_cfdi_score_wrapper {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .o_cfdi_score_value {
+        font-weight: 600;
+    }
+}

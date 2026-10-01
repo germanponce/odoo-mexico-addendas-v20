@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Catalogo de reglas. Se sincroniza desde el registry Python al instalar.
+     Este archivo solo dispara la sincronizacion via server action. -->
+<odoo>
+    <data noupdate="1">
+        <function model="l10n_mx.compliance.rule" name="_sync_from_registry"/>
+    </data>
+</odoo>

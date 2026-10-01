@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_factoring,account_factoring,model_account_factoring,base.group_user,1,1,1,1
+access_account_factoring_line,account_factoring_line,model_account_factoring_line,base.group_user,1,1,1,1

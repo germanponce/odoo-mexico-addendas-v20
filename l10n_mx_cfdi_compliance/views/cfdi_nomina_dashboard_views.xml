@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Dashboard ligero de Nomina: reusa l10n_mx.cfdi.document filtrado a
+         tipo_comprobante='N', con vistas graph + pivot para metricas rapidas. -->
+
+    <record id="view_cfdi_nomina_graph" model="ir.ui.view">
+        <field name="name">cfdi.document.nomina.graph</field>
+        <field name="model">l10n_mx.cfdi.document</field>
+        <field name="arch" type="xml">
+            <graph string="Nomina - Compliance" type="bar" sample="1">
+                <field name="compliance_state"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_cfdi_nomina_pivot" model="ir.ui.view">
+        <field name="name">cfdi.document.nomina.pivot</field>
+        <field name="model">l10n_mx.cfdi.document</field>
+        <field name="arch" type="xml">
+            <pivot string="Nomina - Compliance" sample="1">
+                <field name="compliance_state" type="row"/>
+                <field name="fecha" interval="month" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_cfdi_nomina" model="ir.actions.act_window">
+        <field name="name">Nomina</field>
+        <field name="res_model">l10n_mx.cfdi.document</field>
+        <field name="view_mode">list,graph,pivot,form</field>
+        <field name="domain">[('tipo_comprobante', '=', 'N')]</field>
+        <field name="context">{'search_default_group_state': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aun no hay CFDIs de Nomina evaluados.
+            </p>
+            <p>
+                Aqui se concentran los comprobantes de Nomina (Complemento 1.2) con
+                su estado de compliance. Usa las vistas Grafico y Tabla dinamica para
+                ver el avance por estado, mes y empresa.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_cfdi_nomina" parent="menu_cfdi_compliance_root"
+              name="Nomina" action="action_cfdi_nomina" sequence="15"/>
+
+</odoo>

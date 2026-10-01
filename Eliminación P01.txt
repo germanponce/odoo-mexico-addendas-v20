@@ -1,0 +1,4 @@
+l10n_mx_edi_usage
+
+update account_move set l10n_mx_edi_usage='S01' where l10n_mx_edi_usage='P01';
+update res_partner set l10n_mx_edi_usage='S01' where l10n_mx_edi_usage='P01';

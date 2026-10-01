@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="cfdiv40_cuentapredial" inherit_id="l10n_mx_edi_extended_40.cfdiv40_extended">
+            <!-- Cuenta Predial on invoice lines -->
+            <t t-if="not record.l10n_mx_edi_external_trade" position="after">
+                <t t-if="line_values['cuenta_predial']">
+                    <cfdi:CuentaPredial
+                        xmlns:cfdi="http://www.sat.gob.mx/cfd/4"
+                        t-att-Numero="line_values['cuenta_predial']"/>
+                </t>
+            </t>
+            <!-- -->
+        </template>
+
+    </data>
+</odoo>

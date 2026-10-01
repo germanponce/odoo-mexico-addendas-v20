@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="l10n_mx_edi_import_cfdi_restrict_config_settings_form" model="ir.ui.view">
+            <field name="name">sale.order.credit.limit.restrict.config.settings.form</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//block[@id='invoicing_settings']" position="after">
+                    <block title="CFDI Import" name="l10n_mx_edi_import_cfdi">
+                        <setting id="use_count_location_dest" title="If marked, product in the xml file are going to be created.">
+                            <field name="create_products" class="o_light_label"/>
+                            <field name="product_type_default"
+                                invisible="not create_products"
+                                required="create_products"/>
+                            <field name="product_categ_id_default"
+                                invisible="not create_products"
+                                required="create_products"/>
+                        </setting>
+                    </block>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

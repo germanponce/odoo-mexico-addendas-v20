@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_mx_pos_reinvoice_wizard_form" model="ir.ui.view">
+        <field name="name">l10n_mx.pos.reinvoice.wizard.form</field>
+        <field name="model">l10n_mx.pos.reinvoice.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Refacturar ticket">
+                <field name="order_id" invisible="1"/>
+                <field name="currency_id" invisible="1"/>
+                <div class="alert alert-info" role="alert">
+                    Este ticket salió en una Factura Global. Al confirmar se emite la
+                    factura a nombre del cliente y la nota de crédito a Público en General
+                    relacionada con esa Global, y se aplica el saldo a la factura.
+                </div>
+                <group>
+                    <field name="global_uuid" string="Factura Global del ticket"/>
+                    <field name="amount_total" string="Importe"/>
+                    <field name="partner_id" placeholder="Cliente que recibe la factura"/>
+                </group>
+                <footer>
+                    <button name="action_reinvoice" type="object" string="Refacturar"
+                            class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"
+                            data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

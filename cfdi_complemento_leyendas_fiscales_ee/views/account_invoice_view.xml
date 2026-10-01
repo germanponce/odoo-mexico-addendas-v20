@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+   <record id="view_invoice_extend_complemento_leyendas_fiscales_ee" model="ir.ui.view">
+        <field name="name">account.move.form.leyendas.fiscales</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group//group[last()]" position="inside">
+                <field name="complemento_leyendas_fiscales"/>
+            </xpath>
+            <notebook position="inside">
+                <page string="Leyendas Fiscales" 
+                    invisible="complemento_leyendas_fiscales == False">
+                    <field name="leyendas_fiscales_ids">
+                        <list string="Leyendas Fiscales">
+                            <field name="disposicion" />
+                            <field name="norma" />
+                            <field name="texto_leyenda" />
+                        </list>
+                        <form string="Leyenda Fiscal" >
+                            <group>
+                                <field name="disposicion" />
+                                <field name="norma" />
+                                <field name="texto_leyenda" />
+                            </group>
+                        </form>
+                    </field>
+                    
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+</odoo>

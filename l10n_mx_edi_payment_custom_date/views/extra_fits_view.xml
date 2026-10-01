@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="account_payment_custom_date_wizard_form" model="ir.ui.view">
+            <field name="name">account.payment.custom.date.wizard.form</field>
+            <field name="model">account.payment.custom.date.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Fecha Efectiva de Pago">
+                    <sheet>
+                        <group>
+                            <group string="Selecciona la Fecha Efectiva de Pago">
+                                <field name="cfdi_custom_date" nolabel="1"/>
+                            </group>
+                        </group>
+                        <p class="text-muted">
+                            Esta fecha se usará como <strong>FechaPago</strong> en el XML
+                            del complemento de pago. Se convertirá automáticamente a la
+                            zona horaria fiscal del domicilio emisor.
+                        </p>
+                    </sheet>
+                    <footer>
+                        <button
+                            name="write_custom_date"
+                            string="Asignar Fecha"
+                            type="object"
+                            class="btn-primary"
+                            icon="fa-calendar"
+                        />
+                        <button
+                            special="cancel"
+                            string="Cancelar"
+                            class="btn-secondary"
+                        />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action to open the wizard from account.payment list/form -->
+        <record id="action_account_payment_custom_date_wizard" model="ir.actions.act_window">
+            <field name="name">Asignar Fecha Efectiva de Pago</field>
+            <field name="res_model">account.payment.custom.date.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="account.model_account_payment"/>
+            <field name="binding_view_types">list,form</field>
+        </record>
+
+
+        <record id="view_account_payment_custom_date_register" model="ir.ui.view">
+            <field name="name">account.payment.register.cfdi.custom.date</field>
+            <field name="model">account.payment.register</field>
+            <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='journal_id']" position="after">
+                    <field
+                        name="cfdi_custom_date"
+                    />
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_payment_custom_cfdi_date_form" model="ir.ui.view">
+            <field name="name">account.payment.cfdi.custom.date.form</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date']" position="after">
+                    <field
+                        name="cfdi_custom_date"
+                        readonly="l10n_mx_edi_cfdi_uuid"
+                    />
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

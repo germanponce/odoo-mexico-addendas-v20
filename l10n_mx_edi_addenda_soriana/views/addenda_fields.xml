@@ -1,0 +1,338 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="addenda_soriana_descarga_product_fields_form">
+            <field name="name">addenda_soriana_descarga_product_fields_form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.product_template_only_form_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="soriana_descarga" string="Addenda Soriana (Descarga Remision)">
+                        <field name="x_product_supplierinfo" nolabel="1">
+                            <list string="Información Adicional Cliente" editable="bottom">
+                                <field name="partner_name" optional="show"  />
+                                <field name="product_code" optional="show"  />
+                                <field name="uom" optional="show"  />
+                                <field name="uom_additional" optional="show"  />
+                                <field name="company" optional="show"  />
+                                <field name="vendor_code" optional="show"  />
+                            </list>
+                            <form string="Información Adicional Cliente">
+                                <group>
+                                    <field name="partner_name" />
+                                    <field name="product_code" />
+                                    <field name="uom" />
+                                    <field name="uom_additional" />
+                                    <field name="company" />
+                                    <field name="vendor_code" />
+                                </group>
+                            </form>
+                        </field>
+                    </group>
+                    
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="addenda_soriana_descarga_product_fields_form">
+            <field name="name">addenda_soriana_descarga_product_fields_form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.product_template_only_form_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <field name="barcode" position="after">
+                    <field name="x_codigo_soriana" />
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="addenda_soriana_descarga_71_sale_fields_form">
+            <field name="name">addenda_soriana_descarga_71_sale_fields_form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.sale_order_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="amece" string="Addenda Soriana (Descarga Remision)" invisible="addenda_type != 'soriana_descarga'">
+                        <group>
+                            <field name="x_order_reference"/>
+                            <field name="x_order_reference_date"/>
+                            <!-- <field name="x_additional_reference"/> -->
+                            <field name="x_cedis_id"/>
+                            <field name="x_tipo_moneda"/>
+                            <field name="x_tipo_bulto"/>
+                            <field name="x_cantidad_bultos"/>
+                        </group>
+                        <group>
+                            <field name="x_delivery_reference"/>
+                            <field name="x_delivery_reference_date"/>
+                            <field name="x_vendor_code"/>
+                            <field name="x_vendor_supplier_code"/>
+                            <field name="x_gln"/>     
+                            <field name="x_center"/> 
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="addenda_soriana_descarga_71_invoice_fields_form">
+            <field name="name">addenda_soriana_descarga_71_invoice_fields_form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.account_move_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="soriana_descarga" string="Addenda Soriana (Descarga Remision)" invisible="addenda_type != 'soriana_descarga'">
+                        <group>
+                            <field name="x_order_reference"/>
+                            <field name="x_order_reference_date"/>
+                            <!-- <field name="x_additional_reference"/> -->
+                            <field name="x_order_remision"/>
+                            <field name="x_cedis_id"/>
+                            <field name="x_tipo_moneda"/>
+                            <field name="x_tipo_bulto"/>
+                            <field name="x_cantidad_bultos"/>
+                        </group>
+                        <group>
+                            <field name="x_delivery_reference"/>
+                            <field name="x_delivery_reference_date"/>
+                            <field name="x_vendor_code"/>
+                            <field name="x_vendor_supplier_code"/>
+                            <field name="x_gln"/>     
+                            <field name="x_center"/> 
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr='//field[@name="invoice_line_ids"]/list/field[@name="name"]' position="after">
+                    <field name="x_codigo_soriana" column_invisible="parent.addenda_type != 'soriana_descarga'"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="addenda_soriana_descarga_71_partner_fields_form">
+            <field name="name">addenda_soriana_descarga_71_partner_fields_form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='fiscal_information']" position="inside">
+                    <separator string="Soriana (Descarga Remision)" />
+                    <newline/>
+                    <field name="x_gln"/>     
+                    <field name="x_center"/> 
+                    <field name="x_edi_identification"/>
+                    <field name="x_vendor_code"/>
+                    <field name="x_vendor_supplier_code"/>
+                    <!-- <field name="x_partner_code" nolabel="1" colspan="2">
+                        <list string="Vendedores" editable="bottom">
+                            <field name="code" required="1"/>
+                        </list>
+                        <form string="Vendedor">
+                            <group>
+                                <field name="code" />
+                            </group>
+                        </form>
+                    </field> -->
+                    <field name="x_product_info" nolabel="1" colspan="2" context="{'default_vendor_code':x_vendor_code}">
+                        <list string="Extra Info Productos" editable="bottom">
+                            <field name="product_name" optional="show"  required="1"/>
+                            <field name="product_code" optional="show"  required="1"/>
+                            <field name="uom" optional="show"  required="1"/>
+                            <field name="uom_additional" optional="show"  required="1"/>
+                            <field name="company" optional="show"  required="1"/>
+                            <field name="vendor_code" optional="show"  required="1"/>
+                        </list>
+                        <form string="Extra Info Producto">
+                            <group>
+                                <field name="product_name" />
+                                <field name="product_code" />
+                                <field name="uom" />
+                                <field name="uom_additional" />
+                                <field name="company" />
+                                <field name="vendor_code" />
+                            </group>
+                        </form>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+
+
+    <!-- Supplier Info Sale -->
+
+        <record id="product_supplierinfo_sale_tree" model="ir.ui.view">
+            <field name="name">product.supplierinfo.sale.tree</field>
+            <field name="model">product.supplierinfo.sale</field>            
+            <field name="arch" type="xml">
+                <list string="Additional info" create="true" delete="true" edit="false" editable="bottom" multi_edit="1">
+                    <field name="partner_name"/>
+                    <field name="product_name"/>
+                    <field name="company"/>
+                    <field name="product_code"/>
+                    <field name="vendor_code"/>
+                    <field name="uom"/>
+
+                </list>
+            </field>
+        </record>
+        
+        <record id="product_supplierinfo_sale_form" model="ir.ui.view">
+            <field name="name">product.supplierinfo.sale.form</field>
+            <field name="model">product.supplierinfo.sale</field>
+            <field name="arch" type="xml">
+                <form string="Additional info" create="true" delete="true" edit="true">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="product_code" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_name"/>
+                                <field name="product_name" placeholder="Product Name"/>
+                                <field name='company' placeholder="Company"/>
+                            </group>
+                            <group>
+                                <field name="product_code" placeholder="Product Code"/>
+                                <field name="vendor_code" placeholder="Vendor Code"/>
+                                <field name="uom" placeholder="Unit of measurement"/>
+                                <field name="uom_additional" placeholder="Unit of measurement additional"/>             
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="product_supplierinfo_sale_action" model="ir.actions.act_window">
+            <field name="name">Product additional info</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.supplierinfo.sale</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Assigned product with code  !
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+            id="menu_product_supplierinfo_sale"
+            action="product_supplierinfo_sale_action"
+            name="Product additional info"
+            parent="sale.product_menu_catalog"          
+        />
+
+    <!-- Partner Supplier Info -->
+
+    <record id="res_partner_supplierinfo_tree" model="ir.ui.view">
+            <field name="name">res.partner.supplierinfo.tree</field>
+            <field name="model">res.partner.supplierinfo</field>            
+            <field name="arch" type="xml">
+                <list string="Additional info" create="true" delete="true" edit="false" editable="bottom" multi_edit="1">
+                    <field name="name"/>
+                    <field name="companies"/>
+                    <field name="code"/>
+                </list>
+            </field>
+        </record>
+        
+        <record id="res_partner_supplierinfo_form" model="ir.ui.view">
+            <field name="name">res.partner.supplierinfo.form</field>
+            <field name="model">res.partner.supplierinfo</field>
+            <field name="arch" type="xml">
+                <form string="Additional info" create="true" delete="true" edit="true">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="code" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" placeholder="Customer"/>                                
+                            </group>
+                            <group>
+                                <field name="companies" placeholder="Company"/>
+                                <field name="code" placeholder="Company code"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="res_partner_supplierinfo_action" model="ir.actions.act_window">
+            <field name="name">Partner additional info</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner.supplierinfo</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Assigned partner with code  !
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+            id="menu_res_partner_supplierinfo"
+            action="res_partner_supplierinfo_action"
+            name="Partner additional info"
+            parent="contacts.res_partner_menu_contacts"
+            sequence="3"
+        />
+
+    <!-- Partner Supplier Info -->
+
+    <record id="soriana_cedis_code_tree" model="ir.ui.view">
+            <field name="name">soriana.cedis.code.tree</field>
+            <field name="model">soriana.cedis.code</field>            
+            <field name="arch" type="xml">
+                <list string="CEDIS Entrega Soriana" create="true" delete="true" edit="false" editable="bottom" multi_edit="1">
+                    <field name="name"/>
+                    <field name="code"/>
+                </list>
+            </field>
+        </record>
+        
+        <record id="soriana_cedis_code_form" model="ir.ui.view">
+            <field name="name">soriana.cedis.code.form</field>
+            <field name="model">soriana.cedis.code</field>
+            <field name="arch" type="xml">
+                <form string="CEDIS Entrega Soriana" create="true" delete="true" edit="true">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="code" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" placeholder="Customer"/>                                
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="soriana_cedis_code_action" model="ir.actions.act_window">
+            <field name="name">CEDIS Entrega Soriana</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">soriana.cedis.code</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+            id="menu_soriana_cedis_code"
+            action="soriana_cedis_code_action"
+            name="CEDIS Entrega Soriana"
+            parent="sale.product_menu_catalog"
+            sequence="3"
+        />
+    </data>
+</odoo>

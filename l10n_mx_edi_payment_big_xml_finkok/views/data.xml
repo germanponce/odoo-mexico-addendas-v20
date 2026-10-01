@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <data noupdate="1">        
+            <!-- Parametro para definir si se puede pagar factura sin Contra-Recibo -->
+            <record model="ir.config_parameter" id="limit_weight_bytes_finkok">               
+              <field name="key">limit_weight_bytes_finkok</field> 
+              <field name="value">800000</field>              
+            </record>
+            
+        </data>
+    </data>
+</odoo>

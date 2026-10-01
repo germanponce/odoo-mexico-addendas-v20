@@ -1,0 +1,450 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <data>
+        
+        <!-- Vista list separada para productos -->
+        <record id="view_downloaded_xml_sat_products_tree" model="ir.ui.view">
+            <field name="name">account.edi.downloaded.xml.sat.products.list</field>
+            <field name="model">account.edi.downloaded.xml.sat.products</field>
+            <field name="arch" type="xml">
+                <list string="Conceptos" editable="bottom">
+                    <field name="product_rel"/>
+                    <field name="account_id" optional="show"/>
+                    <field name="sat_id"/>
+                    <field name="description"/>
+                    <field name="cuenta_predial" optional="show" string="Cuenta Predial"/>
+                    <field name="quantity"/>
+                    <field name="product_metrics"/>
+                    <field name="unit_value"/>
+                    <field name="total_amount"/>
+                    <field name="tax_id" column_invisible="1"/>
+                    <field name="ieps_traslado_amount" column_invisible="1"/>
+                    <field name="tax_summary_display" widget="html" readonly="1"/>
+                    <field name="discount"/>
+                </list>
+            </field>
+        </record>
+        
+        <record id="view_account_edi_downloaded_xml_sat_list" model="ir.ui.view">
+            <field name="name">account.edi.downloaded.xml.sat.list</field>
+            <field name="model">account.edi.downloaded.xml.sat</field>
+            <field name="arch" type="xml">
+                <list string="XML SAT" create="0" decoration-danger="company_mismatch==True">
+                    <field name="company_mismatch" column_invisible="1"/>
+                    <field name="name" optional="show"/>
+                    <field name="rfc_empresa" optional="show" string="RFC Empresa"/>
+                    <field name="company_id" optional="show"/>
+                    <field name="rfc_partner" optional="show" string="RFC Contacto"/>
+                    <field name="partner_id" optional="show"/>
+                    <field name="tax_regime" optional="show"/>
+                    <field name="invoice_id" optional="show"/>
+                    <field name="payment_method" optional="show"/>
+                    <field name="payment_method_sat" optional="show"/>
+                    <field name="cfdi_type" optional="show"/>
+                    <field name="cfdi_usage" optional="show"/>
+                    <field name="document_type" optional="show"/>
+                    <field name="state" widget="badge" decoration-info="state == 'not_imported'" decoration-success="state == 'posted'" decoration-warning="state == 'cancel'"/>  
+                    <field name="document_date" optional="show"/>
+                    <field name="fecha_timbrado" optional="show" string="Fecha de Timbrado"/>
+                    <field name="sub_total" optional="show"/>
+                    <!-- Desglose de impuestos (9 columnas).
+                         Los menos comunes en optional="hide": el usuario los habilita desde el
+                         menu "Columnas opcionales" (icono de engrane arriba a la derecha).
+                         Para Excel export aparecen ordenadas entre SubTotal y Total. -->
+                    <field name="tax_iva_16_traslado" optional="show" sum="Total" string="IVA 16%"/>
+                    <field name="tax_iva_8_traslado" optional="hide" sum="Total" string="IVA 8%"/>
+                    <field name="tax_iva_0_traslado" optional="hide" sum="Total" string="IVA 0%"/>
+                    <field name="tax_iva_exento_traslado" optional="hide" sum="Total" string="IVA Exento"/>
+                    <field name="tax_iva_ret" optional="show" sum="Total" string="IVA Ret"/>
+                    <field name="tax_isr_ret" optional="show" sum="Total" string="ISR Ret"/>
+                    <field name="tax_ieps_traslado" optional="hide" sum="Total" string="IEPS"/>
+                    <field name="tax_ieps_ret" optional="hide" sum="Total" string="IEPS Ret"/>
+                    <field name="tax_otros" optional="hide" sum="Total" string="Otros Imp"/>
+                    <field name="amount_total" optional="show"/>
+                    <field name="sat_state" optional="show" widget="badge" decoration-info="sat_state == 'No Encontrado'" decoration-success="sat_state == 'Vigente'" decoration-warning="sat_state == 'Cancelado'"/>
+                    <field name="estatus_69b" string="⚠️ Estatus Artículo 69-B" optional="show" decoration-danger="estatus_69b in ['Presunto','Definitivo','EFOS','No Localizado']" decoration-success="estatus_69b in ['No listado','Vigente','Desvirtuado','Sentencia Favorable','Sin riesgo','']"/>
+                </list>
+
+            </field>
+        </record>
+
+        <record id="view_account_edi_downloaded_xml_sat_list_search" model="ir.ui.view">
+            <field name="name">account.edi.downloaded.xml.sat.view.search</field>
+            <field name="model">account.edi.downloaded.xml.sat</field>
+            <field name="arch" type="xml">
+                <search string="XML SAT">
+                    <!-- ====== Campos buscables (search bar) ====== -->
+                    <field name="name" string="UUID"/>
+                    <field name="partner_id"/>
+                    <field name="company_id"/>
+                    <field name="rfc_empresa"/>
+                    <field name="rfc_partner"/>
+                    <field name="serie"/>
+                    <field name="folio"/>
+                    <!-- Busqueda combinada en los CONCEPTOS del XML: el usuario escribe
+                         texto libre y se busca en codigo SAT, descripcion del codigo SAT,
+                         descripcion del concepto y cuenta predial (todos del child).
+                         Util para localizar facturas por contenido del CFDI. -->
+                    <field name="downloaded_product_id" string="Concepto (codigo SAT / descripcion)" filter_domain="['|', '|', '|',                                            ('downloaded_product_id.sat_id.code', 'ilike', self),                                            ('downloaded_product_id.sat_id.name', 'ilike', self),                                            ('downloaded_product_id.description', 'ilike', self),                                            ('downloaded_product_id.cuenta_predial', 'ilike', self)]"/>
+
+                    <!-- ====== Filtros pre-definidos ====== -->
+                    <!-- Con/Sin Documento Origen viene de la vista heredada
+                         account.edi.downloaded.xml.sat.search.origin (account_move_line_origin_view.xml) -->
+                    <filter string="Con Factura Relacionada" name="filter_con_factura" domain="[('invoice_id', '!=', False)]"/>
+                    <filter string="Sin Factura Relacionada" name="filter_sin_factura" domain="[('invoice_id', '=', False)]"/>
+                    <separator/>
+                    <filter string="Emitidos" name="filter_emitidos" domain="[('cfdi_type', '=', 'emitidos')]"/>
+                    <filter string="Recibidos" name="filter_recibidos" domain="[('cfdi_type', '=', 'recibidos')]"/>
+                    <separator/>
+                    <filter string="Ingreso (I)" name="filter_doc_I" domain="[('document_type', '=', 'I')]"/>
+                    <filter string="Egreso (E)" name="filter_doc_E" domain="[('document_type', '=', 'E')]"/>
+                    <filter string="Pago (P)" name="filter_doc_P" domain="[('document_type', '=', 'P')]"/>
+                    <filter string="Nomina (N)" name="filter_doc_N" domain="[('document_type', '=', 'N')]"/>
+                    <filter string="Traslado (T)" name="filter_doc_T" domain="[('document_type', '=', 'T')]"/>
+                    <separator/>
+                    <filter string="SAT Vigente" name="filter_sat_vigente" domain="[('sat_state', '=', 'Vigente')]"/>
+                    <filter string="SAT Cancelado" name="filter_sat_cancelado" domain="[('sat_state', '=', 'Cancelado')]"/>
+                    <filter string="SAT No Encontrado" name="filter_sat_noenc" domain="[('sat_state', '=', 'No Encontrado')]"/>
+                    <separator/>
+                    <filter string="No Importado" name="filter_not_imported" domain="[('state', '=', 'not_imported')]"/>
+                    <filter string="Borrador" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Publicado" name="filter_posted" domain="[('state', '=', 'posted')]"/>
+                    <filter string="Ignorado" name="filter_ignored" domain="[('state', '=', 'ignored')]"/>
+                    <separator/>
+                    <filter string="Con IEPS" name="filter_con_ieps" domain="[('tax_ieps_traslado', '&gt;', 0)]"/>
+                    <filter string="Con IVA Retenido" name="filter_con_iva_ret" domain="[('tax_iva_ret', '&gt;', 0)]"/>
+                    <filter string="Con ISR Retenido" name="filter_con_isr_ret" domain="[('tax_isr_ret', '&gt;', 0)]"/>
+
+                    <!-- ====== Group By ====== -->
+                    <separator/>
+                    <filter string="Tipo (Emitidos/Recibidos)" name="group_cfdi_type" context="{'group_by': 'cfdi_type'}"/>
+                    <filter string="Tipo Documento (I/E/P/N/T)" name="group_doc_type" context="{'group_by': 'document_type'}"/>
+                    <filter string="Estatus SAT" name="group_sat_state" context="{'group_by': 'sat_state'}"/>
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Proveedor/Cliente" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Empresa" name="group_company" context="{'group_by': 'company_id'}"/>
+                    <filter string="Lote" name="group_batch" context="{'group_by': 'batch_id'}"/>
+                    <filter string="Metodo de Pago" name="group_payment_method" context="{'group_by': 'payment_method'}"/>
+                    <filter string="Forma de Pago" name="group_payment_method_sat" context="{'group_by': 'payment_method_sat'}"/>
+                    <filter string="Uso CFDI" name="group_cfdi_usage" context="{'group_by': 'cfdi_usage'}"/>
+                    <filter string="Regimen Fiscal" name="group_tax_regime" context="{'group_by': 'tax_regime'}"/>
+                    <filter string="Fecha Documento" name="group_doc_date" context="{'group_by': 'document_date'}"/>
+                    <filter string="Fecha Timbrado" name="group_fecha_timbrado" context="{'group_by': 'fecha_timbrado'}"/>
+                    <filter string="Moneda" name="group_currency" context="{'group_by': 'currency_id'}"/>
+                </search>
+            </field>
+        </record>
+
+       <record id="view_account_edi_downloaded_xml_sat_form" model="ir.ui.view">
+            <field name="name">account.edi.downloaded.xml.sat.form</field>
+            <field name="model">account.edi.downloaded.xml.sat</field>
+            <field name="arch" type="xml">
+                <form string="XML SAT" create="0">
+                    <header>
+                        <button string="Importar Factura" name="action_import_invoice" type="object" class="oe_highlight" invisible="imported or invoice_id or document_type=='P'"/>
+                        <button string="Desvincular Factura" name="action_undo_import" type="object" class="btn-warning" invisible="not invoice_id"
+                                confirm="Esto romperá el vínculo con la factura relacionada y dejará el XML como 'No Importado' para re-importarlo o re-vincularlo. Si la factura la creó la importación y está en BORRADOR, también se eliminará; si es una factura real (timbrada/publicada), solo se desvincula y se conserva. ¿Continuar?"/>
+                        <button string="Adjuntar XML a Póliza" name="action_force_attach_xml" type="object" class="btn-secondary" invisible="not invoice_id"
+                                confirm="Adjuntará el XML del SAT y el UUID a la póliza relacionada, aunque esté publicada/conciliada. Solo agrega metadata (no toca importes ni conciliación). Útil cuando la factura se registró con solo el PDF. ¿Continuar?"/>
+                        <button string="Adjuntar Complemento" name="action_add_payment" type="object" class="oe_highlight" invisible="document_type!='P'"/>
+                        <button string="Relacionar Manualmente" name="action_wizard_relate" class="oe_highlight" type="object" invisible="imported or document_type=='P'"/>
+                        <button string="Ignorar Factura" name="action_ignor" type="object" invisible="state=='ignored'"/> 
+                        <button string="Actualizar Estado SAT" name="action_fetch_sat_status" type="object" invisible="state=='ignored'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="not_imported,draft,posted,cancel,ignored,error_relating"/>
+                    </header>
+                    <field name="estatus_69b" invisible="True"/>
+                    <!-- INICIO sheet -->
+                    <sheet>
+                        <div class="alert alert-danger" role="alert" invisible="not company_mismatch">
+                            <strong>⚠️ Advertencia:</strong> El RFC de la empresa en el XML no coincide con la empresa asignada
+                            ni con ninguna coordinada autorizada. Verifique la configuración del CFDI o de las relaciones de coordinadas.
+                        </div>
+                        <div class="alert alert-info" role="alert" invisible="not is_coordinada_authorized">
+                            <strong>✅ CFDI de Coordinada:</strong> El RFC del XML pertenece a una empresa Coordinada autorizada de la Controladora. Operación correcta.
+                        </div>
+                        <div name="button_box" class="oe_button_box">
+                            <button class="oe_stat_button" type="object" name="view_invoice" icon="fa-pencil-square-o" invisible="not invoice_id">
+                                <field name="invoice_id" widget="statinfo" string="XML"/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="document_type" invisible="1"/>
+                                <field name="imported" invisible="1"/>
+                                <field name="company_mismatch" invisible="1"/>
+                                <field name="is_coordinada_authorized" invisible="1"/>
+                                <field name="name" readonly="1"/>
+                                <field name="sat_state" readonly="1"/>
+                                <field name="company_id" readonly="1"/>
+                                <field name="rfc_empresa" readonly="1" string="RFC Empresa"/>
+                                <field name="partner_id"/>
+                                <field name="rfc_partner" readonly="1" string="RFC Contacto"/>
+                                <field name="tax_regime" readonly="1" string="Regimen Fiscal" invisible="not tax_regime"/>
+                                <field name="cfdi_type" readonly="1"/>
+                                <field name="document_date" readonly="1"/>
+                                <field name="fecha_timbrado" readonly="1" invisible="not fecha_timbrado"/>
+                                <!-- Relacion Odoo segun tipo de CFDI: muestra solo el campo aplicable -->
+                                <field name="payment_id" readonly="1" invisible="document_type != 'P'"/>
+                                <field name="picking_id" readonly="1" invisible="document_type != 'T'"/>
+                                <field name="payslip_id" readonly="1" invisible="document_type != 'N'"/>
+                                <field name="estatus_69b" readonly="1" decoration-danger="estatus_69b not in ['','No listado','Vigente','Desvirtuado','Sentencia Favorable','Sin riesgo']" decoration-success="estatus_69b in ['','No listado','Vigente','Desvirtuado','Sentencia Favorable','Sin riesgo']"/>
+                                <field name="discount" readonly="1" invisible="not discount"/>
+                            </group>
+                        </group>
+
+                        <field name="downloaded_product_id" context="{'tree_view_ref': 'l10n_mx_xml_massive_download.view_downloaded_xml_sat_products_tree'}"/>
+                        <group>
+                            <field name="sub_total" widget="monetary" readonly="1"/>
+                            <!-- Descuento del CFDI (positivo en XML, almacenado negativo para mostrar como tal). -->
+                            <field name="discount" string="Descuento" widget="monetary" readonly="1" invisible="not discount"/>
+                            <!-- Desglose de impuestos: cada linea solo aparece si su importe es distinto de cero.
+                                 Asi un CFDI con solo IVA 16% no muestra basura de IVA 8%, IEPS, etc. -->
+                            <field name="tax_iva_16_traslado" widget="monetary" readonly="1" invisible="not tax_iva_16_traslado"/>
+                            <field name="tax_iva_8_traslado" widget="monetary" readonly="1" invisible="not tax_iva_8_traslado"/>
+                            <field name="tax_iva_0_traslado" widget="monetary" readonly="1" invisible="not tax_iva_0_traslado"/>
+                            <field name="tax_iva_exento_traslado" widget="monetary" readonly="1" invisible="not tax_iva_exento_traslado"/>
+                            <field name="tax_iva_ret" widget="monetary" readonly="1" invisible="not tax_iva_ret"/>
+                            <field name="tax_isr_ret" widget="monetary" readonly="1" invisible="not tax_isr_ret"/>
+                            <field name="tax_ieps_traslado" widget="monetary" readonly="1" invisible="not tax_ieps_traslado"/>
+                            <field name="tax_ieps_ret" widget="monetary" readonly="1" invisible="not tax_ieps_ret"/>
+                            <field name="tax_otros" widget="monetary" readonly="1" invisible="not tax_otros"/>
+                            <field name="amount_total" widget="monetary" readonly="1"/>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+
+
+
+
+       
+
+
+
+        <record id="view_account_edi_api_download_list" model="ir.ui.view">
+            <field name="name">account.edi.api.download.list</field>
+            <field name="model">account.edi.api.download</field>
+            <field name="arch" type="xml">
+                <list string="XML SAT">
+                    <field name="vat"/>
+                    <field name="contribuyente_name" string="Contribuyente"/>
+                    <field name="company_id" optional="hide"/>
+                    <field name="cfdi_type"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="sync_stable" string="Sync xmlsat" widget="boolean" column_invisible="1"/>
+                    <field name="sat_verified_complete_total" string="Completo (vs SAT)" widget="boolean" optional="show"/>
+                    <field name="cfdis_sat_display" string="CFDIs en SAT" optional="show"/>
+                    <field name="sat_downloaded_count_total" string="En Odoo" optional="show"/>
+                    <!-- .86: removidas "CFDIs en SAT (num)" (sat_expected_count_total) y
+                         "Descargados (verif. SAT)" (sat_downloaded_count_total) de la lista.
+                         Generaban ruido: se calculan contra el catalogo de vigentes del SAT
+                         (otro universo que "Total XMLs (Odoo)", que incluye cancelados) y
+                         confundian al usuario. El detalle completo sigue visible en el
+                         formulario del lote (banner "Verificado contra SAT: X/Y vig"). -->
+                    <field name="last_update_date" string="Última sync" optional="show"/>
+                </list>
+            </field>
+        </record>
+<!-- ================================================================= -->
+        <record id="view_account_edi_api_download_form" model="ir.ui.view">
+            <field name="name">account.edi.api.download.form</field>
+            <field name="model">account.edi.api.download</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="parent_batch_id" invisible="1"/><field name="sync_stable" invisible="1"/><header>
+                        <button name="action_download" string="Import" class="oe_highlight" type="object" invisible="state!='not_imported'"/>
+                        <button name="action_update" string="Actualizar Lote" class="oe_highlight" type="object" invisible="state in ('not_imported','queued','processing')"/>
+                        <button name="action_manual_upload" string="Subir XMLs Manual desde zip" class="oe_highlight" type="object" invisible="state in ('not_imported','queued','processing')"/>
+                        <!-- Permite agregar descarga de coordinadas a un lote padre ya importado
+                             que se creo sin marcar la casilla. Solo en lotes padre (no hijos). -->
+                        <button name="action_enqueue_missing_coordinadas" string="Descargar coordinadas faltantes" type="object" invisible="state != 'imported' or parent_batch_id" help="Para lotes padre ya importados sin coordinadas. Encola solo los lotes coordinada faltantes; no re-descarga el padre."/>
+                        <field name="state" widget="statusbar" statusbar_visible="not_imported,queued,processing,imported,error"/>
+                    </header>
+                    <!-- Banner: lote encolado, esperando cron -->
+                    <div class="alert alert-info" role="alert" invisible="state != 'queued'">
+                        <strong>⏳ En cola:</strong> El cron procesará este lote en los próximos minutos. Puede crear o consultar otros lotes mientras tanto.
+                    </div>
+                    <!-- Banner: cron procesando ahora mismo -->
+                    <div class="alert alert-info" role="alert" invisible="state != 'processing'">
+                        <strong>⚙️ Procesando:</strong> El cron está descargando este lote en este momento. La vista se actualizará al finalizar.
+                    </div>
+                    <!-- Banner: lote con error -->
+                    <div class="alert alert-danger" role="alert" invisible="state != 'error'">
+                        <strong>❌ Error en el último intento:</strong> <field name="last_error" readonly="1" nolabel="1"/>
+                    </div>
+                    <!-- Banner de estado de sincronización automática -->
+                    <div class="alert alert-success" role="alert" invisible="not sync_stable">
+                        <strong>✅ Sincronización completa:</strong> El servidor SAT ya no tiene XMLs nuevos para este lote y han pasado más de 72 horas desde la fecha de finalización. El cron no lo volverá a procesar.
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="sync_stable or state in ('not_imported','queued','processing','error')">
+                        <strong>🔄 Sincronización en progreso:</strong> El cron automático actualizará este lote cada 30 minutos. Se marcará como completo cuando no hayan XMLs nuevos <em>y</em> hayan transcurrido al menos 72 horas desde la Fecha de Finalización (SAT puede entregar CFDIs de los últimos días del periodo hasta 3 días después del cierre).
+                    </div>
+                    <!-- Fields declarados invisible para que los modifiers de los
+                         banners (sat_verified_complete, sat_total_windows) sean
+                         validos en Odoo 17+ que requiere que todo field usado en
+                         invisible/readonly/required este presente en la vista. -->
+                    <field name="sat_verified_complete" invisible="1"/>
+                    <field name="sat_total_windows" invisible="1"/>
+                    <!-- Banner de verificacion end-to-end vs SAT -->
+                    <div class="alert alert-success" role="alert" invisible="not sat_verified_complete">
+                        <strong>🛡️ Verificado contra SAT:</strong>
+                        <field name="sat_completeness_message" readonly="1" nolabel="1"/>
+                        — Ultima verificacion: <field name="sat_last_verified_at" readonly="1" nolabel="1"/>
+                    </div>
+                    <div class="alert alert-info" role="alert" invisible="sat_verified_complete or not sat_total_windows or state in ('not_imported','queued','processing','error')">
+                        <strong>⏳ Verificacion SAT en proceso:</strong>
+                        <field name="sat_completeness_message" readonly="1" nolabel="1"/>
+                        — El cron de re-verificacion (cada 6h) compara contra el SAT.
+                    </div>
+                    <sheet>
+                        <div name="button_box" position="inside">
+                        <button class="oe_stat_button" type="object" name="view_xml_sat" icon="fa-archive">
+                             <field name="xml_count" widget="statinfo" string="XML"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_child_batches" icon="fa-sitemap" invisible="child_batch_count == 0">
+                             <field name="child_batch_count" widget="statinfo" string="Coordinadas"/>
+                        </button>
+                        </div>
+                        <h1>Descargar XMLs del SAT</h1>
+                        <group>
+                            <field name="last_update_date" readonly="1"/>
+                        </group>
+
+                        <separator string="Filtros de descarga" colspan="2"/>
+                        <group col="2">
+                            <group>
+                                <field name="has_coordinadas_config" invisible="1"/>
+                                <field name="download_coordinadas" invisible="not has_coordinadas_config"/>
+                                <field name="vat" readonly="1"/>
+                                <field name="company_id" options="{'no_open' : True}"/>
+                                <field name="cfdi_type" readonly="state!='not_imported'"/>
+                                <field name="date_start" readonly="state!='not_imported'"/>
+                                <field name="date_end" readonly="state!='not_imported'"/>
+                            </group>
+                             <group>
+                                <div class="o_horizontal_separator">Tipo de documento</div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="o_setting_box">
+                                            <div class="o_setting_left_pane">
+                                                <field name="ingreso" readonly="state!='not_imported'"/>
+                                            </div>
+                                            <div class="o_setting_right_pane">
+                                                <label for="ingreso"/>
+                                            </div>
+                                        </div>
+                                        <div class="o_setting_box">
+                                            <div class="o_setting_left_pane">
+                                                <field name="egreso" readonly="state!='not_imported'"/>
+                                            </div>
+                                            <div class="o_setting_right_pane">
+                                                <label for="egreso"/>
+                                            </div>
+                                        </div>
+                                        <div class="o_setting_box">
+                                            <div class="o_setting_left_pane">
+                                                <field name="pago" readonly="state!='not_imported'"/>
+                                            </div>
+                                            <div class="o_setting_right_pane">
+                                                <label for="pago"/>
+                                            </div>
+                                        </div>
+                                        <div class="o_setting_box">
+                                            <div class="o_setting_left_pane">
+                                                <field name="nomina" readonly="state!='not_imported'"/>
+                                            </div>
+                                            <div class="o_setting_right_pane">
+                                                <label for="nomina"/>
+                                            </div>
+                                        </div>
+                                        <div class="o_setting_box">
+                                            <div class="o_setting_left_pane">
+                                                <field name="traslado" readonly="state!='not_imported'"/>
+                                            </div>
+                                            <div class="o_setting_right_pane">
+                                                <label for="traslado"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="o_horizontal_separator">Estatus SAT</div>
+                                        <div class="o_setting_box">
+                                            <div class="o_setting_left_pane">
+                                                <field name="valido" readonly="state!='not_imported'"/>
+                                            </div>
+                                            <div class="o_setting_right_pane">
+                                                <label for="valido"/>
+                                            </div>
+                                        </div>
+                                        <div class="o_setting_box">
+                                            <div class="o_setting_left_pane">
+                                                <field name="cancelado" readonly="state!='not_imported'"/>
+                                            </div>
+                                            <div class="o_setting_right_pane">
+                                                <label for="cancelado"/>
+                                            </div>
+                                        </div>
+                                        <div class="o_setting_box">
+                                            <div class="o_setting_left_pane">
+                                                <field name="no_encontrado" readonly="state!='not_imported'"/>
+                                            </div>
+                                            <div class="o_setting_right_pane">
+                                                <label for="no_encontrado"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_edi_api_download_action" model="ir.actions.act_window">
+            <field name="name">Descargar XMLs del SAT</field>
+            <field name="res_model">account.edi.api.download</field>
+            <field name="view_mode">list,form</field>
+            <field name="target">current</field>
+            <!-- Ocultar lotes hijos de coordinadas: el usuario ve solo el lote de la
+                 controladora y al entrar encuentra el total consolidado (controladora
+                 + sus coordinadas) gracias al roll-up del bot\u00f3n inteligente. -->
+            <field name="domain">[('parent_batch_id', '=', False)]</field>
+        </record>
+        
+        <record id="account_edi_download_xml_sat_view_action" model="ir.actions.act_window">
+            <field name="name">XMLs Descargados del SAT</field>
+            <field name="res_model">account.edi.downloaded.xml.sat</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- Acción simple para el reporte de conciliación -->
+        <record id="action_simple_conciliation_report" model="ir.actions.act_window">
+            <field name="name">Reporte de Conciliación SAT vs Odoo</field>
+            <field name="res_model">sat.conciliation.report</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- Menú padre para XMLs del SAT -->
+        <menuitem id="menu_l10n_mx_xml_sat" name="XML SAT" parent="account.menu_finance_entries" sequence="15" groups="l10n_mx_xml_massive_download.group_l10n_mx_xml_sat_user"/>
+
+        <!-- Submenús -->
+        <menuitem id="account_edi_api_download_menu" parent="menu_l10n_mx_xml_sat" action="account_edi_api_download_action" sequence="1" name="Importar XMLs del SAT" groups="l10n_mx_xml_massive_download.group_l10n_mx_xml_sat_user"/>
+        
+        <menuitem id="account_edi_download_xml_sat_view_menu" parent="menu_l10n_mx_xml_sat" action="account_edi_download_xml_sat_view_action" sequence="2" name="XMLs Descargados" groups="l10n_mx_xml_massive_download.group_l10n_mx_xml_sat_user"/>
+
+        <menuitem id="menu_conciliation_report" parent="menu_l10n_mx_xml_sat" action="l10n_mx_xml_massive_download.action_open_conciliation_report_wizard" sequence="3" name="Reporte de Conciliación" groups="l10n_mx_xml_massive_download.group_l10n_mx_xml_sat_user"/>
+
+        <!-- Los menuitems de Complemento Pago Clientes y Proveedores estan
+             definidos en report/complemento_pago_reports_views.xml junto con
+             sus actions, para garantizar orden correcto de carga. -->
+
+        <!-- Agregar también como menú directo en Contabilidad -->
+        <menuitem id="menu_conciliation_report_direct" parent="account.menu_finance_entries" action="l10n_mx_xml_massive_download.action_open_conciliation_report_wizard" sequence="99" name="Reporte de Conciliación SAT" groups="l10n_mx_xml_massive_download.group_l10n_mx_xml_sat_user"/>
+        
+    </data>
+</odoo>

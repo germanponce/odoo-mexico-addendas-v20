@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- =========================================================================
+         CONVENCION DE VISIBILIDAD
+         =========================================================================
+         Las acciones de "workflow normal" (revisar 69-B, buscar factura) quedan
+         visibles a todos los usuarios con acceso al modulo. Las acciones de
+         REMEDIACION / MIGRACION / MANTENIMIENTO solo se muestran a usuarios
+         con grupo Administracion (base.group_system) — el menu Acciones las
+         oculta automaticamente para usuarios sin ese grupo.
+
+         Si por alguna razon el campo groups_id no aplica en server actions de
+         tu version Odoo, el primer check del code lanza UserError, garantizando
+         doble proteccion: visibilidad UI + bloqueo en ejecucion.
+         ========================================================================= -->
+
+    <!-- ====== VISIBLES PARA TODOS ====== -->
+
+    <!-- Revisión Art 69-B para XML seleccionados -->
+    <record id="action_review_69b_selected_xml" model="ir.actions.server">
+        <field name="name">Revisar Art 69-B (seleccionados)</field>
+        <field name="model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="binding_model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="state">code</field>
+        <field name="code">action = records.action_review_69b()</field>
+        <field name="binding_type">action</field>
+    </record>
+
+    <!-- Buscar y relacionar Factura Relacionada para XML seleccionados -->
+    <record id="action_search_related_invoice_selected_xml" model="ir.actions.server">
+        <field name="name">Buscar Factura Relacionada (seleccionados)</field>
+        <field name="model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="binding_model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="state">code</field>
+        <field name="code">action = records.action_search_related_invoice()</field>
+        <field name="binding_type">action</field>
+    </record>
+
+    <!-- ====== SOLO ADMINISTRACION (base.group_system) ====== -->
+
+    <!-- Recalcular currency_id para XML seleccionados (remediacion) -->
+    <record id="action_recompute_currency_selected_xml" model="ir.actions.server">
+        <field name="name">🔄 Recalcular Moneda (admin)</field>
+        <field name="model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="binding_model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+if not env.user.has_group('base.group_system'):
+    raise UserError(_('Esta accion solo esta disponible para Administradores.'))
+for record in records:
+    record._compute_currency_id()
+        </field>
+        <field name="binding_type">action</field>
+    </record>
+
+    <!-- Backfill de Cuenta Predial en XMLs historicos (remediacion) -->
+    <record id="action_backfill_cuenta_predial" model="ir.actions.server">
+        <field name="name">Rellenar Cuenta Predial - re-parsear XML (admin)</field>
+        <field name="model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="binding_model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+if not env.user.has_group('base.group_system'):
+    raise UserError(_('Esta accion solo esta disponible para Administradores.'))
+action = records.action_backfill_cuenta_predial()
+        </field>
+        <field name="binding_type">action</field>
+    </record>
+
+    <!-- Backfill Fecha de Timbrado e Impuestos Desglosados (remediacion v19.0.46.x). -->
+    <record id="action_backfill_timbrado_y_taxes" model="ir.actions.server">
+        <field name="name">Rellenar Fecha Timbrado e Impuestos - re-parsear XML (admin)</field>
+        <field name="model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="binding_model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+if not env.user.has_group('base.group_system'):
+    raise UserError(_('Esta accion solo esta disponible para Administradores.'))
+action = records.action_backfill_timbrado_y_taxes()
+        </field>
+        <field name="binding_type">action</field>
+    </record>
+
+    <!-- Re-consultar Estatus SAT forzado (remediacion). -->
+    <record id="action_refetch_sat_status_forced" model="ir.actions.server">
+        <field name="name">Re-consultar Estatus SAT - forzar (admin)</field>
+        <field name="model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="binding_model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+if not env.user.has_group('base.group_system'):
+    raise UserError(_('Esta accion solo esta disponible para Administradores.'))
+action = records.action_refetch_sat_status_forced()
+        </field>
+        <field name="binding_type">action</field>
+    </record>
+
+    <!-- Corregir divisa de CFDIs de Pago XXX -> MonedaP (remediacion). -->
+    <record id="action_backfill_payment_currency" model="ir.actions.server">
+        <field name="name">Corregir Divisa de Pagos XXX → MonedaP (admin)</field>
+        <field name="model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="binding_model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+if not env.user.has_group('base.group_system'):
+    raise UserError(_('Esta accion solo esta disponible para Administradores.'))
+action = records.action_backfill_payment_currency()
+        </field>
+        <field name="binding_type">action</field>
+    </record>
+
+    <!-- Evaluar CFDI Compliance sobre XMLs seleccionados (remediacion). -->
+    <record id="action_evaluate_compliance" model="ir.actions.server">
+        <field name="name">Evaluar CFDI Compliance (admin)</field>
+        <field name="model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="binding_model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+if not env.user.has_group('base.group_system'):
+    raise UserError(_('Esta accion solo esta disponible para Administradores.'))
+action = records.action_evaluate_compliance()
+        </field>
+        <field name="binding_type">action</field>
+    </record>
+
+    <!-- Aprender producto/cuenta desde la factura Odoo enlazada (remediacion). -->
+    <record id="action_learn_from_imported_invoice" model="ir.actions.server">
+        <field name="name">Aprender producto/cuenta desde factura enlazada (admin)</field>
+        <field name="model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="binding_model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+if not env.user.has_group('base.group_system'):
+    raise UserError(_('Esta accion solo esta disponible para Administradores.'))
+action = records.action_learn_from_imported_invoice()
+        </field>
+        <field name="binding_type">action</field>
+    </record>
+
+    <!-- Aprender heuristicamente desde el historial contable del proveedor (remediacion). -->
+    <record id="action_learn_from_partner_history" model="ir.actions.server">
+        <field name="name">Aprender desde historial del proveedor heuristico (admin)</field>
+        <field name="model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="binding_model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+if not env.user.has_group('base.group_system'):
+    raise UserError(_('Esta accion solo esta disponible para Administradores.'))
+action = records.action_learn_from_partner_history()
+        </field>
+        <field name="binding_type">action</field>
+    </record>
+
+    <!-- Re-aplicar IEPS-en-base retroactivamente sobre facturas en borrador
+         creadas desde XMLs seleccionados (admin only). -->
+    <record id="action_apply_ieps_in_base_retroactive" model="ir.actions.server">
+        <field name="name">Aplicar IEPS en la Base retroactivo (admin)</field>
+        <field name="model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="binding_model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+if not env.user.has_group('base.group_system'):
+    raise UserError(_('Esta accion solo esta disponible para Administradores.'))
+action = records.action_apply_ieps_in_base_retroactive()
+        </field>
+        <field name="binding_type">action</field>
+    </record>
+
+    <!-- Backfill xml.sat para REPs timbrados sin entrada en SAT (admin).
+         Crea registros account.edi.downloaded.xml.sat usando el lote real
+         del mes correspondiente. Idempotente: skipea UUIDs ya existentes
+         y moves sin lote del mes. Procesa hasta 500 por invocacion. -->
+    <record id="action_backfill_xml_sat_from_payments" model="ir.actions.server">
+        <field name="name">Backfill xml.sat desde Payments timbrados (admin)</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+if not env.user.has_group('base.group_system'):
+    raise UserError(_('Esta accion solo esta disponible para Administradores.'))
+result = env['account.move'].action_backfill_xml_sat_from_payments(limit=500)
+raise UserError(
+    'Backfill xml.sat\n\nMoves escaneados: %s\nCreados: %s\nSkipped: %s\nErrores: %s\n\n'
+    'Si Creados > 0, vuelve a ejecutar hasta que Creados=0 (procesa lotes de 500).' % (
+        result['scanned'], result['created'], result['skipped'], result['errors'],
+    )
+)
+        </field>
+    </record>
+
+    <!-- Backfill xml.sat para Facturas timbradas sin entrada en SAT (admin).
+         Analogo al de payments pero para account.move tipo factura
+         (out_invoice, in_invoice, out_refund, in_refund). Resuelve los
+         rojos "Factura no localizada en XML SAT" cuando el backend xmlsat
+         no descargo la factura aunque exista timbrada y validada en Odoo. -->
+    <record id="action_backfill_xml_sat_from_invoices" model="ir.actions.server">
+        <field name="name">Backfill xml.sat desde Facturas timbradas (admin)</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+if not env.user.has_group('base.group_system'):
+    raise UserError(_('Esta accion solo esta disponible para Administradores.'))
+result = env['account.move'].action_backfill_xml_sat_from_invoices(limit=500)
+raise UserError(
+    'Backfill xml.sat (Facturas)\n\nMoves escaneados: %s\nCreados: %s\nSkipped: %s\nErrores: %s\n\n'
+    'Si Creados > 0, vuelve a ejecutar hasta que Creados=0 (procesa lotes de 500).' % (
+        result['scanned'], result['created'], result['skipped'], result['errors'],
+    )
+)
+        </field>
+    </record>
+
+    <!-- ====== ELIMINACION DE LOTES (solo admin) ====== -->
+
+    <!-- Eliminar lote y todos sus XMLs hijos: SOLO ADMIN. Util cuando un lote
+         se creo por error, o cuando se quiere limpiar duplicados. CASCADA: borra
+         account.edi.downloaded.xml.sat y account.edi.downloaded.xml.sat.products. -->
+    <record id="action_admin_delete_batch" model="ir.actions.server">
+        <field name="name">⚠️ Eliminar Lote y sus XMLs (admin)</field>
+        <field name="model_id" ref="model_account_edi_api_download"/>
+        <field name="binding_model_id" ref="model_account_edi_api_download"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+if not env.user.has_group('base.group_system'):
+    raise UserError(_('Esta accion solo esta disponible para Administradores.'))
+action = records.action_admin_delete_batch()
+        </field>
+        <field name="binding_type">action</field>
+    </record>
+</odoo>

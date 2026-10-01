@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_form_contacts_organized" model="ir.ui.view">
+        <field name="name">res.partner.form.contacts.organized</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[@name='contact_addresses']" position="replace">
+                <page string="Contactos y Direcciones" name="contact_addresses" autofocus="autofocus">
+                    <!-- ══════ SECCIÓN: CONTACTOS ══════ -->
+                    <div class="o_partner_section o_partner_section_contact mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom border-primary">
+                            <i class="fa fa-users fa-lg text-primary" title="Contactos"/>
+                            <h4 class="mb-0 text-primary fw-bold">Contactos</h4>
+                            <span class="badge rounded-pill text-bg-primary ms-1">
+                                <field name="contact_child_count"/>
+                            </span>
+                        </div>
+                        <field name="contact_child_ids"
+                               mode="kanban"
+                               nolabel="1"
+                               context="{'default_parent_id': id, 'default_type': 'contact', 'default_street': street, 'default_street2': street2, 'default_city': city, 'default_state_id': state_id, 'default_zip': zip, 'default_country_id': country_id, 'default_lang': lang, 'default_user_id': user_id}">
+                            <kanban>
+                                <field name="type"/>
+                                <field name="is_company"/>
+                                <field name="color"/>
+                                <templates>
+                                    <t t-name="card" class="flex-row">
+                                        <aside class="o_kanban_aside_full">
+                                            <field name="avatar_128"
+                                                   class="o_kanban_image_fill w-100"
+                                                   widget="image"
+                                                   options="{'img_class': 'object-fit-cover'}"
+                                                   alt="Foto contacto"/>
+                                        </aside>
+                                        <main class="ps-2">
+                                            <field name="name" class="fw-bold fs-6"/>
+                                            <div t-if="record.function.raw_value" class="text-muted small">
+                                                <i class="fa fa-fw fa-suitcase me-1" title="Puesto"/>
+                                                <field name="function"/>
+                                            </div>
+                                            <div t-if="record.email.raw_value" class="text-truncate small mt-1">
+                                                <i class="fa fa-fw fa-envelope me-1 text-primary" title="Email"/>
+                                                <field name="email"/>
+                                            </div>
+                                            <div t-if="record.phone.raw_value" class="small">
+                                                <i class="fa fa-fw fa-phone me-1 text-primary" title="Teléfono"/>
+                                                <field name="phone"/>
+                                            </div>
+                                        </main>
+                                    </t>
+                                </templates>
+                            </kanban>
+                            <form string="Contacto">
+                                <sheet>
+                                    <field name="type" invisible="1"/>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <field name="image_1920" widget="contact_image" nolabel="1"
+                                               options="{'preview_image': 'avatar_128', 'size': [100,100], 'img_class': 'rounded border'}"/>
+                                        <div class="flex-grow-1">
+                                            <h3>
+                                                <field name="name" class="d-block" default_focus="1"
+                                                       required="1" placeholder="Nombre del contacto"/>
+                                            </h3>
+                                            <div class="d-flex align-items-baseline mb-1">
+                                                <i class="fa fa-fw fa-envelope me-1 text-primary" title="Email"/>
+                                                <field name="email" widget="email" class="w-100" placeholder="Email"/>
+                                            </div>
+                                            <div class="d-flex align-items-baseline mb-1">
+                                                <i class="fa fa-fw fa-phone me-1 text-primary" title="Teléfono"/>
+                                                <field name="phone" widget="phone" class="w-100" placeholder="Teléfono"/>
+                                            </div>
+                                            <div class="d-flex align-items-baseline">
+                                                <i class="fa fa-fw fa-suitcase me-1 text-primary" title="Puesto"/>
+                                                <field name="function" placeholder="Puesto / Cargo"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <group>
+                                        <field name="company_id" invisible="1"/>
+                                        <label for="comment"/>
+                                        <field name="comment" options="{'height': 100}"
+                                               placeholder="Notas internas..." nolabel="1"/>
+                                    </group>
+                                    <field name="lang" invisible="1"/>
+                                </sheet>
+                            </form>
+                        </field>
+                    </div>
+
+                    <!-- ══════ SECCIÓN: DIRECCIONES DE ENTREGA ══════ -->
+                    <div class="o_partner_section o_partner_section_delivery mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom border-success">
+                            <i class="fa fa-truck fa-lg text-success" title="Direcciones de entrega"/>
+                            <h4 class="mb-0 text-success fw-bold">Direcciones de Entrega</h4>
+                            <span class="badge rounded-pill text-bg-success ms-1">
+                                <field name="delivery_child_count"/>
+                            </span>
+                        </div>
+                        <field name="delivery_child_ids"
+                               mode="kanban"
+                               nolabel="1"
+                               context="{'default_parent_id': id, 'default_type': 'delivery', 'default_lang': lang, 'default_user_id': user_id}">
+                            <kanban>
+                                <field name="type"/>
+                                <field name="color"/>
+                                <templates>
+                                    <t t-name="card" class="flex-row">
+                                        <aside class="o_kanban_aside_full o_partner_aside_delivery">
+                                            <div class="d-flex align-items-center justify-content-center h-100"
+                                                 style="min-width:55px; background-color: #d1e7dd;">
+                                                <i class="fa fa-truck fa-2x text-success" title="Entrega"/>
+                                            </div>
+                                        </aside>
+                                        <main class="ps-2">
+                                            <field name="name" class="fw-bold fs-6"/>
+                                            <div t-if="record.street.raw_value" class="small mt-1">
+                                                <i class="fa fa-fw fa-map-marker me-1 text-success" title="Dirección"/>
+                                                <field name="street"/>
+                                            </div>
+                                            <div class="small text-muted ms-3"
+                                                 t-if="record.city.raw_value or record.state_id.raw_value">
+                                                <field name="city"/>
+                                                <span t-if="record.city.raw_value and record.state_id.raw_value">, </span>
+                                                <field name="state_id"/>
+                                            </div>
+                                            <div class="small text-muted ms-3"
+                                                 t-if="record.zip.raw_value or record.country_id.raw_value">
+                                                <field name="zip"/>
+                                                <span t-if="record.zip.raw_value and record.country_id.raw_value"> — </span>
+                                                <field name="country_id"/>
+                                            </div>
+                                            <div t-if="record.phone.raw_value" class="small mt-1">
+                                                <i class="fa fa-fw fa-phone me-1 text-success" title="Teléfono"/>
+                                                <field name="phone"/>
+                                            </div>
+                                        </main>
+                                    </t>
+                                </templates>
+                            </kanban>
+                            <form string="Dirección de Entrega">
+                                <sheet>
+                                    <field name="type" invisible="1"/>
+                                    <group>
+                                        <group>
+                                            <field name="name" string="Referencia / Nombre"
+                                                   placeholder="Ej: Bodega Norte, Sucursal Centro..."/>
+                                            <span class="o_form_label o_td_label">
+                                                <b>Dirección de Entrega</b>
+                                            </span>
+                                            <div class="o_address_format">
+                                                <field name="street" placeholder="Calle..." class="o_address_street"/>
+                                                <field name="street2" placeholder="Calle 2..." class="o_address_street"/>
+                                                <field name="city" placeholder="Ciudad" class="o_address_city"/>
+                                                <field name="state_id" class="o_address_state" placeholder="Estado"
+                                                       options="{'no_open': True, 'no_quick_create': True}"
+                                                       context="{'country_id': country_id, 'default_country_id': country_id, 'zip': zip}"/>
+                                                <field name="zip" placeholder="C.P." class="o_address_zip"/>
+                                                <field name="country_id" placeholder="País" class="o_address_country"
+                                                       options='{"no_open": True, "no_create": True}'/>
+                                            </div>
+                                        </group>
+                                        <group>
+                                            <field name="phone" widget="phone" placeholder="Teléfono"/>
+                                            <field name="email" widget="email" placeholder="Email (opcional)"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <field name="company_id" invisible="1"/>
+                                        <label for="comment"/>
+                                        <field name="comment" options="{'height': 100}"
+                                               placeholder="Notas de entrega..." nolabel="1"/>
+                                    </group>
+                                    <field name="lang" invisible="1"/>
+                                </sheet>
+                            </form>
+                        </field>
+                    </div>
+
+                    <!-- ══════ SECCIÓN: DIRECCIONES DE FACTURA ══════ -->
+                    <div class="o_partner_section o_partner_section_invoice mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom border-warning">
+                            <i class="fa fa-file-text-o fa-lg text-warning" title="Direcciones de factura"/>
+                            <h4 class="mb-0 fw-bold" style="color: #e67e00;">Direcciones de Factura</h4>
+                            <span class="badge rounded-pill text-bg-warning ms-1">
+                                <field name="invoice_child_count"/>
+                            </span>
+                        </div>
+                        <field name="invoice_child_ids"
+                               mode="kanban"
+                               nolabel="1"
+                               context="{'default_parent_id': id, 'default_type': 'invoice', 'default_lang': lang, 'default_user_id': user_id}">
+                            <kanban>
+                                <field name="type"/>
+                                <field name="color"/>
+                                <templates>
+                                    <t t-name="card" class="flex-row">
+                                        <aside class="o_kanban_aside_full o_partner_aside_invoice">
+                                            <div class="d-flex align-items-center justify-content-center h-100"
+                                                 style="min-width:55px; background-color: #fff3cd;">
+                                                <i class="fa fa-file-text-o fa-2x" style="color: #e67e00;" title="Factura"/>
+                                            </div>
+                                        </aside>
+                                        <main class="ps-2">
+                                            <field name="name" class="fw-bold fs-6"/>
+                                            <div t-if="record.street.raw_value" class="small mt-1">
+                                                <i class="fa fa-fw fa-map-marker me-1" style="color: #e67e00;" title="Dirección"/>
+                                                <field name="street"/>
+                                            </div>
+                                            <div class="small text-muted ms-3"
+                                                 t-if="record.city.raw_value or record.state_id.raw_value">
+                                                <field name="city"/>
+                                                <span t-if="record.city.raw_value and record.state_id.raw_value">, </span>
+                                                <field name="state_id"/>
+                                            </div>
+                                            <div class="small text-muted ms-3"
+                                                 t-if="record.zip.raw_value or record.country_id.raw_value">
+                                                <field name="zip"/>
+                                                <span t-if="record.zip.raw_value and record.country_id.raw_value"> — </span>
+                                                <field name="country_id"/>
+                                            </div>
+                                            <div t-if="record.vat.raw_value" class="small mt-1">
+                                                <i class="fa fa-fw fa-building me-1" style="color: #e67e00;" title="RFC"/>
+                                                <field name="vat"/>
+                                            </div>
+                                        </main>
+                                    </t>
+                                </templates>
+                            </kanban>
+                            <form string="Dirección de Factura">
+                                <sheet>
+                                    <field name="type" invisible="1"/>
+                                    <group>
+                                        <group>
+                                            <field name="name" string="Razón Social / Nombre"
+                                                   placeholder="Ej: Empresa S.A. de C.V."/>
+                                            <span class="o_form_label o_td_label">
+                                                <b>Dirección Fiscal</b>
+                                            </span>
+                                            <div class="o_address_format">
+                                                <field name="street" placeholder="Calle..." class="o_address_street"/>
+                                                <field name="street2" placeholder="Calle 2..." class="o_address_street"/>
+                                                <field name="city" placeholder="Ciudad" class="o_address_city"/>
+                                                <field name="state_id" class="o_address_state" placeholder="Estado"
+                                                       options="{'no_open': True, 'no_quick_create': True}"
+                                                       context="{'country_id': country_id, 'default_country_id': country_id, 'zip': zip}"/>
+                                                <field name="zip" placeholder="C.P." class="o_address_zip"/>
+                                                <field name="country_id" placeholder="País" class="o_address_country"
+                                                       options='{"no_open": True, "no_create": True}'/>
+                                            </div>
+                                        </group>
+                                        <group>
+                                            <field name="vat" string="RFC" placeholder="RFC"/>
+                                            <field name="phone" widget="phone" placeholder="Teléfono"/>
+                                            <field name="email" widget="email" placeholder="Email para facturación"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <field name="company_id" invisible="1"/>
+                                        <label for="comment"/>
+                                        <field name="comment" options="{'height': 100}"
+                                               placeholder="Notas de facturación..." nolabel="1"/>
+                                    </group>
+                                    <field name="lang" invisible="1"/>
+                                </sheet>
+                            </form>
+                        </field>
+                    </div>
+
+                    <!-- ══════ SECCIÓN: OTRAS DIRECCIONES (si existen) ══════ -->
+                    <div class="o_partner_section o_partner_section_other mb-4"
+                         invisible="not other_child_ids">
+                        <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom">
+                            <i class="fa fa-ellipsis-h fa-lg text-muted" title="Otras direcciones"/>
+                            <h4 class="mb-0 text-muted fw-bold">Otras Direcciones</h4>
+                        </div>
+                        <field name="other_child_ids"
+                               mode="kanban"
+                               nolabel="1"
+                               context="{'default_parent_id': id, 'default_lang': lang, 'default_user_id': user_id}">
+                            <kanban>
+                                <field name="type"/>
+                                <field name="color"/>
+                                <templates>
+                                    <t t-name="card" class="flex-row">
+                                        <aside class="o_kanban_aside_full">
+                                            <div class="d-flex align-items-center justify-content-center h-100"
+                                                 style="min-width:55px; background-color: #e9ecef;">
+                                                <i class="fa fa-map-marker fa-2x text-muted" title="Dirección"/>
+                                            </div>
+                                        </aside>
+                                        <main class="ps-2">
+                                            <field name="name" class="fw-bold fs-6"/>
+                                            <div class="small">
+                                                <span class="badge text-bg-secondary">
+                                                    <field name="type"/>
+                                                </span>
+                                            </div>
+                                            <div t-if="record.street.raw_value" class="small mt-1">
+                                                <i class="fa fa-fw fa-map-marker me-1 text-muted" title="Dirección"/>
+                                                <field name="street"/>
+                                            </div>
+                                            <div class="small text-muted ms-3"
+                                                 t-if="record.city.raw_value or record.country_id.raw_value">
+                                                <field name="city"/>
+                                                <span t-if="record.city.raw_value and record.country_id.raw_value">, </span>
+                                                <field name="country_id"/>
+                                            </div>
+                                        </main>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
+                    </div>
+
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

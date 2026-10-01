@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.actions.act_window" id="action_import_info_tree">
+            <field name="name">Import Info</field>
+            <field name="res_model">import.info</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help">Aquí puede capturar los Pedimentos Aduanales con su información básica necesaria para trazabilidad de la información necesaria en Movimientos de Inventario y Facturación Electrónica.</field>
+        </record>
+        
+        <menuitem
+            parent="stock.menu_stock_inventory_control"
+            id="menu_action_import_info_tree"
+            action="action_import_info_tree"
+            sequence="99"
+            name="Pedimentos Aduanales"/>
+        
+        <record model="ir.ui.view" id="view_import_info_form">
+            <field name="name">import.info.form</field>
+            <field name="model">import.info</field>
+            <field name="arch" type="xml">
+                <form string="Import Info">
+                    <field name="customs" invisible="1"/>
+                    
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sat_aduana_id" />
+                            <field name="date"/>
+                            <field name="rate"/>
+                        </group>
+                        <group>
+                            <field name="import_consol" />
+                            <field name="supplier_id" context="{'search_default_supplier':1}"/>
+                            <field name="company_id" select="1" groups="base.group_multi_company" widget="selection"/>
+                        </group>
+                    </group>   
+                    <group>
+                        <field name="notes" nolabel="1" colspan="4" placeholder="Observaciones..."/>
+                    </group>                 
+                    <newline/>
+                    <notebook colspan="4">
+                        <page string="Trazabilidad Paquetes">
+                            <field name="package_ids" nolabel="1" colspan="4" readonly="1"/> <!-- context="{'form_view_ref' : 'l10n_mx_import_info.stock_tracking_form'}"/>-->
+                        </page>                        
+                        <page string="Líneas de Facturas relacionadas">
+                            <field name="invoice_line_ids" nolabel="1" readonly="1"/>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_import_info_tree">
+            <field name="name">import.info.tree</field>
+            <field name="model">import.info</field>
+            <field name="arch" type="xml">
+                <list string="Import Info">
+                        <field name="name"/>
+                        <field name="sat_aduana_id" />
+                        <field name="date"/>
+                        <field name="rate"/>
+                        <field name="company_id" groups="base.group_multi_company" widget="selection"/>
+                </list>
+            </field>
+        </record>
+    </data>
+</openerp>

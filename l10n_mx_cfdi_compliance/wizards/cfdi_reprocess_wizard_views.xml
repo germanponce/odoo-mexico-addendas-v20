@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_cfdi_reprocess_wizard_form" model="ir.ui.view">
+        <field name="name">cfdi.reprocess.wizard.form</field>
+        <field name="model">l10n_mx.cfdi.reprocess.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reprocesar Compliance">
+                <sheet>
+                    <group>
+                        <field name="document_ids" widget="many2many_tags"/>
+                        <field name="profile_id"/>
+                        <field name="force"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_reprocess" type="object" string="Reprocesar" class="btn-primary"/>
+                    <button special="cancel" string="Cancelar"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cfdi_reprocess_wizard" model="ir.actions.act_window">
+        <field name="name">Reprocesar CFDIs</field>
+        <field name="res_model">l10n_mx.cfdi.reprocess.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_l10n_mx_cfdi_document"/>
+        <field name="binding_view_types">list,form</field>
+    </record>
+</odoo>

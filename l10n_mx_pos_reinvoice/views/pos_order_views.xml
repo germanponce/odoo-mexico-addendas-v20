@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_order_form_reinvoice" model="ir.ui.view">
+        <field name="name">pos.order.form.reinvoice</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="l10n_mx_can_reinvoice" invisible="1"/>
+                <button name="action_l10n_mx_pos_reinvoice" type="object"
+                        string="Refacturar" class="btn-primary"
+                        invisible="not l10n_mx_can_reinvoice"
+                        groups="l10n_mx_pos_reinvoice.group_pos_reinvoice"
+                        help="El ticket salió en una Factura Global: emite la factura al cliente y la nota de crédito a la Global."/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

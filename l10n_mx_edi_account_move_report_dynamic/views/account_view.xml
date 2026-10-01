@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- ================================================================
+             Diario Contable — Campo selector de reporte CFDI
+             ================================================================ -->
+        <record id="account_journal_cfdi_report_form_ext" model="ir.ui.view">
+            <field name="name">account.journal.cfdi.report.ext</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <notebook position="before">
+                    <group string="Reporte CFDI">
+                        <field name="cfdi_report_id"
+                               options="{'no_create': True, 'no_create_edit': True}"
+                               help="Seleccione el reporte QWeb-PDF a usar al imprimir/enviar facturas de este diario. Si no se configura se usará el reporte estándar de Odoo."/>
+                    </group>
+                </notebook>
+            </field>
+        </record>
+
+        <!-- ================================================================
+             Orden de Venta — Campos logísticos (Vía Embarque / No. Orden)
+             ================================================================ -->
+        <record id="sale_order_logistics_form_ext" model="ir.ui.view">
+            <field name="name">sale.order.logistics.ext</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_shipping_id" position="after">
+                    <field name="via_embarque" string="Vía de Embarque"/>
+                    <field name="no_orden"     string="No. Orden"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

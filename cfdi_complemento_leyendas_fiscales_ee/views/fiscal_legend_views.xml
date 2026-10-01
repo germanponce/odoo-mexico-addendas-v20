@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="complemento_leyenda_fiscal_view_form" model="ir.ui.view">
+        <field name="name">complemento.leyenda.fiscal.view.form</field>
+        <field name="model">complemento.leyenda.fiscal</field>
+        <field name="arch" type="xml">
+            <form name="form_fiscal_legend" string="Leyenda Fiscal">
+                <sheet>
+                    <group name="fiscal_legend_info">
+                        <field name="norma"/>
+                        <field name="disposicion"/>
+                        <field name="texto_leyenda"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="complemento_leyenda_fiscal_view_tree" model="ir.ui.view">
+        <field name="name">complemento.leyenda.fiscal.view.tree</field>
+        <field name="model">complemento.leyenda.fiscal</field>
+        <field name="arch" type="xml">
+            <list name="tree_fiscal_legend" string="Leyendas Fiscales">
+                <field name="norma"/>
+                <field name="disposicion"/>
+                <field name="texto_leyenda"/>
+            </list>
+        </field>
+    </record>
+</odoo>

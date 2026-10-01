@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_indirect_form" model="ir.ui.view">
+        <field name="name">res.partner.purchase.indirect.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <!--
+                Odoo 18: el grupo 'purchase' en el formulario de contacto sigue
+                existiendo.  Si no se encuentra, usa `//page[@name='purchase']`
+                como xpath alternativo.
+            -->
+            <xpath expr="//group[@name='purchase']" position="inside">
+                <field name="l10n_mx_edi_is_indirect"/>
+                <field name="danone_supplier_type"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

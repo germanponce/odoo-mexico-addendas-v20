@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="payment20_fix_precision_mxn" inherit_id="l10n_mx_edi.payment20">
+            <xpath expr="//*[name()='pago20:TrasladoP']" position="attributes">
+                <attribute name="t-att-BaseP">format_float(tax_values['base'], precision=moneda_dp)</attribute>
+                <attribute name="t-att-ImporteP">format_float(tax_values['importe'], precision=moneda_dp)</attribute>
+            </xpath>
+            <xpath expr="//*[name()='pago20:RetencionP']" position="attributes">
+                <attribute name="t-att-ImporteP">format_float(tax_values['importe'], precision=moneda_dp)</attribute>
+            </xpath>
+        </template>
+    </data>
+</odoo>

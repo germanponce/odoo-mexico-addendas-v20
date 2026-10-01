@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="report_payments_resumen_hader">
+            <div class="header">
+                
+                <div class="row">
+                    <strong>
+                        <!-- <div class="col-xs-2 pull-left"> -->
+                        <div class="pull-left">
+                            <small>
+                                <![CDATA[&nbsp;&nbsp;&nbsp;]]>
+                                <span style="font-size: 12pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri;">RESUMEN DE COBRANZA CON IEPS - </span>
+                                <![CDATA[&nbsp;&nbsp;&nbsp;]]>
+                                <span style="font-size: 12pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri;">EJERCICIO <span t-esc="year"/> </span>
+                                <![CDATA[&nbsp;&nbsp;&nbsp;]]>
+                                <span style="font-size: 12pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri;">
+                                    [ <span t-esc="date"/> / <span t-esc="date_stop"/> ] <![CDATA[&nbsp;&nbsp;&nbsp;]]> <![CDATA[&nbsp;&nbsp;&nbsp;]]>
+                                </span>
+
+                            </small>
+                        </div>
+                    </strong>
+                </div>
+
+                
+            </div>
+        </template>
+
+        <template id="report_payments_resumen_template">
+            <t t-call="web.external_layout">
+                <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+                <style type="text/css">
+                .tg  {border-collapse:collapse;border-spacing:0;}
+                .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+                  overflow:hidden;padding:10px 5px;word-break:normal;}
+                .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+                  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+                .tg .tg-lboi{border-color:inherit;text-align:left;vertical-align:middle}
+                .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+                </style>
+                <!-- <t t-call="l10n_mx_edi_payments_distribution_report_ieps.report_payments_resumen_hader"/> -->
+                <div class="page">
+                    <div class="oe_structure"/>
+                    
+                    <br/>
+                    <br/>
+                    <div class="col-auto" name="companies">
+                        <small>
+                            <![CDATA[&nbsp;&nbsp;&nbsp;]]>
+                            <span style="font-size: 12pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri;">RESUMEN DE COBRANZA CON IEPS - </span>
+                            <![CDATA[&nbsp;&nbsp;&nbsp;]]>
+                            <span style="font-size: 12pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri;">EJERCICIO <span t-esc="year"/> </span>
+                            <![CDATA[&nbsp;&nbsp;&nbsp;]]>
+                            <span style="font-size: 12pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri;">
+                                [ <span t-esc="date"/> / <span t-esc="date_stop"/> ] <![CDATA[&nbsp;&nbsp;&nbsp;]]> <![CDATA[&nbsp;&nbsp;&nbsp;]]>
+                            </span>
+
+                        </small>
+                    </div>
+
+                    <div class="col-auto" name="companies">
+                        <![CDATA[&nbsp;&nbsp;&nbsp;]]>
+                        <strong>
+                            Compañias: <![CDATA[&nbsp;&nbsp;&nbsp;]]> <![CDATA[&nbsp;&nbsp;&nbsp;]]>
+                        </strong>
+                        <span t-esc="companies"/>
+                    </div>
+                    <div class="col-auto" name="journals">
+                        <![CDATA[&nbsp;&nbsp;&nbsp;]]>
+                        <strong>
+                            Diarios: <![CDATA[&nbsp;&nbsp;&nbsp;]]> <![CDATA[&nbsp;&nbsp;&nbsp;]]>
+                        </strong>
+                        <span t-esc="journals"/>
+                    </div>
+                    
+                    <table class="table table-sm o_main_table table-borderless mt-4">
+                        <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                        <thead style="display: table-row-group">
+                            <tr>
+                                <th name="th_razon" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-start">Cliente</th>
+                                <!-- <th name="th_entidad" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-start">Entidad federativa</th> -->
+                                <th name="th_pago" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-start">Pago</th>
+                                <th name="th_pago" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-start">Divisa</th>
+                                <th name="th_fecha_pago" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-start">Fecha de Pago</th>
+                                <th name="th_folio_fiscal_pago" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-start">Folio Fiscal</th>
+                                <th name="th_forma_pago_pago" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-start">Forma de Pago</th>
+                                <th name="th_monto_pago" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-end">Monto pagado</th>
+
+                                <th name="th_factura" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-start">Factura</th>
+                                <th name="th_folio_fiscal_factura" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-start">Folio Fiscal</th>
+                                <th name="th_fecha_factura" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-start">Fecha Factura</th>
+                                <th name="th_metodo_pago_factura" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-start">Metodo de Pago</th>
+                                <th name="th_subtotal" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-end">Forma de Pago</th>
+                                <th name="th_subtotal" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-end">Base</th>
+                                <th name="th_impuestos" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-end">IEPS</th>
+                                <th name="th_total" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-end">Total</th>
+
+                                <!-- <th name="th_factura_parcialidad" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-start">Parcialidad</th>
+                                <th name="th_factura_adeudo_anterior" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-end">Adeudo Anterior</th>
+                                <th name="th_factura_monto_pagado" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-end">Monto Pagado</th>
+                                <th name="th_factura_saldo" style="font-size: 7pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri; border: none; border-bottom: 1px solid black;" class="text-end">Saldo</th> -->
+                            </tr>
+                        </thead>
+
+                        <tbody class="sale_tbody">
+                            <t t-name="last_payment" t-value="False" />
+                            <t t-foreach="payment_invoices_doc_list" t-as="line">
+
+                                <tr style="page-break-inside: avoid;font-size: 7pt;font-family:Verdana,Arial,sans,Lucida Grande,Calibri;">
+                                    
+                                    <t t-if="line.payment_id != last_payment">
+                                        <td style="text-align: left; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.partner_id.name" />
+                                        </td>
+                                        <!-- <td style="text-align: left; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.entidad_federativa_id.name"/>
+                                        </td> -->
+                                        <td style="text-align: left; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.payment_id.name" t-if="line.payment_id"/>
+                                        </td>
+                                        <td style="text-align: left; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.payment_id.currency_id.name" t-if="line.payment_id"/>
+                                        </td>
+                                        <td style="text-align: left; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.payment_date" />
+                                        </td>
+                                        <td style="text-align: left; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.payment_uuid"/>
+                                        </td>
+                                        <td style="text-align: left; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.payment_method_id.name" t-if="line.payment_method_id"/>
+                                        </td>
+                                        <td style="text-align: right; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.payment_amount" />
+                                        </td>
+
+                                        <td style="text-align: left; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.invoice_id.name" t-if="line.invoice_payment_method_id"/>
+                                        </td>
+
+                                        <td style="text-align: left; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.invoice_uuid"/>
+                                        </td>
+
+                                        <td style="text-align: left; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.invoice_date"/>
+                                        </td>
+                                        <td style="text-align: left; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.invoice_payment_method_id.name" t-if="line.invoice_payment_method_id"/>
+                                        </td>
+                                        <td style="text-align: left; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.l10n_mx_edi_payment_policy"/>
+                                        </td>
+                                        <td style="text-align: right; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.ieps_amount_base"/>
+                                        </td>
+                                        <td style="text-align: right; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.ieps_amount"/>
+                                        </td>
+                                        <td style="text-align: right; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.invoice_amount_total"/>
+                                        </td>
+
+                                        <!-- <td style="text-align: right; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.parcialidad"/>
+                                        </td>
+                                        <td style="text-align: right; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.adeudo_anterior"/>
+                                        </td>
+                                        <td style="text-align: right; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.monto_pagado"/>
+                                        </td>
+                                        <td style="text-align: right; border: 1px solid transparent; background-color: #e7e7e7;color:black;">
+                                            <span t-esc="line.saldo"/>
+                                        </td> -->
+
+                                    </t>
+                                    <t t-else="">
+                                        <td style="text-align: center; border: 1px solid transparent;">
+                                            -
+                                        </td>
+                                        <!-- <td style="text-align: center; border: 1px solid transparent;">
+                                            <span t-esc="line.entidad_federativa_id.name"/>
+                                        </td> -->
+                                        <td style="text-align: center; border: 1px solid transparent;">
+                                            -
+                                        </td>
+                                        <td style="text-align: center; border: 1px solid transparent;">
+                                            -
+                                        </td>
+                                        <td style="text-align: center; border: 1px solid transparent;">
+                                            -
+                                        </td>
+                                        <td style="text-align: center; border: 1px solid transparent;">
+                                            -
+                                        </td>
+                                        <td style="text-align: center; border: 1px solid transparent;">
+                                            -
+                                        </td>
+                                        <td style="text-align: center; border: 1px solid transparent;">
+                                            -
+                                        </td>
+
+                                        <td style="text-align: left; border: 1px solid transparent;">
+                                            <span t-esc="line.invoice_id.name" t-if="line.invoice_id"/>
+                                        </td>
+
+                                        <td style="text-align: left; border: 1px solid transparent;">
+                                            <span t-esc="line.invoice_uuid"/>
+                                        </td>
+
+                                        <td style="text-align: left; border: 1px solid transparent;">
+                                            <span t-esc="line.invoice_date"/>
+                                        </td>
+                                        <td style="text-align: left; border: 1px solid transparent;">
+                                            <span t-esc="line.invoice_payment_method_id.name" t-if="line.invoice_payment_method_id"/>
+                                        </td>
+                                        <td style="text-align: left; border: 1px solid transparent;">
+                                            <span t-esc="line.l10n_mx_edi_payment_policy"/>
+                                        </td>
+                                        <td style="text-align: right; border: 1px solid transparent;">
+                                            <span t-esc="line.ieps_amount_base"/>
+                                        </td>
+                                        <td style="text-align: right; border: 1px solid transparent;">
+                                            <span t-esc="line.ieps_amount"/>
+                                        </td>
+                                        <td style="text-align: right; border: 1px solid transparent;">
+                                            <span t-esc="line.invoice_amount_total"/>
+                                        </td>
+
+                                        <!-- <td style="text-align: right; border: 1px solid transparent;">
+                                            <span t-esc="line.parcialidad"/>
+                                        </td>
+                                        <td style="text-align: right; border: 1px solid transparent;">
+                                            <span t-esc="line.adeudo_anterior"/>
+                                        </td>
+                                        <td style="text-align: right; border: 1px solid transparent;">
+                                            <span t-esc="line.monto_pagado"/>
+                                        </td>
+                                        <td style="text-align: right; border: 1px solid transparent;">
+                                            <span t-esc="line.saldo"/>
+                                        </td> -->
+
+                                    </t>
+                                </tr>
+                                <t t-set="last_payment" t-value="line.payment_id" />
+                            </t>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="footer">
+                    <table width="100%" style="font-size: 16px; padding: 0; border-spacing: 0; margin-top: 5px; border-collapse: separate; border-top: none; border-right: none; border-left: none; border-bottom: none;">
+                        <tr>
+                            <td style="font-size: 11px; width: 40%; text-align: left; border: 1px solid #07190B; border-collapse: collapse; padding: 1px; border-bottom: 1px; border-left: none; border-right: none;">
+                                <strong style="font-weight: bold; color: #001f5b; font-size: 8pt;">
+                                    <span t-esc="env.company.name" />  <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> <span t-esc="company_vat" />
+                                    <!-- <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/> -->
+
+                                </strong>
+                            </td>
+                            <td style="width: 60%; text-align: right; border: 1px solid #07190B; border-collapse: collapse; padding: 1px; border-bottom: 1px; border-left: none; border-right: none;">
+                                <strong style="font-weight: bold; color: #001f5b; font-size: 8pt;">
+                                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> | <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><span></span>Pagina <span class="page" /> de <span class="topage" />
+                                </strong>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+           </t>
+        </template>
+
+
+        <template id="report_payments_resumen_doc">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="l10n_mx_edi_payments_distribution_report_ieps.report_payments_resumen_template" t-lang="env.company.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+    <record id="report_payments_resumen_paper" model="report.paperformat">
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="header_spacing">20</field>
+        <field name="margin_top">19</field>
+        <field name="margin_right">0</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">0</field>
+        <field name="header_line" eval="False"/>
+        <field name="name">Resumen de Cobranza con IEPS (Paper)</field>
+        <field name="orientation">Landscape</field>
+        <field name="dpi">90</field>
+        <field name="default" eval="True"/>
+        <field name="format">Letter</field>
+    </record>
+
+
+    <record id="report_payments_resumen_action" model="ir.actions.report">
+        <field name="name">Resumen de Cobranza con IEPS</field>
+        <field name="model">account.move.bank.report.data</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_mx_edi_payments_distribution_report_ieps.report_payments_resumen_doc</field>
+        <field name="report_file">l10n_mx_edi_payments_distribution_report_ieps.report_payments_resumen_doc</field>
+        <field name="print_report_name">'Resumen de Cobranza con IEPS' + '.pdf'</field>
+        <field name="binding_model_id" ref="l10n_mx_edi_payments_distribution_report_ieps.model_account_move_bank_report_data"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="l10n_mx_edi_payments_distribution_report_ieps.report_payments_resumen_paper" />
+    </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <template id="l10n_mx_edi_addenda_bassware" name="Basware">
+            <t t-set="sale_model" t-value="'sale_line_ids' in record.invoice_line_ids._fields"/>
+            <t t-set="sale_id" t-value="record.mapped('invoice_line_ids.sale_line_ids.order_id') if sale_model else False"/>
+            <t t-set="pickings" t-value="sale_id.picking_ids.filtered(lambda x: x.state == 'done' and x.date_done)" />
+            
+            <AddendaBasware
+            xmlns="https://kb.basware.com/sites/default/files/public/basware_additionaldata_mx.xsd"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="https://kb.basware.com/sites/default/files/public/basware_additionalda
+            ta_mx.xsd" version="1.0">
+                <Documento>
+                <OrdenCompra>PO001467</OrdenCompra>
+                <NumeroContrato>1233/89-AAB</NumeroContrato>
+                <PersonaReferencia>Person Name</PersonaReferencia>
+                <Email>generic.mail@google.com</Email>
+                <DocumentoTransporte>DN0089765</DocumentoTransporte>
+                <NumeroProveedor>00054321</NumeroProveedor>
+                <CodigoDestinatario>BT00012</CodigoDestinatario>
+                <ISOMoneda>MXN</ISOMoneda>
+                <FechaPago>2024-08-15</FechaPago>
+                <TerminoPago>60 Dias</TerminoPago>
+                <ExtraInformacion>
+                    <ExtraInfo type="FechaEntrega">12/03/19</ExtraInfo>
+                    <ExtraInfo type="CargosTransporte">1230.78</ExtraInfo>
+                </ExtraInformacion>
+                </Documento>
+                <Lineas>
+                    <Linea>
+                    <NumeroLinea>1</NumeroLinea>
+                    <OrdenCompra>PO003467</OrdenCompra>
+                    <LineaOrdenCompra>12</LineaOrdenCompra>
+                    <NumeroContrato>NA</NumeroContrato>
+                    <CodigoProductoComprador>AA340078N</CodigoProductoComprador>
+                    <DocumentoTransporte>DN0089734,DN0085432</DocumentoTransporte>
+                    <ExtraInformacion>
+                        <ExtraInfo type="ListaPrecio">AA27456</ExtraInfo>
+                    </ExtraInformacion>
+                    </Linea>
+                </Lineas>
+            </AddendaBasware>
+
+
+
+
+
+
+
+
+
+
+
+
+            <requestForPayment type="SimpleInvoiceType" contentVersion="1.0" documentStructureVersion="CPLM1.0" documentStatus="ORIGINAL" t-att-DeliveryDate="str(pickings[0].date_done).replace('-','')[0:8] if pickings else str(record.invoice_date).replace('-','')[0:8] ">
+            <requestForPaymentIdentification>
+                <entityType>INVOICE</entityType>
+                <uniqueCreatorIdentification><t t-raw="record.name"/></uniqueCreatorIdentification>
+            </requestForPaymentIdentification>
+            <orderIdentification>
+                <referenceIdentification type="ON"><t t-raw="record.x_order_no"/></referenceIdentification>
+                <t t-if="record.x_reference_date">
+                    <ReferenceDate><t t-raw="str(record.x_reference_date)[0:10]"/></ReferenceDate>
+                </t>
+                <t t-if="record.x_fecha_promesa_ent">
+                    <FechaPromesaEnt><t t-raw="str(record.x_fecha_promesa_ent)[0:10]"/></FechaPromesaEnt>
+                </t>
+            </orderIdentification>
+            <seller>
+                <gln>0000000000001</gln>
+                <t t-if="record.company_id.x_gln"><gln><t t-raw="record.company_id.x_gln"/></gln></t>
+                <alternatePartyIdentification type="SELLER_ASSIGNED_IDENTIFIER_FOR_A_PARTY"><t t-raw="record.company_id.x_supplier_id"/></alternatePartyIdentification>
+                <IndentificaTipoProv><t t-raw="record.company_id.x_supplier_type"/></IndentificaTipoProv>
+            </seller>
+            <shipTo>
+                <t t-if="record.x_gln"><gln><t t-raw="record.x_gln"/></gln></t>
+                <nameAndAddress>
+                    <name><t t-raw="record.x_name_warehouse" /></name>
+                    <streetAddressOne><t t-raw="record.x_street_warehouse"/></streetAddressOne>
+                    <city><t t-raw="record.x_city_warehouse"/></city>
+                    <postalCode><t t-raw="record.x_zip_warehouse"/></postalCode>
+                </nameAndAddress>
+                <BodegaDestino><t t-raw="record.x_bodega_destino"/></BodegaDestino>
+                <BodegaReceptora><t t-raw="record.x_bodega_receptora"/></BodegaReceptora>
+            </shipTo>
+            <currency currencyISOCode="MXN">
+                <currencyFunction>BILLING_CURRENCY</currencyFunction>
+                <rateOfChange>1.000000</rateOfChange>
+            </currency>
+
+            <t t-if="record.x_flete_partner_id"><FleteCaja type="SELLER_PROVIDED"><t t-raw="record.x_flete_partner_id.name" /></FleteCaja></t>
+
+            <allowanceCharge allowanceChargeType="ALLOWANCE_GLOBAL">
+                <monetaryAmountOrPercentage>
+                    <rate base="INVOICE_VALUE">
+                        <percentage>0.0</percentage>
+                    </rate>
+                </monetaryAmountOrPercentage>
+            </allowanceCharge>
+
+            <t t-if="record.x_qty_lote">
+                 <TotalLotes>
+                    <cantidad><t t-raw="record.x_qty_lote"/></cantidad>
+                </TotalLotes>
+            </t>
+           
+            <t t-set="number" t-value="1"/>
+            <t t-set="invoice_lines" t-value="record.get_invoice_lines()"/>
+            <t t-foreach="invoice_lines" t-as="line">
+                <t t-set="sale_line" t-value="line.sale_line_ids[0] if line.sale_line_ids else False"/>
+                <lineItem type="SimpleInvoiceLineItemType" t-att-number="number">
+                    <tradeItemIdentification>
+                        <gtin><t t-raw="line.product_id.x_gtin"/></gtin>
+                    </tradeItemIdentification>
+                    <alternateTradeItemIdentification type="BUYER_ASSIGNED"><t t-raw="line.product_id.x_gtin"/></alternateTradeItemIdentification>
+                    <tradeItemDescriptionInformation language="ES">
+                        <longText><t t-raw="line.product_id.name"/></longText>
+                    </tradeItemDescriptionInformation>
+                    <invoicedQuantity unitOfMeasure="PZA"><t t-raw="line.quantity"/></invoicedQuantity>
+                    <grossPrice>
+                        <Amount><t t-raw="line.price_unit"/></Amount>
+                    </grossPrice>
+                    <netPrice>
+                        <Amount><t t-raw="line.price_unit"/></Amount>
+                    </netPrice>
+                    <modeloInformation>
+                        <longText><t t-raw="line.product_id.x_model"/></longText>
+                    </modeloInformation>
+                    <palletInformation>
+                        <palletQuantity><t t-raw="sale_line.x_quantity if sale_line else line.quantity"/></palletQuantity> 
+                        <description type="BOX" /> 
+                        <transport>
+                            <methodOfPayment>PREPAID_BY_SELLER</methodOfPayment>
+                        </transport>
+                        <prepactCant><t t-raw="sale_line.x_qty if sale_line else line.quantity"/></prepactCant>
+                    </palletInformation>    
+                    <allowanceCharge allowanceChargeType="ALLOWANCE_GLOBAL">
+                        <specialServicesType>TD</specialServicesType> 
+                        <monetaryAmountOrPercentage>
+                            <percentagePerUnit>0.00</percentagePerUnit> 
+                            <ratePerUnit>
+                                <amountPerUnit>0.00</amountPerUnit>
+                            </ratePerUnit>
+                        </monetaryAmountOrPercentage>
+                    </allowanceCharge>
+                    <totalLineAmount>
+                        <grossAmount>
+                            <Amount><t t-raw="line.price_subtotal"/></Amount>
+                        </grossAmount>
+                        <netAmount>
+                            <Amount><t t-raw="line.price_subtotal"/></Amount>
+                        </netAmount>
+                    </totalLineAmount>
+                </lineItem>
+                <t t-set="number" t-value="number+1"/>
+            </t>
+
+            <totalAmount>
+                <Amount><t t-raw="record.amount_untaxed"/></Amount>
+            </totalAmount>
+            <TotalAllowanceCharge allowanceOrChargeType="ALLOWANCE">
+                <specialServicesType>TD</specialServicesType>
+                <Amount>0.00</Amount>
+            </TotalAllowanceCharge>
+            <baseAmount>
+                <Amount><t t-raw="record.amount_untaxed"/></Amount>
+            </baseAmount>
+            <tax type="VAT">
+                <taxPercentage>16.00</taxPercentage>
+                <taxAmount><t t-raw="record.amount_tax"/></taxAmount>
+                <taxCategory>TRANSFERIDO</taxCategory>
+            </tax>
+            <payableAmount>
+                <Amount><t t-raw="record.amount_total"/></Amount>
+            </payableAmount>
+            <cadenaOriginal>
+                <Cadena><t t-raw="record.x_cadena_original"/></Cadena>
+            </cadenaOriginal>
+        </requestForPayment>
+        </template>
+    
+    <record id="l10n_mx_edi_addenda_coppel" model="ir.ui.view">
+        <field name="l10n_mx_edi_addenda_flag">True</field>
+    </record>
+    </data>
+</odoo>

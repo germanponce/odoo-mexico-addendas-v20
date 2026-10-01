@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="l10n_mx_cfdi_compliance.CompliancePanel">
+        <div class="o_cfdi_compliance_panel">
+            <div class="o_cfdi_score_wrapper">
+                <span t-att-class="badgeClass">
+                    <t t-esc="state.status"/>
+                </span>
+                <span class="o_cfdi_score_value ms-2">
+                    <t t-esc="state.score"/>/100
+                </span>
+            </div>
+        </div>
+    </t>
+
+</templates>

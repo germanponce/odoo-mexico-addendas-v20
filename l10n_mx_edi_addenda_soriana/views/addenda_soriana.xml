@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="l10n_mx_edi_addenda_soriana" model="l10n_mx_edi.addenda">
+            <field name="name">Soriana</field>
+            <field name="arch" type="xml">
+                <t t-xml-node="addenda">
+                    <t t-set="total_without_disc" t-value="0.00"/>
+                    <t t-set="x_cantidad_bultos" t-value="record.x_cantidad_bultos"/>
+                    <t t-set="totalProducts" t-value="0"/>
+                    <t t-set="total_units" t-value="0.00"/>
+                    <t t-set="sale_model" t-value="'sale_line_ids' in record.invoice_line_ids._fields"/>
+                    <t t-set="invoice_lines" t-value="record.invoice_line_ids.filtered(lambda inv: inv.display_type == 'product')" />
+                    <t t-foreach="invoice_lines" t-as="b">
+                        <t t-set="totalProducts" t-value="totalProducts + 1"/>
+                        <t t-set="total_units" t-value="total_units + b.quantity"/>
+                        <t t-set="product_total" t-value="b.price_unit * b.quantity"/>
+                        <t t-set="total_without_disc" t-value="b.price_subtotal"/>
+                    </t>
+
+                    <DSCargaRemisionProv>
+                        <Remision Id="Remision0" RowOrder="0">
+
+                            <t t-set="vendor_supplier_code" t-value="record.x_vendor_supplier_code"/>
+                            <t t-set="center" t-value=""/>
+                            <t t-set="order_date" t-value=""/>
+                            <t t-set="delivery_date" t-value=""/>
+
+                            <t t-set="picking_name" t-value="record.x_order_remision"/>
+                            <t t-set="x_cedis_code" t-value="record.x_cedis_id.code if record.x_cedis_id else '0'"/>
+                            <t t-set="sale_id" t-value="record.mapped('invoice_line_ids.sale_line_ids.order_id') if sale_model else False"/>
+
+                            <t t-if="not picking_name">
+                                <t t-if="sale_id">
+                                    <t t-set="pickings" t-value="sale_id.picking_ids.filtered(lambda x: x.state == 'done' and x.date_done)" />
+                                    <t t-if="pickings">
+                                        <t t-foreach="pickings" t-as="pick">
+                                            <t t-set="picking_name" t-value="pick.name.replace('/','-')"/>
+                                        </t>
+                                    </t>
+                                </t>
+                            </t>
+
+
+                            <t t-if="record.partner_shipping_id">
+                              <t t-set="center" t-value="record.partner_shipping_id.x_center"/>
+                            </t>
+
+                            <t t-else="">
+                              <t t-set="center" t-value="record.partner_id.x_center"/>
+                            </t>
+
+                            <t t-if="record.x_order_reference_date">
+                                <t t-set="order_date" t-value="record.x_order_reference_date.strftime('%Y-%m-%dT%H:%M:%S')"/>
+                            </t>
+                            <t t-else="">
+                              <t t-set="order_date" t-value="' '"/>
+                            </t>
+
+                            <t t-if="record.x_delivery_reference_date">
+                                <t t-set="delivery_date" t-value="record.x_delivery_reference_date.strftime('%Y-%m-%dT%H:%M:%S')"/>
+                            </t>
+                            <t t-else="">
+                              <t t-set="delivery_date" t-value="' '"/>
+                            </t>
+
+                            <Proveedor t-out="str(record.x_vendor_supplier_code)"/>
+                            <Remision t-out="str(record.x_order_remision)"/>
+                            <Consecutivo>0</Consecutivo>
+                            <FechaRemision t-out="str(order_date)"/>
+                            <Tienda t-out="str(record.x_center)"/>
+                            <TipoMoneda t-out="record.x_tipo_moneda"/>
+                            <TipoBulto t-out="record.x_tipo_bulto"/>
+                            <EntregaMercancia t-out="str(record.x_cedis_id.code)"/>
+                            <CumpleReqFiscales>true</CumpleReqFiscales>
+                            <CantidadBultos t-out="x_cantidad_bultos"/>
+                            <Subtotal t-out="record.amount_total"/>
+
+                            <t t-set="total_Discount" t-value="total_without_disc - record.amount_untaxed"/>
+                            <Descuentos t-out="round(total_Discount,2)"/>
+
+                            <IEPS>0</IEPS>
+                            <IVA>0</IVA>
+                            <OtrosImpuestos>0</OtrosImpuestos>
+                            <Total t-out="str(record.amount_total)"/>
+                            <CantidadPedidos t-out="1"/>
+                            <FechaEntregaMercancia t-out="delivery_date"/>
+                            <Cita t-out="str(record.x_delivery_reference)"/>
+                        </Remision>
+
+                        <Pedidos Id="Pedido0" RowOrder="0">
+                            <Proveedor t-out="str(record.x_vendor_supplier_code)"/>
+                            <Remision t-out="str(record.x_order_remision)"/>
+                            <FolioPedido t-out="str(record.x_order_reference)"/>
+                            <Tienda t-out="str(record.x_center)"/>
+                            <CantidadArticulos t-out="str(totalProducts)"/>
+                        </Pedidos>
+
+
+                        <t t-set="i" t-value="0"/>
+                        <t t-foreach="invoice_lines" t-as="o">
+
+                            <Articulos Id="Articulo" t-att-RowOrder="999999 if i== 0 else i">
+                                <Proveedor t-out="str(record.x_vendor_supplier_code)"/>
+                                <Remision t-out="str(record.x_order_remision)"/>
+                                <FolioPedido t-out="record.x_order_reference"/>
+                                <Tienda t-out="str(record.x_center)"/>
+                                <Codigo t-out="str(o.product_id.x_codigo_soriana or o.product_id.barcode)"/>
+                                <t t-set="i" t-value="i+1"/>
+                                <CantidadUnidadCompra t-out="o.quantity"/>
+                                <CostoNetoUnidadCompra t-out="round(o.price_unit - o.price_unit * o.discount / 100,2)"/>
+                                <PorcentajeIEPS>0.00</PorcentajeIEPS>
+                                <PorcentajeIVA>0.00</PorcentajeIVA>
+                            </Articulos>
+                        </t>
+                    </DSCargaRemisionProv>
+                </t>
+            </field>
+        </record>
+
+    </data>
+</odoo>

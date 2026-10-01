@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="global_invoice_rounding_fix" inherit_id="l10n_mx_edi.cfdiv40">
+        <xpath expr="//*[name()='cfdi:Impuestos']" position="attributes">
+              <attribute name="TotalImpuestosTrasladados">record._get_fix_amount_traslados(retenciones_reduced_list)</attribute>
+        </xpath>
+
+    </template>
+
+    </data>
+</odoo>

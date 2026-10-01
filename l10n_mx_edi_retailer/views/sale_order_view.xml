@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <record id="view_l10n_mx_edi_retailer_sale_order_form_inherit" model="ir.ui.view">
+            <field name="name">l10n_mx_edi.retailer.sale.order.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.sale_order_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group string="Complemento Detallista" invisible="addenda_type != 'retailer'">
+                        <div class="alert alert-warning" role="alert" invisible="not l10n_mx_edi_retailer_company_data_missing">
+                            Faltan datos de compañía requeridos por el Complemento Detallista (GLN comprador/vendedor,
+                            identificador alterno, GLN destino de envío).
+                            <button
+                                name="action_open_retailer_company_config"
+                                type="object"
+                                string="→ Configurar en la Compañía"
+                                class="oe_link"
+                            />
+                        </div>
+                        <group>
+                            <field name="l10n_mx_edi_retailer_status"/>
+                            <field name="l10n_mx_edi_retailer_purchase_order_date"/>
+                            <field name="l10n_mx_edi_retailer_purchase_order_name"/>
+                            <field name="l10n_mx_edi_retailer_purchase_contact_name"/>
+                            <field name="l10n_mx_edi_retailer_special_service_type"/>
+                        </group>
+                        <group string="Remisión">
+                            <field name="l10n_mx_edi_retailer_delivery"/>
+                            <field name="l10n_mx_edi_retailer_delivery_date"/>
+                        </group>
+                        <group string="Tipo de Transacción / Emisor de Factura">
+                            <field name="l10n_mx_edi_retailer_entity_type"/>
+                            <field name="l10n_mx_edi_retailer_invoice_creator_id"/>
+                        </group>
+                        <group string="Descuento/Cargo Global (allowanceCharge)">
+                            <field name="l10n_mx_edi_retailer_allow_allowance_charge"/>
+                            <field name="l10n_mx_edi_retailer_allowance_charge_type" invisible="not l10n_mx_edi_retailer_allow_allowance_charge"/>
+                            <field name="l10n_mx_edi_retailer_allowance_special_services_type" invisible="not l10n_mx_edi_retailer_allow_allowance_charge"/>
+                            <field name="l10n_mx_edi_retailer_allowance_sequence_number" invisible="not l10n_mx_edi_retailer_allow_allowance_charge"/>
+                            <field name="l10n_mx_edi_retailer_allowance_percentage" invisible="not l10n_mx_edi_retailer_allow_allowance_charge"/>
+                        </group>
+                        <group string="Descuento/Cargo Total (TotalAllowanceCharge)">
+                            <field name="l10n_mx_edi_retailer_total_allowance_type"/>
+                            <field name="l10n_mx_edi_retailer_total_special_services_type"/>
+                        </group>
+                        <group string="Datos de Compañía (solo lectura, se configuran en la ficha de la Compañía)">
+                            <field name="l10n_mx_edi_retailer_company_buyer_gln" readonly="1"/>
+                            <field name="l10n_mx_edi_retailer_company_seller_gln" readonly="1"/>
+                            <field name="l10n_mx_edi_retailer_company_seller_alt_id" readonly="1"/>
+                            <field name="l10n_mx_edi_retailer_company_ship_to_gln" readonly="1"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_compliance_profile_list" model="ir.ui.view">
+        <field name="name">l10n_mx.compliance.profile.list</field>
+        <field name="model">l10n_mx.compliance.profile</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="fiscal_regime"/>
+                <field name="rule_count"/>
+                <field name="min_score_pass"/>
+                <field name="transition_mode"/>
+                <field name="is_default"/>
+                <field name="active"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_compliance_profile_form" model="ir.ui.view">
+        <field name="name">l10n_mx.compliance.profile.form</field>
+        <field name="model">l10n_mx.compliance.profile</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_populate_all_rules" type="object" string="Cargar todas las reglas del catalogo" class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Modo Transicion" bg_color="bg-warning" invisible="not transition_mode"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Nombre del perfil"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="fiscal_regime"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                            <field name="is_default"/>
+                            <field name="transition_mode"/>
+                        </group>
+                        <group>
+                            <field name="min_score_pass"/>
+                            <field name="min_score_warning"/>
+                            <field name="rule_count"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Descripcion / criterios fiscales..."/>
+                    </group>
+                    <notebook>
+                        <page string="Reglas">
+                            <field name="rule_config_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="rule_id"/>
+                                    <field name="rule_category"/>
+                                    <field name="enabled" widget="boolean_toggle"/>
+                                    <field name="severity"/>
+                                    <field name="weight"/>
+                                    <field name="authorizer_group_id" optional="hide"/>
+                                    <field name="params" optional="hide" widget="json"/>
+                                    <field name="notes" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_compliance_profiles" model="ir.actions.act_window">
+        <field name="name">Perfiles de Compliance</field>
+        <field name="res_model">l10n_mx.compliance.profile</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

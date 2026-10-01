@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="cfdi_waybill_custom_extends" inherit_id="l10n_mx_edi_stock_40.cfdi_cartaporte_40">
+        <xpath expr="//*[name()='cartaporte20:Mercancia']" position="attributes">
+            <attribute name="t-att-MaterialPeligroso">move.product_id.hazardous_material if move.product_id.hazardous_material else None</attribute>
+            <attribute name="t-att-CveMaterialPeligroso">move.product_id.hazardous_key_product_id.code if move.product_id.hazardous_key_product_id else None</attribute>
+            <attribute name="t-att-Embalaje">move.product_id.tipo_embalaje_id.code if move.product_id.tipo_embalaje_id else None</attribute>
+            <attribute name="t-att-DescripEmbalaje">move.product_id.tipo_embalaje_id.name if move.product_id.tipo_embalaje_id else None</attribute>
+        </xpath>
+        <xpath expr="//*[name()='cartaporte20:Seguros']" position="attributes">
+            <attribute name="t-att-AseguraMedAmbiente">record.l10n_mx_edi_vehicle_id.ambiental_transport_insurerance if record._have_hazardous_code() else None</attribute>
+            <attribute name="t-att-PolizaMedAmbiente">record.l10n_mx_edi_vehicle_id.ambiental_transport_insurance_policy if record._have_hazardous_code() else None</attribute>
+        </xpath>
+    </template>
+
+</odoo>

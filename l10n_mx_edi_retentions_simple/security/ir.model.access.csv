@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_retention_type_user,access.retention.type.user,model_retention_type,account.group_account_user,1,0,0,0
+access_retention_type_manager,access.retention.type.manager,model_retention_type,account.group_account_manager,1,1,1,1

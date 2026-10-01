@@ -1,0 +1,17 @@
+INSTRUCCIONES — Archivo XSLT de Cadena Original para Retenciones v1.0
+======================================================================
+
+Este directorio debe contener el archivo:
+
+    retenciones.xslt
+
+Obtenlo directamente del SAT en:
+  https://www.sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id
+  &blobtable=MungoBlobs&blobwhere=1461173300266&ssbinary=true
+
+O búscalo en el paquete de validación de la especificación técnica del CFDI
+de Retenciones v1.0, disponible en:
+  https://www.sat.gob.mx/consultas/23653/complementos-del-cfdi
+
+SIN este archivo, el módulo funciona en entorno de prueba con PAC de prueba
+(el sello no se valida en test). En PRODUCCIÓN es OBLIGATORIO.

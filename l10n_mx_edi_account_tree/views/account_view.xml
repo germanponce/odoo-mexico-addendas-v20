@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+                
+        
+        <record id="view_account_form_l10n_mx_edi_account_tree" model="ir.ui.view">
+            <field name="name">account.account.form.l10n_mx_edi_account_tree</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <field name="account_type" position="replace">
+                    <field name="account_type"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_tree_l10n_mx_edi_account_tree" model="ir.ui.view">
+            <field name="name">account.account.tree.l10n_mx_edi_account_tree</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_list"/>
+            <field name="arch" type="xml">
+                <field name="account_type" position="replace">
+                    <field name="account_type"/>
+                </field>
+            </field>
+        </record>
+
+    <record id="view_account_form_l10n_mx_edi_account_tree" model="ir.ui.view">
+        <field name="name">Chart of Accounts Tree Structure - Form</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_form"/>
+        <field name="arch" type="xml">
+            <field name="account_type" position="before" >
+                <field name="parent_id" domain="[('id','!=',id),('account_type','=','view')]"/>
+            </field>                
+            <field name="account_type" position="after" >
+                <field name="child_consol_ids" widget="many2many_tags"
+                       invisible="account_type != 'consolidation'" />
+                <field name="sign"/>
+                <field name="partner_breakdown"  invisible="account_type == 'view'"/>
+            </field>
+
+        </field>
+    </record>
+
+    
+    <record id="view_account_list_l10n_mx_edi_account_tree" model="ir.ui.view">
+        <field name="name">Chart of Accounts Tree Structure - Tree</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_list"/>
+        <field name="arch" type="xml">
+            <field name="reconcile" position="before" >
+                <field name="parent_id" optional="show"
+                       domain="[('id','!=',id),('account_type','=','view')]"/>
+                <field name="sign"/>
+            </field>
+        </field>
+    </record>
+
+        
+</odoo>

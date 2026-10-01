@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+wizard_audit_analysis_access,wizard.audit.analysis,model_wizard_audit_analysis,,1,1,1,1
+move_audit_analysis_access,move.audit.analysis,model_move_audit_analysis,,1,1,1,1
+move_audit_analysis_line_access,move.audit.analysis.line,model_move_audit_analysis_line,,1,1,1,1
+cfdi_txt_metadata_access,cfdi.txt.metadata,model_cfdi_txt_metadata,,1,1,1,1
+move_audit_analysis_check_access,move.audit.analysis.check,model_move_audit_analysis_check,,1,1,1,1

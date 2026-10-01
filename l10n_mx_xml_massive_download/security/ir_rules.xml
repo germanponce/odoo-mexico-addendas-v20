@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Multi-empresa: TODOS los usuarios (incluyendo admin) solo ven XMLs
+         de las empresas que tienen seleccionadas. Regla GLOBAL (sin grupo)
+         para que no se pueda saltar con superuser. -->
+    <record id="_access_sat_download_rule" model="ir.rule">
+        <field name="name">Regla Acceso Descarga XML Compañia</field>
+        <field name="model_id" ref="model_account_edi_downloaded_xml_sat"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="global" eval="True"/>
+    </record>
+
+    <record id="_access_sat_api_download_rule" model="ir.rule">
+        <field name="name">Regla Acceso Descarga API SAT XML Compañia</field>
+        <field name="model_id" ref="model_account_edi_api_download"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="global" eval="True"/>
+    </record>
+
+    <!-- Multi-empresa: Reportes Complemento de Pago (Clientes y Proveedores).
+         Cada empresa ve solo sus propias facturas/pagos. Regla GLOBAL para
+         que el aislamiento aplique incluso al admin con multiples compañias
+         seleccionadas: solo se muestran filas de las compañias activas
+         (company_ids = allowed_company_ids del switcher).
+
+         Bug v<=.61: sin esta regla el reporte mezclaba facturas de TODAS
+         las companias del Odoo, violando la separacion multi-tenant. -->
+    <record id="_access_complemento_pago_cliente_rule" model="ir.rule">
+        <field name="name">Regla Multi-empresa Complemento Pago Clientes</field>
+        <field name="model_id" ref="model_l10n_mx_complemento_pago_cliente_report"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="global" eval="True"/>
+    </record>
+
+    <record id="_access_complemento_pago_proveedor_rule" model="ir.rule">
+        <field name="name">Regla Multi-empresa Complemento Pago Proveedores</field>
+        <field name="model_id" ref="model_l10n_mx_complemento_pago_proveedor_report"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="global" eval="True"/>
+    </record>
+
+    <!-- Aislamiento multi-empresa tambien para el Reporte de Conciliacion
+         SAT vs Odoo (sat.conciliation.report). Cada usuario solo ve los
+         reportes de sus compañias activas. -->
+    <record id="_access_sat_conciliation_report_rule" model="ir.rule">
+        <field name="name">Regla Multi-empresa Reporte Conciliacion SAT vs Odoo</field>
+        <field name="model_id" ref="model_sat_conciliation_report"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="global" eval="True"/>
+    </record>
+
+</odoo>

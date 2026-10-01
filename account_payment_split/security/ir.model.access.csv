@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_register_invooices,account.register.invoices,model_account_register_invoices,account.group_account_invoice,1,1,1,1
+access_account_split_payment_register,account.split.payment.register,model_account_split_payment_register,account.group_account_invoice,1,1,1,1

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="account_factoring_view_form" model="ir.ui.view">
+            <field name="name">account_factoring_view_form</field>
+            <field name="model">account.factoring</field>
+            <field name="arch" type="xml">
+                <form string="Factoraje financiero">
+                    <sheet>
+                        <group>
+                            <group string="Factorante">
+                                <field name="partner_id"
+                                       options="{'no_create': True}"
+                                       required="1"/>
+                                <field name="invoice_partner_id" invisible="1"/>
+                                <field name="factoring_date" required="1"/>
+                                <field name="journal_id"
+                                       options="{'no_create': True}"
+                                       required="1"/>
+                            </group>
+                            <group string="Factura de Proveedor">
+                                <field name="bill_id"
+                                       required="1"
+                                       domain="[('state','=','posted'),('move_type','in',['in_invoice','in_refund']),('partner_id','=',partner_id),('amount_residual','>',0)]"
+                                       options="{'no_create': True}"/>
+                                <field name="bill_amount" readonly="1"/>
+                                <field name="amount"/>
+                                <field name="factoring_amount" readonly="1"/>
+                                <field name="balance" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <!-- Líneas: facturas de cliente a compensar -->
+                        <field name="line_ids">
+                            <list editable="bottom">
+                                <field name="invoice_id"
+                                       options="{'no_create': True}"
+                                       domain="[('partner_id','=',parent.invoice_partner_id),('move_type','=','out_invoice'),('state','=','posted'),('amount_residual','>',0)]"/>
+                                <field name="amount"/>
+                            </list>
+                        </field>
+                    </sheet>
+                    <footer>
+                        <button name="create_factoring"
+                                string="Compensar"
+                                class="btn btn-primary"
+                                type="object"/>
+                        <button special="cancel"
+                                string="Cerrar"
+                                class="btn btn-secondary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_factoring_action" model="ir.actions.act_window">
+            <field name="name">Factoraje financiero</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.factoring</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

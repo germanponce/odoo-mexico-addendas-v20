@@ -1,0 +1,3 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_x_l10n_mx_edi_retailer_wizard,access_x_l10n_mx_edi_retailer_wizard,model_l10n_mx_edi_retailer_wizard,base.group_user,1,1,1,1
+access_l10n_mx_edi_retailer_additional_reference,access_l10n_mx_edi_retailer_additional_reference,model_l10n_mx_edi_retailer_additional_reference,base.group_user,1,1,1,1

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+
+        <!-- Herencia Configuracion -->
+
+        <record model="ir.ui.view" id="l10n_mx_edi_pos_global_reinvocing_settings_view_inherit_reinvoicing_form">
+            <field name="name">res.config.settings.global.address</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+                <block id="pos_interface_section" position="after">
+                    <block title="Facturación Global" id="global_address_and_invoicing">
+                        <setting>
+                            <field name="cfdi_global_manual_signed"/>
+                        </setting>
+                    </block>
+                </block>
+            </field>
+        </record>
+
+
+        <!-- ============================================================ -->
+        <!-- 1) REFACTURACIÓN — flujo normal, con Nota de Crédito activa -->
+        <!-- ============================================================ -->
+        <record id="view_pos_order_re_invoice_wizard" model="ir.ui.view">
+            <field name="name">Pos Orders Refacturación</field>
+            <field name="model">pos.order.invoice_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Refacturación">
+                    <group string="Asistente de Re-facturación">
+                        <group>
+                            <field name="partner_id" options="{'no_create': True, 'no_create_edit': True}" required="1"/>
+                            <field name="l10n_mx_edi_usage" required="1"/>
+                            <field name="payment_tpv_id" options="{'no_create': True, 'no_create_edit': True}" required="1"/>
+                            <field name="invoice_payment_term_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="journal_id" domain="[('type', '=', 'sale')]" required="1"/>
+                            <field name="create_nc"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="create_re_invoice_from_sales" string="Facturación" type="object" class="oe_highlight"/>
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_pos_order_re_invoice_fx" model="ir.actions.act_window">
+            <field name="name">Refacturación</field>
+            <field name="res_model">pos.order.invoice_wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'wizard_reinvoice': True}</field>
+            <field name="view_id" ref="view_pos_order_re_invoice_wizard"/>
+            <field name="binding_model_id" ref="point_of_sale.model_pos_order"/>
+            <field name="binding_view_types">list,form</field>
+        </record>
+
+        <!-- ============================================================ -->
+        <!-- 2) OPERACIONES ADICIONALES — asociación manual NC / Global   -->
+        <!-- ============================================================ -->
+        <record id="view_pos_order_re_invoice_operations_wizard" model="ir.ui.view">
+            <field name="name">Pos Orders Refacturación - Operaciones Adicionales</field>
+            <field name="model">pos.order.invoice_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Operaciones Adicionales de Re-facturación">
+                    <group string="Asociar Nota de Crédito / Factura Global">
+                        <field name="operations_extra_type" string="Operación" required="1"/>
+                        <field name="new_invoice_id"
+                               invisible="operations_extra_type != 'associate_nc_reinvoicing'"
+                               required="operations_extra_type == 'associate_nc_reinvoicing'"
+                               options="{'no_create': True}"/>
+                    </group>
+                    <footer>
+                        <button name="execute_operations_extra_type" string="Ejecutar Operación" type="object" class="oe_highlight" icon="fa-cogs"/>
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_pos_order_re_invoice_operations_fx" model="ir.actions.act_window">
+            <field name="name">Operaciones de Re-facturación</field>
+            <field name="res_model">pos.order.invoice_wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'wizard_reinvoice': True}</field>
+            <field name="view_id" ref="view_pos_order_re_invoice_operations_wizard"/>
+            <field name="binding_model_id" ref="point_of_sale.model_pos_order"/>
+            <field name="binding_view_types">list,form</field>
+        </record>
+
+       <!-- POS ORDER BUTTON -->
+
+        <record id="pos_order_re_invoice_global_form" model="ir.ui.view">
+            <field name="name">global.invoice.pos.order.reinvoice.form</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+            <field name="arch" type="xml">
+                <field name="state" position="before">
+                    <button id="action_pos_order_re_invoice_fx" name="%(l10n_mx_edi_pos_global_reinvocing.action_pos_order_re_invoice_fx)d" type="action" string="Refacturación" class="oe_highlight" icon="fa-exchange"/>
+                    <button id="action_pos_order_re_invoice_operations_fx" name="%(l10n_mx_edi_pos_global_reinvocing.action_pos_order_re_invoice_operations_fx)d" type="action" string="Operaciones de Re-facturación" class="oe_highlight" icon="fa-cogs"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_pos_order_tree_folio_fiscal_all" model="ir.ui.view">
+            <field name="name">pos.order.list.folio.fiscal.all</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_order_tree"/>
+            <field name="arch" type="xml">
+                <field name="amount_total" position="after">
+                    <field name="l10n_mx_edi_folio_fiscal_all" string="Folio Fiscal" optional="show"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

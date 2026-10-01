@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List view -->
+    <record id="view_cfdi_pipeline_job_list" model="ir.ui.view">
+        <field name="name">cfdi.pipeline.job.list</field>
+        <field name="model">l10n_mx.cfdi.pipeline.job</field>
+        <field name="arch" type="xml">
+            <list string="Pipeline Jobs"
+                  decoration-success="state == 'done'"
+                  decoration-info="state == 'running'"
+                  decoration-warning="state == 'pending'"
+                  decoration-danger="state == 'failed'">
+                <field name="id" string="ID"/>
+                <field name="attachment_id"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-info="state == 'running'"
+                       decoration-warning="state == 'pending'"
+                       decoration-danger="state == 'failed'"/>
+                <field name="attempts"/>
+                <field name="next_run" optional="show"/>
+                <field name="started_at" optional="hide"/>
+                <field name="finished_at" optional="hide"/>
+                <field name="duration_ms" optional="show" string="ms"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+                <field name="create_date" optional="show"/>
+                <field name="last_error" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="view_cfdi_pipeline_job_form" model="ir.ui.view">
+        <field name="name">cfdi.pipeline.job.form</field>
+        <field name="model">l10n_mx.cfdi.pipeline.job</field>
+        <field name="arch" type="xml">
+            <form string="Pipeline Job">
+                <header>
+                    <button name="action_force_run" type="object"
+                            string="Procesar ahora" class="btn-primary"
+                            invisible="state in ('running', 'done')"/>
+                    <button name="action_retry" type="object"
+                            string="Reintentar" class="btn-secondary"
+                            invisible="state != 'failed'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="pending,running,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Job">
+                            <field name="attachment_id" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="attempts" readonly="1"/>
+                            <field name="next_run" readonly="1"/>
+                        </group>
+                        <group string="Ejecucion">
+                            <field name="started_at" readonly="1"/>
+                            <field name="finished_at" readonly="1"/>
+                            <field name="duration_ms" readonly="1" string="Duracion (ms)"/>
+                        </group>
+                    </group>
+                    <group string="Ultimo error" invisible="not last_error">
+                        <field name="last_error" readonly="1" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search view -->
+    <record id="view_cfdi_pipeline_job_search" model="ir.ui.view">
+        <field name="name">cfdi.pipeline.job.search</field>
+        <field name="model">l10n_mx.cfdi.pipeline.job</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Pipeline Jobs">
+                <field name="attachment_id"/>
+                <filter name="filter_pending" string="Pendientes"
+                        domain="[('state', '=', 'pending')]"/>
+                <filter name="filter_running" string="Ejecutandose"
+                        domain="[('state', '=', 'running')]"/>
+                <filter name="filter_failed" string="Fallidos"
+                        domain="[('state', '=', 'failed')]"/>
+                <filter name="filter_done" string="Completados"
+                        domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <filter name="filter_retry_pending" string="Listos para reintento"
+                        domain="[('state', '=', 'pending'), ('attempts', '>', 0)]"/>
+                <filter name="group_state" string="Estado"
+                        context="{'group_by': 'state'}"/>
+                <filter name="group_company" string="Empresa"
+                        context="{'group_by': 'company_id'}"
+                        groups="base.group_multi_company"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_cfdi_pipeline_job" model="ir.actions.act_window">
+        <field name="name">CFDI Pipeline Queue</field>
+        <field name="res_model">l10n_mx.cfdi.pipeline.job</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_cfdi_pipeline_job_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Cola de trabajos del pipeline CFDI vacia.
+            </p>
+            <p>
+                Aqui apareceran los jobs creados automaticamente cuando se
+                suban XMLs CFDI. El cron `CFDI Compliance: process pipeline
+                job queue` los procesa cada minuto.
+            </p>
+        </field>
+    </record>
+
+</odoo>

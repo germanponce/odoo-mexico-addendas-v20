@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!--Email template -->
+        <record id="email_template_factura_traslado" model="mail.template">
+            <field name="name">Factura traslado CFDI - Enviar Email</field>
+            <field name="email_from">{{'%s &lt;%s&gt;' % (object.company_id.name, object.company_id.email or '')}}</field>
+            <field name="subject">Factura: {{object.number}}</field>
+            <field name="partner_to">{{object.partner_id.id}}</field>
+            <field name="model_id" ref="l10n_mx_traslado.model_cfdi_traslado"/>
+            <field name="report_template_ids" eval="[(4, ref('l10n_mx_traslado.report_facturatraslado'))]"/>
+            <field name="body_html"><![CDATA[
+                <p>Hola, <span t-esc='object.partner_id.name'/></p>
+                <p>Anexo encontrará su factura de traslado.</p>
+                <p>Saludos.</p>
+                ]]>
+            </field>
+        </record>
+
+        <record id="email_template_alarma_de_saldo" model="mail.template">
+            <field name="name">Alarma de Saldo</field>
+            <field name="email_from">{{('%s &lt;%s&gt;' % (object.name, object.email) or '')}}</field>
+            <field name="subject">Ref: Alarma de Saldo</field>
+            <!-- <field name="partner_to">${object.partner_id.id}</field> -->
+            <field name="model_id" ref="base.model_res_company"/>
+            <field name="auto_delete" eval="True"/>
+            <!-- <field name="report_template" ref="report_payments"/>
+            <field name="report_name">${object.name.replace('/', '_') + '.pdf'}</field> -->
+            <field name="lang">{{object.partner_id.lang}}</field>
+            <field name="body_html"><![CDATA[
+El saldo de timbres es menor al monto seleccionado. Por favor contacte a su proveedor de timbres para adquirir más
+]]></field>
+        </record>
+
+        <record id="email_template_alarma_de_csd" model="mail.template">
+            <field name="name">Alarma de CSD</field>
+            <field name="email_from">{{('%s &lt;%s&gt;' % (object.name, object.email) or '')}}</field>
+            <field name="subject">Ref: Alarma de CSD</field>
+            <!-- <field name="partner_to">${object.partner_id.id}</field> -->
+            <field name="model_id" ref="base.model_res_company"/>
+            <field name="auto_delete" eval="True"/>
+            <!-- <field name="report_template" ref="report_payments"/>
+            <field name="report_name">${object.name.replace('/', '_') + '.pdf'}</field> -->
+            <field name="lang">{{object.partner_id.lang}}</field>
+            <field name="body_html"><![CDATA[
+La vigencia de tus certificados CSD está próxima, genera tus nuevos certificados y cámbialos en la configuración de la compañía.
+]]></field>
+        </record>
+
+
+    </data>
+</odoo>

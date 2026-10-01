@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Odoo 18 migration notes for portal_templates.xml:
+    - XPath targets verified against Odoo 18 purchase portal templates.
+    - `t-raw` replaced with `t-out` where present.
+    - Bootstrap classes updated (mt32 → mt-5, nopadding → p-0, etc.)
+    - The form's `enctype` and CSRF field remain unchanged.
+    - If an xpath fails after upgrade, inspect the base template with:
+      `ir.ui.view` search on 'purchase.portal_my_purchase_orders' or
+      'purchase.purchase_order_portal_content' to find the new node IDs.
+-->
+<odoo>
+
+    <!-- ── Badget "Facturado" en la lista de Órdenes de Compra ─────────── -->
+    <template
+        id="portal_purchase_my_orders_state_invoiced"
+        name="Portal: Estado Facturado"
+        inherit_id="purchase.portal_my_purchase_orders">
+        <!--
+            Odoo 18: el badge de estado está dentro de una celda de tabla.
+            Buscamos el span de estado "info" (En espera) y añadimos el de
+            Facturado justo después.  Ajusta el xpath si el nodo cambió.
+        -->
+        <xpath expr="//span[hasclass('badge') and hasclass('text-bg-info')]" position="after">
+            <span t-if="order.invoice_status == 'invoiced'"
+                  class="badge rounded-pill text-bg-success">
+                <i class="fa fa-fw fa-check-circle-o"
+                   role="img"
+                   aria-label="Facturado"
+                   title="Facturado"/>
+                <span class="d-none d-md-inline"> Facturado</span>
+            </span>
+        </xpath>
+    </template>
+
+
+    <!-- ── Formulario de carga de XML/PDF en el detalle de OC ──────────── -->
+    <template
+        id="portal_purchase_upload_attachment"
+        name="Portal: Upload Attachments to Purchase Order"
+        inherit_id="purchase.purchase_order_portal_content">
+
+        <!-- Badget de estado arriba del detalle -->
+        <xpath expr="//h3[@id='details']" position="before">
+            <div class="text-end mb-2">
+                <span t-if="order.invoice_status == 'invoiced'"
+                      class="badge rounded-pill text-bg-success"
+                      style="font-size:14px;">
+                    <i class="fa fa-fw fa-check-circle-o"
+                       role="img" aria-label="Facturado" title="Facturado"/>
+                    <span class="d-none d-md-inline"> Facturado</span>
+                </span>
+                <span t-if="order.invoice_status == 'to invoice'"
+                      class="badge rounded-pill text-bg-info"
+                      style="font-size:14px;">
+                    <i class="fa fa-fw fa-file-text"
+                       role="img" aria-label="Esperando Factura" title="Esperando Factura"/>
+                    <span class="d-none d-md-inline"> Esperando Factura</span>
+                </span>
+            </div>
+        </xpath>
+
+        <!-- Formulario de carga al final del contenido -->
+        <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+            <t t-set="partner_id" t-value="order.partner_id"/>
+            <div class="panel-body mt-3" t-if="order.invoice_status != 'invoiced'">
+                <form t-attf-action="/purchase/order_attachments/#{order.id}"
+                      class="s_upload_attachments container-fluid"
+                      enctype="multipart/form-data"
+                      method="post"
+                      t-att-data-form_field_order_id="order.id"
+                      t-att-data-model_name="order.id"
+                      style="padding-left:25px;">
+                    <t t-if="not upload_success">
+
+                        <!-- XML (obligatorio) -->
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-bold" for="xml">XML</label>
+                                <input accept=".xml"
+                                       class="form-control"
+                                       name="xml"
+                                       required="required"
+                                       type="file"/>
+                            </div>
+                        </div>
+
+                        <!-- PDF (obligatorio) -->
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-bold" for="pdf">PDF</label>
+                                <input accept=".pdf"
+                                       class="form-control"
+                                       name="pdf"
+                                       required="required"
+                                       type="file"/>
+                            </div>
+                        </div>
+
+                        <!-- Orden de Compra (opcional / requerida por config) -->
+                        <div class="row mb-3" t-if="order.company_id.show_document_purchase_order">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-bold" for="purchase_order">
+                                    Orden de Compra
+                                </label>
+                                <input class="form-control"
+                                       name="purchase_order"
+                                       t-att-required="'required' if order.company_id.show_document_purchase_order else False"
+                                       type="file"/>
+                            </div>
+                        </div>
+
+                        <!-- Acuse de Recibo (opcional / requerido por config) -->
+                        <div class="row mb-3" t-if="order.company_id.show_document_purchase_order_acuse">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-bold" for="receipt">
+                                    Acuse de Recibo
+                                </label>
+                                <input class="form-control"
+                                       name="receipt"
+                                       t-att-required="'required' if order.company_id.show_document_purchase_order_acuse else False"
+                                       type="file"/>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-sm-12">
+                                <button class="btn btn-primary btn-lg"
+                                        id="o_website_form_portal_vendor_upload_files">
+                                    Subir
+                                </button>
+                                <span id="o_website_form_result"/>
+                            </div>
+                        </div>
+
+                        <input name="csrf_token"
+                               t-att-value="request.csrf_token()"
+                               type="hidden"/>
+                    </t>
+                </form>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

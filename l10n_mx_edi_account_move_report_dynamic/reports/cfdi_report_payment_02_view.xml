@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+<!-- Reemplazando el Reporte -->
+
+<template id="external_layout_header_payment_standard_benotto_02">
+    <div class="header">
+        <head>
+            <style media="screen">
+                body {
+                    font-family: 'Segoe UI','Microsoft Sans Serif',sans-serif;
+                }
+
+                /*
+                    These next two styles are apparently the modern way to clear a float. This allows the logo
+                    and the word "Invoice" to remain above the From and To sections. Inserting an empty div
+                    between them with clear:both also works but is bad style.
+                    Reference:
+                    http://stackoverflow.com/questions/490184/what-is-the-best-way-to-clear-the-css-style-float
+                */
+                header:before, header:after {
+                    content: " ";
+                    display: table;
+                }
+
+                header:after {
+                    clear: both;
+                }
+
+                .invoiceNbr {
+                    font-size: 14px;
+                    margin-right: 30px;
+                    margin-top: 30px;
+                    float: right;
+                }
+
+                .logo {
+                    float: left;
+                }
+
+                .from {
+                    float: left;
+                }
+
+                .to {
+                    float: right;
+                }
+
+                .fromto {
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: black;
+                    border-radius: 10px;
+                    margin: 20px;
+                    min-width: 200px;
+                }
+
+                .fromtocontent {
+                    margin: 10px;
+                    margin-right: 15px;
+                }
+
+                .panel {
+                    background-color: #afafaf;
+                    padding: 7px;
+                }
+
+                .items {
+                    clear: both;
+                    display: table;
+                    padding: 20px;
+                }
+
+                /* Factor out common styles for all of the "col-" classes.*/
+                div[class^="col-"] {
+                    display: table-cell;
+                    padding: 7px;
+                }
+
+                /*for clarity name column styles by the percentage of width */
+                .col-1-10 {
+                    width: 10%;
+                }
+
+                .col-1-52 {
+                    width: 52%;
+                }
+
+                .row {
+                    display: table-row;
+                    page-break-inside: avoid;
+                }
+
+        </style>
+        </head>
+        <table width="100%" style="border-collapse: collapse;padding: 5px;border: 0px solid #FFFFFF; font-size:14px;" id="company_address_data">
+            <tr style="border-bottom: 1px solid  transparent;">
+                <td width="25%" style="vertical-align: middle;text-align: center;">
+                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo" style="max-height: 100px;height: auto;"/>
+                    <br/>
+                </td>
+                
+                <td width="15%" align="center" valign="top">
+                    <!--  -->
+                </td>
+                <td width="60%" align="right" valign="middle" style="padding-right:5px;">
+                    <div class="fromto from" style="width: 90%;" >
+                        <div class="panel" align="center" style="border-radius: 10px;">
+                            <strong>
+                                <span style="color: black; font-size:16px;" >
+                                    P - Pagos - VERSIÓN 4.0
+                                </span>
+                            </strong>
+                        </div>
+                        
+                        <div class="fromtocontent" style="font-size:12px;">
+                            <div align="center">
+                                <strong style="color: red;">
+                                    <span t-field="o.name" />
+                                </strong><br/>
+                                <strong>
+                                    Folio Fiscal (UUID)
+                                </strong><br/>
+                                <span t-out="cfdi.get('uuid')">No identificado</span><br/>
+                                <strong>
+                                    No. de serie del CSD del emisor
+                                </strong><br/>
+                                <span t-out="cfdi.get('certificate_number')">30001000000500003416</span><br/>
+                                <strong>
+                                    Fecha y Hora de emisión
+                                </strong><br/>
+                                <span t-out="cfdi.get('emission_date_str')">2023-09-12</span><br/>
+                            </div>
+                        </div>
+                    </div>              
+                    
+                </td>
+            </tr>
+        </table>
+
+
+    </div>
+</template>
+
+
+<template id="report_benotto_payment_cfdi_document_02">
+    <t t-call="web.basic_layout">
+        <!-- Variables -->
+        <t t-set="values" t-value="o._get_payment_receipt_report_values()"/>
+        <t t-set="cfdi" t-value="values.get('cfdi') or {}"/>
+
+        <!-- Header -->
+        <t t-call="l10n_mx_edi_account_move_report_dynamic.external_layout_header_payment_standard_benotto_02"/>
+
+        <!-- Variable -->
+        <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang}).sudo()"/>
+
+        <div class="page">
+            <br/>
+            <table width="100%" style="border-collapse: collapse;padding: 5px;border: 1px solid black; font-size:14px;" id="thead_address">
+                <thead style="font-size:14px; background-color: #afafaf; color: #FFFFFF">
+                    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;">
+                        <td width="33%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 0;">
+                            <strong>
+                                <span>Fecha y hora de certificación</span>
+                            </strong>
+                        </td>
+                        <td width="33%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 0;border-right: 0;">
+                            <strong>
+                                <span>No. de serie del CSD del SAT</span>
+                            </strong>
+                        </td>
+                        <td width="34%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 0;border-right: 1px solid black;">
+                            <strong>
+                                <span>Forma de Pago</span>
+                            </strong>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;">
+                        <td width="33%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 0;">
+                            <span t-out="cfdi.get('stamp_date','')">2023-09-12</span>
+                        </td>
+                        <td width="33%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 0;border-right: 0;">
+                            <span t-out="cfdi.get('certificate_sat_number')">30001000000500003442</span>
+                        </td>
+                        <td width="34%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 0;border-right: 1px solid black;">
+                            <span t-out="'%s - %s' % (o.l10n_mx_edi_payment_method_id.code, o.l10n_mx_edi_payment_method_id.name)"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <strong>Lugar de expedición: </strong> <span t-out="cfdi.get('expedition')">20928</span> 
+            <br/>
+            <table width="100%" style="border-collapse: collapse;padding: 5px;border: 1px solid black; font-size:14px;" id="thead_address">
+                <thead style="font-size:14px; background-color: #afafaf; color: #FFFFFF">
+                    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                        <td width="50%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                            <strong>
+                                <span>Emisor</span>
+                            </strong>
+                        </td>
+                        <td width="50%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                            <strong>
+                                <span>Receptor</span>
+                            </strong>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                        <td width="50%" align="left" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                            <span t-field="o.company_id.partner_id.name"/>
+                        </td>
+                        <td width="50%" align="left" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                            <span t-field="o.partner_id.name" />
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                        <td width="50%" align="left" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                                    
+                                <span t-field="o.company_id.partner_id.street"/> 
+                                <span t-field="o.company_id.partner_id.street_name"/>
+                                <span t-if="o.company_id.partner_id.street_number"> No. <span t-field="o.company_id.partner_id.street_number"/></span>
+                                <span t-if="o.company_id.partner_id.street_number2"> Int. <span t-field="o.company_id.partner_id.street_number2"/></span>
+                                <br t-if="o.company_id.partner_id.street_number2"/>
+                                <span t-if="o.company_id.partner_id.city">
+                                    <span t-field="o.company_id.partner_id.city"/>,
+                                </span>
+                                <br/>
+                                <span t-field="o.company_id.partner_id.state_id.name"/>, 
+                                <span t-field="o.company_id.partner_id.country_id.name"/>
+                                <span t-if="o.company_id.partner_id.zip">
+                                    C.P. <span t-field="o.company_id.partner_id.zip"/>
+                                </span>
+                                <br/>
+                                <strong>RFC: </strong> <span t-field="o.company_id.partner_id.vat" /><br/>
+                                <strong>Régimen Fiscal: </strong> <span t-esc="o.company_id.partner_id.l10n_mx_edi_fiscal_regime" /> - <span t-field="o.company_id.partner_id.l10n_mx_edi_fiscal_regime" />
+
+                        </td>
+                        <td width="50%" align="left" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                                <span t-field="o.partner_id.street"/> 
+                                <span t-field="o.partner_id.street_name"/>
+                                <span t-if="o.partner_id.street_number"> No. <span t-field="o.partner_id.street_number"/></span>
+                                <span t-if="o.partner_id.street_number2"> Int. <span t-field="o.partner_id.street_number2"/></span>
+                                <br t-if="o.partner_id.street_number2"/>
+                                <span t-if="o.partner_id.city">
+                                    <span t-field="o.partner_id.city"/>,
+                                </span>
+                                <br/>
+                                <span t-field="o.partner_id.state_id.name"/>, 
+                                <span t-field="o.partner_id.country_id.name"/> 
+                                <br/>
+                                RFC: <span t-field="o.partner_id.vat" />
+                                <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> 
+                                USO CFDI: <span t-out="cfdi.get('usage')"> S01 - Without fiscal effects</span>
+                                <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+                                Régimen Fiscal: <span t-esc="o.partner_id.l10n_mx_edi_fiscal_regime" /> 
+                                <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+                                <span t-if="o.partner_id.zip">
+                                    C.P.: <span t-field="o.partner_id.zip"/>
+                                </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            
+            <table width="100%" style="border-collapse: collapse;padding: 5px;border: 1px solid black; font-size:14px;" id="thead_address">
+                <thead style="font-size:14px; background-color: #afafaf; color: #FFFFFF">
+                    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                        <td width="15%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid gray;">
+                            <strong>
+                                <span>Cantidad</span>
+                            </strong>
+                        </td>
+                        <td width="15%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid gray;">
+                            <strong>
+                                <span>Clave Unidad</span>
+                            </strong>
+                        </td>
+                        <td width="40%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid gray;">
+                            <strong>
+                                <span>Descripción</span>
+                            </strong>
+                        </td>
+                        <td width="15%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid gray;">
+                            <strong>
+                                <span>Valor Unitario</span>
+                            </strong>
+                        </td>
+                        <td width="15%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                            <strong>
+                                <span>Importe</span>
+                            </strong>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr style="border-bottom: 1px solid transparent;border-top: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;">
+                            <td align="left" valign="middle" style="padding-left:5px;border-bottom: 1px solid transparent;border-top: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;">
+                                <span>1.00</span>
+                            </td>
+                            <td align="left" valign="middle" style="padding-left:5px;border-bottom: 1px solid transparent;border-top: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;">
+                                <span>ACT - Actividad</span>
+                            </td>
+                            <td align="left" valign="middle" style="padding-left:5px;border-bottom: 1px solid transparent;border-top: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;">
+                                <span>Pago 
+                                Objeto Imp: 01 - No objeto de impuesto</span>
+                            </td>
+                            <td align="left" valign="middle" style="padding-left:5px;border-bottom: 1px solid transparent;border-top: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;">
+                                <span class="text-nowrap">0.00</span>
+                            </td>
+                            <td align="left" valign="middle" style="padding-left:5px;border-bottom: 1px solid transparent;border-top: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;">
+                                 <span class="text-nowrap">0.00</span>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid transparent;border-top: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;">
+                                <td colspan="5" align="left" valign="middle" style="padding-left:5px;border-bottom: 1px solid black;border-top: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;">
+                                    <table align="left" valign="middle">
+                                        <tr style="padding-left:5px;border-bottom: 1px solid transparent;border-top: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;text-align: left;">
+                                            <td style="padding-left:7px;padding-left:5px;border-bottom: 1px solid transparent;border-top: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;">
+                                                <span>ClaveProdServ: 84111506 - Servicios de facturación</span>
+                                            </td>
+                                        </tr>
+                                        <tr style="padding-left:5px;border-bottom: 1px solid transparent;border-top: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;">
+                                            <td style="padding-left:7px;padding-left:5px;border-bottom: 1px solid transparent;border-top: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;">
+                                                <strong> IVA: </strong>0.0 
+                                                <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+                                                <strong> IEPS: </strong>0.0
+                                                <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+                                                <strong> IEPS RET: </strong>0.0
+                                                <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+                                                <strong> ISR: </strong>0.0
+                                                <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+                                                <strong> IVA RET: </strong>0.0
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                </tbody>
+            </table>
+            <br/>
+                
+
+            <t t-if="cfdi and cfdi.get('cfdi_node')">
+                <table width="100%" style="border-collapse: collapse;padding: 5px;border: 1px solid black; font-size:14px;" id="thead_address">
+                    <thead style="font-size:14px; background-color: #afafaf; color: #FFFFFF">
+                        <tr style="border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                            <td colspan="8" width="10%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid gray;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                                <strong>
+                                    <span>Complemento de Pagos</span>
+                                </strong>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+
+                <t t-set="payment_info" t-value="cfdi.get('payment_info')"/>
+                <table class="table table-sm" t-if="payment_info">
+                    <thead>
+                        <tr>
+                            <th><t t-out="o.company_id.account_fiscal_country_id.vat_label or 'VAT'"/><span> RFC Emisor Cta.Ord:</span></th>
+                            <th>Nom. Banco Ord.Ext:</th>
+                            <th>Cta. Ordenante:</th>
+                            <th><t t-out="o.company_id.account_fiscal_country_id.vat_label or 'VAT'"/><span> RFC Emisor Cta.Ben:</span></th>
+                            <th>Cta. Beneficiario:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td t-if="payment_info['from_account_vat']">
+                                <span t-out="payment_info['from_account_vat']"/>
+                            </td>
+                            <td t-if="payment_info['from_account_name']">
+                                <span t-out="payment_info['from_account_name']"/>
+                            </td>
+                            <td t-if="payment_info['from_account_number']">
+                                <span t-out="payment_info['from_account_number']"/>
+                            </td>
+                            <td t-if="payment_info['to_account_vat']">
+                                <span t-out="payment_info['to_account_vat']"/>
+                            </td>
+                            <td t-if="payment_info['to_account_number']">
+                                <span t-out="payment_info['to_account_number']"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+            <br/>
+            <table width="100%" style="border-collapse: collapse;padding: 5px;border: 1px solid black; font-size:14px;" id="thead_address">
+                <thead style="font-size:14px; background-color: #afafaf; color: #FFFFFF">
+                    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                        <td colspan="8" width="10%" align="center" valign="middle" style="padding-left:5px;border-bottom: 1px solid gray;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;">
+                            <strong>
+                                <span>Documentos Relacionados</span>
+                            </strong>
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+
+            <t t-if="cfdi">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Factura</th>
+                            <th>UUID</th>
+                            <th class="text-end">Parcialidad</th>
+                            <th class="text-end">Saldo Anterior</th>
+                            <th class="text-end">Importe Pagado</th>
+                            <th class="text-end">Saldo</th>
+                            <th>Divisa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="cfdi.get('invoices',[])" t-as="inv_values">
+                            <td><span t-out="inv_values['invoice'].name"/></td>
+                            <td><span t-out="inv_values['uuid']"/></td>
+                            <td class="text-end"><span t-out="inv_values['partiality']"/></td>
+                            <td class="text-end">
+                                <span t-out="'%.2f' % (inv_values['previous_balance'] or 0.0)"/>
+                            </td>
+                            <td class="text-end">
+                                <span t-out="'%.2f' % (inv_values['amount_paid'] or 0.0)"/>
+                            </td>
+                            <td class="text-end">
+                                <span t-out="'%.2f' % (inv_values['balance'] or 0.0)"/>
+                            </td>
+                            <td><span t-out="inv_values['currency']"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Fecha de Factura</th>
+                            <th>Número de Factura</th>
+                            <th class="text-end">Importe Original</th>
+                            <th class="text-end">Importe Pagado</th>
+                            <th class="text-end">Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="cfdi.get('invoices',[])" t-as="inv_values">
+                            <t t-set="invoice" t-value="inv_values['invoice']"/>
+                            <td><span t-field="invoice.invoice_date"/></td>
+                            <td><span t-field="invoice.name"/></td>
+                            <td class="text-end"><span t-field="invoice.amount_total"/></td>
+                            <td class="text-end">
+                                <span t-out="'%.2f' % (invoice.amount_total - invoice.amount_residual)"/>
+                            </td>
+                            <td class="text-end"><span t-field="invoice.amount_residual"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+
+
+            <div class="row col-12" id='complement'>
+                <div class="barcode col-3">
+                    <img alt="Barcode" t-att-src="cfdi.get('barcode_src')"/>
+                </div>
+                <div class="complement-details col-9">
+                    <div class="digital-stamp">
+                        <span>Sello digital del emisor</span>
+                    </div>
+                    <div class="digital-stamp-content">
+                        <span t-out="cfdi.get('sello_sat')">No identificado</span>
+                    </div>
+                    <div class="digital-stamp">
+                        <span>Sello digital del SAT</span>
+                    </div>
+                    <div class="digital-stamp-content">
+                        <span t-out="cfdi.get('sello_sat')">No identificado</span>
+                    </div>
+                    <div class="digital-stamp">
+                        <span>Cadena original del complemento del certificado digital del SAT</span>
+                    </div>
+                    <div class="digital-stamp-content">
+                        <span class="nowrap" t-out="cfdi.get('cadena')">No identificado</span>
+                    </div>
+                    <div class="digital-stamp-content text-center">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>  
+
+        <div class="footer">
+
+            <table style="width: 100%">
+                <tr >
+                    <td  align="center" style="font-size: 12px;width: 65%;text-align: center;border: 1px solid transparent;border-collapse: collapse;padding: 1px;border-bottom: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;">
+                        Este documento es una representacion impresa de un CFDI
+                    </td>
+                    <td style="width: 35%;text-align: right;border: 1px solid transparent;border-collapse: collapse;padding: 1px;border-bottom: 1px solid transparent;border-left: 1px solid transparent;border-right: 1px solid transparent;">
+
+                         <strong  style="font-size: 12px;text-align: center;" ><span>   Página </span><span class="page" /> de <span class="topage" /></strong>                       
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </t>
+</template>
+
+<template id="report_benotto_payment_cfdi_02">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="l10n_mx_edi_account_move_report_dynamic.report_benotto_payment_cfdi_document_02" t-lang="o.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+
+
+<record id="report_benotto_payment_paper_02" model="report.paperformat">
+    <field name="page_height">0</field>
+    <field name="page_width">0</field>
+    <field name="margin_top">43</field>
+    <field name="header_spacing">38</field>
+    <field name="margin_right">7</field>
+    <field name="margin_bottom">10</field>
+    <field name="margin_left">7</field>
+    <field name="header_line" eval="False"/>
+    <field name="name">Benotto - Pago 02</field>
+    <field name="orientation">Portrait</field>
+    <field name="dpi">110</field>
+    <field name="default" eval="True"/>
+    <field name="format">Letter</field>
+</record>
+
+
+<record id="report_benotto_payment_cfdi_02_act" model="ir.actions.report">
+    <field name="name">Pago CFDI (EST-02)</field>
+    <field name="model">account.payment</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">l10n_mx_edi_account_move_report_dynamic.report_benotto_payment_cfdi_02</field>
+    <field name="report_file">l10n_mx_edi_account_move_report_dynamic.report_benotto_payment_cfdi_02</field>
+    <field name="print_report_name">(object.company_id.vat + '_' + (object.name or '').replace('/','_').replace(' ','_')  +'.pdf')</field>
+    <field name="binding_model_id" ref="account.model_account_payment"/>
+    <field name="paperformat_id" ref="l10n_mx_edi_account_move_report_dynamic.report_benotto_payment_paper_02" />
+</record>
+
+
+  </data>
+</odoo>

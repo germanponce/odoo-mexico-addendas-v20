@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Migración v17 → v19:
+    - inherit_id: 'l10n_mx_edi.l10n_mx_edi_inh_res_partner_form' se mantiene.
+      Es el ID del partner form de l10n_mx_edi que añade los campos MX.
+      Si en tu instalación v19 este ID no existe (renombrado), usa como
+      alternativa: ref="account.view_partner_property_form" y cambia el
+      xpath por: //group[@name='fiscal_information'] position="inside".
+-->
+<odoo>
+    <record id="view_partner_property_form" model="ir.ui.view">
+        <field name="name">l10n_mx_edi_factoring_simple.res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="l10n_mx_edi.l10n_mx_edi_res_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='l10n_mx_edi_payment_method_id']" position="after">
+                <field name="l10n_mx_edi_factoring"/>
+                <field
+                    name="l10n_mx_edi_factoring_id"
+                    options="{'no_create': True}"
+                    invisible="not l10n_mx_edi_factoring"
+                    domain="[('id', '!=', id), ('l10n_mx_edi_factoring', '=', True)]"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

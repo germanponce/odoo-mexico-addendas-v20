@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_inherit_send_mail_probc" model="ir.ui.view">
+        <field name="name">res.partner.form.mail.send.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='accounting']//button[hasclass('btn-link')]" position="after">
+                <field name="custom_allow_send_mail"
+                    attrs="{'invisible': [('parent_id','=', True)]}"/>    
+            </xpath>
+        </field>
+    </record>
+</odoo>

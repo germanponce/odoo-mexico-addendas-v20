@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2026 ANFEPI - Roberto Requejo Jimenez | License OPL-1 -->
+<odoo>
+    <!-- Pestania "Permisos CFDI Compliance" en la ficha de usuario.
+         Solo visible si el usuario tiene acceso a CFDI Compliance (grupo User+).
+         Reemplaza a los antiguos grupos sueltos group_cfdi_type_*/group_cfdi_dir_*. -->
+    <record id="view_users_form_compliance_permissions" model="ir.ui.view">
+        <field name="name">res.users.form.compliance.permissions</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="before">
+                <field name="has_cfdi_compliance_access" invisible="1"/>
+            </xpath>
+            <notebook position="inside">
+                <page name="cfdi_compliance_permissions" string="Permisos CFDI Compliance"
+                      invisible="not has_cfdi_compliance_access">
+                    <div class="alert alert-info" role="alert">
+                        Controla que CFDIs ve este usuario dentro del modulo de Compliance,
+                        por tipo de comprobante y por direccion. Los <strong>Manager</strong> y
+                        <strong>Auditor</strong> ven todo (no se ven afectados por estos campos).
+                    </div>
+                    <group>
+                        <group string="Tipos de comprobante visibles">
+                            <field name="can_see_compliance_ingreso"/>
+                            <field name="can_see_compliance_egreso"/>
+                            <field name="can_see_compliance_pago"/>
+                            <field name="can_see_compliance_traslado"/>
+                            <field name="can_see_compliance_nomina"/>
+                        </group>
+                        <group string="Direccion visible">
+                            <field name="can_see_compliance_emitido"/>
+                            <field name="can_see_compliance_recibido"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-warning" role="alert">
+                        <strong>⚠️ Nomina:</strong> los CFDIs de Nomina contienen informacion
+                        sensible de empleados (sueldos, percepciones, deducciones). Activar
+                        "ver Nomina" solo para usuarios de confianza. Un usuario sin ningun tipo
+                        marcado (o sin ninguna direccion) no vera CFDIs.
+                    </div>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

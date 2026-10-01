@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="l10n_mx_edi_pos_default_uso_cfdi_s01.AddInfoPopup" t-inherit="l10n_mx_edi_pos.AddInfoPopup" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('mb-3')][1]" position="replace">
+            <div class="mb-3">
+                <label for="mx_detail_usage" class="form-label">Uso CFDI: </label>
+                <select class="detail form-select" id="mx_detail_usage" name="l10n_mx_edi_usage" t-model="state.l10n_mx_edi_usage">
+                    <t t-foreach="pos.l10n_mx_edi_usage" t-as="l10n_mx_edi_usage" t-key="l10n_mx_edi_usage.value">
+                        <option t-att-value="l10n_mx_edi_usage.value"
+                                t-att-selected="l10n_mx_edi_usage.value === state.l10n_mx_edi_usage ? 'selected' : undefined">
+                            <t t-out="l10n_mx_edi_usage.name"/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+         </xpath>
+    </t>
+</templates>

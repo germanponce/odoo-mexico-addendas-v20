@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+            <record id="l10n_mx_edi_addenda_bassware" model="l10n_mx_edi.addenda">
+                <field name="name">Basware</field>
+                <field name="arch" type="xml">
+                    <t t-xml-node="addenda">
+                        <t t-set="sale_model" t-value="'sale_line_ids' in record.invoice_line_ids._fields"/>
+                        <t t-set="sale_id" t-value="record.invoice_line_ids.sale_line_ids.order_id[:1] if sale_model else False"/>
+                        <t t-set="pickings" t-value="sale_id.picking_ids.filtered(lambda x: x.state == 'done' and x.date_done)" />
+
+                        <AddendaBasware
+                            xmlns="https://kb.basware.com/sites/default/files/public/basware_additionaldata_mx.xsd"
+                            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                            xsi:schemaLocation="https://kb.basware.com/sites/default/files/public/basware_additionalda
+                            ta_mx.xsd" version="1.0">
+                                <Documento>
+                                <t t-if="record.x_orden_compra">
+                                    <OrdenCompra><t t-out="record.x_orden_compra"/></OrdenCompra>
+                                </t>
+                                <t t-if="record.x_numero_contrato">
+                                    <NumeroContrato><t t-out="record.x_numero_contrato"/></NumeroContrato>
+                                </t>
+                                <t t-if="record.x_persona_referencia">
+                                    <PersonaReferencia><t t-out="record.x_persona_referencia"/></PersonaReferencia>
+                                </t>
+                                <t t-if="record.x_email">
+                                    <Email><t t-out="record.x_email"/></Email>
+                                </t>
+                                <t t-if="record.x_documento_transporte">
+                                    <DocumentoTransporte><t t-out="record.x_documento_transporte"/></DocumentoTransporte>
+                                </t>
+                                <t t-if="record.x_numero_proveedor">
+                                    <NumeroProveedor><t t-out="record.x_numero_proveedor"/></NumeroProveedor>
+                                </t>
+                                <t t-if="record.x_codigo_destinatario">
+                                    <CodigoDestinatario><t t-out="record.x_codigo_destinatario"/></CodigoDestinatario>
+                                </t>
+                                <ISOMoneda><t t-out="record.x_iso_moneda"/></ISOMoneda>
+                                <t t-if="record.x_fecha_pago">
+                                    <FechaPago><t t-out="record.x_fecha_pago"/></FechaPago>
+                                </t>
+                                <t t-if="record.x_termino_pago">
+                                    <TerminoPago><t t-out="record.x_termino_pago"/></TerminoPago>
+                                </t>
+                                <t t-if="record.x_extra_info_ids">
+                                    <ExtraInformacion>
+                                        <t t-foreach="record.x_extra_info_ids" t-as="extra_info">
+                                            <ExtraInfo t-att-type="extra_info.ttype"><t t-out="extra_info.value"/></ExtraInfo>
+                                        </t>
+                                    </ExtraInformacion>
+                                </t>
+                                </Documento>
+                                <Lineas>
+                                    <t t-set="number" t-value="1"/>
+                                    <t t-set="invoice_lines" t-value="record.get_invoice_lines()"/>
+                                    <t t-foreach="invoice_lines" t-as="line">
+                                        <Linea>
+                                            <t t-if="number">
+                                                <NumeroLinea><t t-out="number"/></NumeroLinea>
+                                            </t>
+                                            <t t-if="line.x_orden_compra">
+                                                <OrdenCompra><t t-out="line.x_orden_compra"/></OrdenCompra>
+                                            </t>
+                                            <t t-if="line.x_linea_orden_compra">
+                                                <LineaOrdenCompra><t t-out="line.x_linea_orden_compra"/></LineaOrdenCompra>
+                                            </t>
+                                            <t t-if="line.x_numero_contrato">
+                                                <NumeroContrato><t t-out="line.x_numero_contrato"/></NumeroContrato>
+                                            </t>
+                                            <t t-if="line.x_codido_producto_comprador">
+                                                <CodigoProductoComprador><t t-out="line.x_codido_producto_comprador"/></CodigoProductoComprador>
+                                            </t>
+                                            <t t-if="line.x_documento_transporte">
+                                                <DocumentoTransporte><t t-out="line.x_documento_transporte"/></DocumentoTransporte>
+                                            </t>
+                                            <t t-if="line.x_extra_info_ids">
+                                                <ExtraInformacion>
+                                                    <t t-foreach="line.x_extra_info_ids" t-as="extra_info_line">
+                                                        <ExtraInfo t-att-type="extra_info_line.ttype"><t t-out="extra_info.value"/></ExtraInfo>
+                                                    </t>
+                                                </ExtraInformacion>
+                                            </t>
+                                        </Linea>
+                                        <t t-set="number" t-value="number+1"/>
+                                    </t>
+                                </Lineas>
+                        </AddendaBasware>
+                    </t>
+                </field>
+            </record>
+
+ 
+    </data>
+</odoo>

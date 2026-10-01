@@ -1,0 +1,89 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="addenda_insabi_71_sale_fields_form">
+            <field name="name">addenda_insabi_71_sale_fields_form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.sale_order_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <separator string="Addenda INSABI" invisible="addenda_type != 'insabi'"/>
+                    <newline invisible="addenda_type != 'insabi'"/>
+                    <group name="insabi" invisible="addenda_type != 'insabi'">
+                        <group>
+                            <field name="l10n_mx_edi_insabi_imss_no_orden"/>
+                            <field name="l10n_mx_edi_insabi_contract_name"/>
+                        </group>
+                        <group>
+                            <field name="l10n_mx_edi_insabi_response_orden_remi"/>
+                        </group>
+                    </group>
+
+                    <group name="insabi" string="CLUES" invisible="addenda_type != 'insabi'">
+                        <group>
+                            <field name="l10n_mx_edi_insabi_clue"/>
+                        </group>
+                        <group>
+                            <field name="l10n_mx_edi_insabi_final_destiny_clues"/>
+                            <field name="l10n_mx_edi_insabi_send_to_name"/>
+                        </group>
+                    </group>
+
+                    <group name="insabi" string="Fechas" invisible="addenda_type != 'insabi'">
+                        <group>
+                            <field name="l10n_mx_edi_insabi_expedition_date"/>
+                            <field name="l10n_mx_edi_insabi_incoming_date"/>
+                        </group>
+                        <group>
+                            <field name="l10n_mx_edi_insabi_reception_date"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="addenda_insabi_71_invoice_fields_form">
+            <field name="name">addenda_insabi_71_invoice_fields_form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.account_move_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <separator string="Addenda INSABI" invisible="addenda_type != 'insabi'"/>
+                    <newline invisible="addenda_type != 'insabi'"/>
+                    <group name="insabi" invisible="addenda_type != 'insabi'">
+                        <group>
+                            <field name="l10n_mx_edi_insabi_imss_no_orden"/>
+                            <field name="l10n_mx_edi_insabi_contract_name"/>
+                        </group>
+                        <group>
+                            <field name="l10n_mx_edi_insabi_response_orden_remi"/>
+                        </group>
+                    </group>
+
+                    <group name="insabi" string="CLUES" invisible="addenda_type != 'insabi'">
+                        <group>
+                            <field name="l10n_mx_edi_insabi_clue"/>
+                        </group>
+                        <group>
+                            <field name="l10n_mx_edi_insabi_final_destiny_clues"/>
+                            <field name="l10n_mx_edi_insabi_send_to_name"/>
+                        </group>
+                    </group>
+
+                    <group name="insabi" string="Fechas" invisible="addenda_type != 'insabi'">
+                        <group>
+                            <field name="l10n_mx_edi_insabi_expedition_date"/>
+                            <field name="l10n_mx_edi_insabi_incoming_date"/>
+                        </group>
+                        <group>
+                            <field name="l10n_mx_edi_insabi_reception_date"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

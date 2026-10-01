@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>l10n_mx_edi_cfdi_validator — Validador CFDI de Proveedor</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; background-color: #f8f9fa;">
+
+    <!-- ══ CABECERA ══ -->
+    <div style="text-align: center; background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%); color: white; padding: 40px 20px; border-radius: 10px; margin-bottom: 30px;">
+        <div style="width: 70px; height: 70px; background: rgba(255,255,255,0.15); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 15px;">🧾</div>
+        <h1 style="margin: 0 0 10px 0; font-size: 2.2rem; font-weight: 700;">Validador CFDI de Proveedor</h1>
+        <p style="margin: 0 0 15px 0; font-size: 1.1rem; opacity: 0.9;">Módulo Odoo 18.0 — Localización México</p>
+        <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">Versión 18.0.1.0.0</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">l10n_mx_edi_cfdi_validator</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">Depende: l10n_mx_edi, account</span>
+        </div>
+    </div>
+
+    <!-- ══ DESCRIPCIÓN ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 15px 0; color: #0d6efd; font-size: 1.5rem; text-align: center;">¿Qué hace este módulo?</h2>
+        <p style="color: #5d6d7e; text-align: center; max-width: 820px; margin: 0 auto 15px auto;">
+            Extiende el flujo de facturas de proveedor en Odoo 18 México con una
+            <strong>pestaña CFDI dedicada</strong> que lee el XML automáticamente,
+            expone todos sus datos clave y ejecuta <strong>validaciones SAT configurables</strong>
+            que pueden bloquear la confirmación del documento si fallan.
+        </p>
+        <div style="background: #e7f1ff; border-left: 4px solid #0d6efd; padding: 15px 20px; border-radius: 4px; max-width: 820px; margin: 0 auto;">
+            <strong style="color: #0a58ca;">Alcance:</strong>
+            <span style="color: #5d6d7e;"> Solo actúa sobre <code>in_invoice</code> (facturas de proveedor)
+            e <code>in_refund</code> (notas de crédito de proveedor). No afecta documentos de cliente.</span>
+        </div>
+    </div>
+
+    <!-- ══ FLUJO ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 25px 0; color: #0d6efd; font-size: 1.5rem; text-align: center;">Flujo de Trabajo</h2>
+        <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 10px;">
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #0d6efd, #0a58ca); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">📎</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">1. Adjuntar XML</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">Usuario sube el CFDI en la pestaña CFDI estándar de Odoo</p>
+            </div>
+
+            <div style="font-size: 2rem; color: #0d6efd; flex: 0;">→</div>
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #198754, #146c43); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">🔍</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">2. Lectura Automática</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">El override de importación CFDI puebla todos los campos de la pestaña</p>
+            </div>
+
+            <div style="font-size: 2rem; color: #0d6efd; flex: 0;">→</div>
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #ffc107, #e0a800); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">✅</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">3. Semáforo SAT</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">Cada validación muestra Correcto / Error / No configurado en tiempo real</p>
+            </div>
+
+            <div style="font-size: 2rem; color: #0d6efd; flex: 0;">→</div>
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #dc3545, #b02a37); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">🔒</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">4. Confirmar</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">Si una validación activa falla, el sistema bloquea el registro</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ PESTAÑA CFDI — CAMPOS ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #0d6efd; font-size: 1.5rem; text-align: center;">Pestaña CFDI — Campos de Datos</h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+
+            <!-- Cabecera -->
+            <div style="background: #f8f9fa; border-radius: 8px; padding: 18px; border-top: 3px solid #0d6efd;">
+                <h4 style="margin: 0 0 12px 0; color: #0d6efd;">🔑 Cabecera</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.88rem; color: #5d6d7e;">
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>UUID / Folio Fiscal</strong> — del campo estándar l10n_mx_edi_cfdi_uuid</li>
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Versión CFDI</strong> — atributo Version</li>
+                    <li style="padding: 4px 0;">📌 <strong>Tipo Comprobante</strong> — TipoDeComprobante (I/E/P)</li>
+                </ul>
+            </div>
+
+            <!-- Emisor -->
+            <div style="background: #f8f9fa; border-radius: 8px; padding: 18px; border-top: 3px solid #6f42c1;">
+                <h4 style="margin: 0 0 12px 0; color: #6f42c1;">🏭 Emisor (Proveedor)</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.88rem; color: #5d6d7e;">
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>RFC Emisor</strong> — Emisor@Rfc</li>
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Nombre Emisor</strong> — Emisor@Nombre</li>
+                    <li style="padding: 4px 0;">📌 <strong>Régimen Fiscal</strong> — Emisor@RegimenFiscal</li>
+                </ul>
+            </div>
+
+            <!-- Receptor -->
+            <div style="background: #f8f9fa; border-radius: 8px; padding: 18px; border-top: 3px solid #198754;">
+                <h4 style="margin: 0 0 12px 0; color: #198754;">🏢 Receptor (Empresa)</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.88rem; color: #5d6d7e;">
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>RFC Receptor</strong> — Receptor@Rfc</li>
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Nombre Receptor</strong> — Receptor@Nombre</li>
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Domicilio Fiscal</strong> — Receptor@DomicilioFiscalReceptor</li>
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Régimen Fiscal</strong> — Receptor@RegimenFiscalReceptor</li>
+                    <li style="padding: 4px 0;">📌 <strong>Uso de CFDI</strong> — Receptor@UsoCFDI</li>
+                </ul>
+            </div>
+
+            <!-- Info Adicional -->
+            <div style="background: #f8f9fa; border-radius: 8px; padding: 18px; border-top: 3px solid #fd7e14;">
+                <h4 style="margin: 0 0 12px 0; color: #fd7e14;">📋 Información Adicional</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.88rem; color: #5d6d7e;">
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Método de Pago</strong> — Comprobante@MetodoPago</li>
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Forma de Pago</strong> — Comprobante@FormaPago</li>
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Lugar Expedición</strong> — Comprobante@LugarExpedicion</li>
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Moneda XML</strong> — Comprobante@Moneda</li>
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Subtotal</strong> — Comprobante@SubTotal</li>
+                    <li style="padding: 4px 0;">📌 <strong>Total</strong> — Comprobante@Total</li>
+                </ul>
+            </div>
+
+            <!-- Impuestos -->
+            <div style="background: #f8f9fa; border-radius: 8px; padding: 18px; border-top: 3px solid #dc3545;">
+                <h4 style="margin: 0 0 12px 0; color: #dc3545;">💰 Impuestos (One2many)</h4>
+                <p style="font-size: 0.82rem; color: #7f8c8d; margin: 0 0 8px 0;">
+                    Modelo: <code>mx.cfdi.tax.line</code><br>
+                    Nodo global <code>cfdi:Impuestos</code> hijo directo de Comprobante.
+                </p>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.88rem; color: #5d6d7e;">
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Tipo</strong> — Traslado | Retención</li>
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Código</strong> — @Impuesto (001/002/003)</li>
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Tipo Factor</strong> — @TipoFactor</li>
+                    <li style="padding: 4px 0; border-bottom: 1px dashed #dee2e6;">📌 <strong>Tasa o Cuota</strong> — @TasaOCuota</li>
+                    <li style="padding: 4px 0;">📌 <strong>Importe</strong> — @Importe</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ VALIDACIONES SAT ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #0d6efd; font-size: 1.5rem; text-align: center;">12 Validaciones SAT Configurables</h2>
+        <p style="text-align: center; color: #7f8c8d; margin: 0 0 20px 0;">
+            Cada validación se activa/desactiva individualmente en
+            <strong>Contabilidad → Configuración → Ajustes → Validaciones CFDI de Proveedor</strong>.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px;">
+
+            <!-- Receptor -->
+            <div style="border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+                <div style="background: #198754; color: white; padding: 10px 16px; font-weight: 600; font-size: 0.9rem;">
+                    🏢 Receptor (su empresa)
+                </div>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 8px 14px; color: #2c3e50; font-weight: 500;">Versión CFDI 4.0</td>
+                        <td style="padding: 8px 14px; color: #7f8c8d;">Attribute Version == "4.0"</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f0f0f0; background: #fafafa;">
+                        <td style="padding: 8px 14px; color: #2c3e50; font-weight: 500;">RFC Receptor</td>
+                        <td style="padding: 8px 14px; color: #7f8c8d;">vs company.partner_id.vat</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 8px 14px; color: #2c3e50; font-weight: 500;">Razón Social Receptor</td>
+                        <td style="padding: 8px 14px; color: #7f8c8d;">vs company.name (sanitizado)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 14px; color: #2c3e50; font-weight: 500;">CP Receptor</td>
+                        <td style="padding: 8px 14px; color: #7f8c8d;">vs company.partner_id.zip</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Comprobante -->
+            <div style="border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+                <div style="background: #0d6efd; color: white; padding: 10px 16px; font-weight: 600; font-size: 0.9rem;">
+                    📄 Comprobante
+                </div>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 8px 14px; color: #2c3e50; font-weight: 500;">Tipo Comprobante</td>
+                        <td style="padding: 8px 14px; color: #7f8c8d;">I=factura, E=nota de crédito</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f0f0f0; background: #fafafa;">
+                        <td style="padding: 8px 14px; color: #2c3e50; font-weight: 500;">Moneda</td>
+                        <td style="padding: 8px 14px; color: #7f8c8d;">MXN o USD</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 8px 14px; color: #2c3e50; font-weight: 500;">UUID Duplicado</td>
+                        <td style="padding: 8px 14px; color: #7f8c8d;">No debe existir en otra factura activa</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 14px; color: #2c3e50; font-weight: 500;">Estatus SAT</td>
+                        <td style="padding: 8px 14px; color: #7f8c8d;">l10n_mx_edi_cfdi_sat_state == 'valid'</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Emisor -->
+            <div style="border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+                <div style="background: #6f42c1; color: white; padding: 10px 16px; font-weight: 600; font-size: 0.9rem;">
+                    🏭 Emisor (proveedor)
+                </div>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 8px 14px; color: #2c3e50; font-weight: 500;">RFC Emisor</td>
+                        <td style="padding: 8px 14px; color: #7f8c8d;">vs partner.vat</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f0f0f0; background: #fafafa;">
+                        <td style="padding: 8px 14px; color: #2c3e50; font-weight: 500;">Razón Social Emisor</td>
+                        <td style="padding: 8px 14px; color: #7f8c8d;">vs partner.name (sanitizado)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 8px 14px; color: #2c3e50; font-weight: 500;">Régimen Fiscal Emisor</td>
+                        <td style="padding: 8px 14px; color: #7f8c8d;">vs partner.l10n_mx_edi_fiscal_regime</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 14px; color: #2c3e50; font-weight: 500;">CP Emisor</td>
+                        <td style="padding: 8px 14px; color: #7f8c8d;">LugarExpedicion vs partner.zip</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- Leyenda resultados -->
+        <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="background: #198754; color: white; padding: 3px 12px; border-radius: 12px; font-size: 0.82rem;">Correcto</span>
+                <span style="color: #7f8c8d; font-size: 0.85rem;">La validación está activa y el dato coincide</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="background: #dc3545; color: white; padding: 3px 12px; border-radius: 12px; font-size: 0.82rem;">Error</span>
+                <span style="color: #7f8c8d; font-size: 0.85rem;">La validación está activa y el dato NO coincide</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="background: #6c757d; color: white; padding: 3px 12px; border-radius: 12px; font-size: 0.82rem;">No configurado</span>
+                <span style="color: #7f8c8d; font-size: 0.85rem;">Validación desactivada o sin XML leído</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ MODELOS ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #0d6efd; font-size: 1.5rem; text-align: center;">Modelos y Campos Técnicos</h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+
+            <!-- mx.cfdi.tax.line -->
+            <div style="background: #fff8f0; border-radius: 8px; padding: 20px; border-left: 4px solid #fd7e14;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                    <span style="background: #fd7e14; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700;">NUEVO</span>
+                    <code style="font-size: 0.9rem; color: #2c3e50;">mx.cfdi.tax.line</code>
+                </div>
+                <p style="color: #7f8c8d; font-size: 0.85rem; margin: 0 0 10px 0;">Líneas de impuesto del nodo global cfdi:Impuestos.</p>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.82rem; color: #5d6d7e;">
+                    <li>✓ <strong>move_id</strong> — Many2one account.move (cascade)</li>
+                    <li>✓ <strong>tipo</strong> — traslado / retención</li>
+                    <li>✓ <strong>codigo</strong> — 001=ISR 002=IVA 003=IEPS</li>
+                    <li>✓ <strong>tipo_factor</strong> — Tasa | Cuota | Exento</li>
+                    <li>✓ <strong>tasa_o_cuota</strong> — valor numérico (Char)</li>
+                    <li>✓ <strong>importe</strong> — Float(16,4)</li>
+                </ul>
+            </div>
+
+            <!-- res.company -->
+            <div style="background: #f0f7ff; border-radius: 8px; padding: 20px; border-left: 4px solid #0d6efd;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                    <span style="background: #0d6efd; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700;">HERENCIA</span>
+                    <code style="font-size: 0.9rem; color: #2c3e50;">res.company</code>
+                </div>
+                <p style="color: #7f8c8d; font-size: 0.85rem; margin: 0 0 10px 0;">12 campos Boolean para configuración de validaciones.</p>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.82rem; color: #5d6d7e;">
+                    <li>✓ l10n_mx_cfdi_val_version</li>
+                    <li>✓ l10n_mx_cfdi_val_rfc_receptor</li>
+                    <li>✓ l10n_mx_cfdi_val_rs_receptor</li>
+                    <li>✓ l10n_mx_cfdi_val_cp_receptor</li>
+                    <li>✓ l10n_mx_cfdi_val_tipo_comprobante</li>
+                    <li>✓ l10n_mx_cfdi_val_moneda</li>
+                    <li>✓ l10n_mx_cfdi_val_uuid_duplicado</li>
+                    <li>✓ l10n_mx_cfdi_val_rfc_emisor</li>
+                    <li>✓ l10n_mx_cfdi_val_rs_emisor</li>
+                    <li>✓ l10n_mx_cfdi_val_regimen_emisor</li>
+                    <li>✓ l10n_mx_cfdi_val_cp_emisor</li>
+                    <li>✓ l10n_mx_cfdi_val_sat_status</li>
+                </ul>
+            </div>
+
+            <!-- account.move -->
+            <div style="background: #f0fff4; border-radius: 8px; padding: 20px; border-left: 4px solid #198754;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                    <span style="background: #198754; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700;">HERENCIA</span>
+                    <code style="font-size: 0.9rem; color: #2c3e50;">account.move</code>
+                </div>
+                <p style="color: #7f8c8d; font-size: 0.85rem; margin: 0 0 10px 0;">Campos de datos CFDI (stored), campos de validación (computed), métodos.</p>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.82rem; color: #5d6d7e;">
+                    <li>✓ 16 campos Char/Float de datos XML</li>
+                    <li>✓ l10n_mx_cfdi_tax_line_ids (One2many)</li>
+                    <li>✓ 12 campos de resultado de validación (computed)</li>
+                    <li>✓ l10n_mx_cfdi_error_count (Integer computed)</li>
+                    <li>✓ _l10n_mx_edi_import_cfdi_invoice() — override</li>
+                    <li>✓ action_mx_cfdi_reread_xml() — botón manual</li>
+                    <li>✓ _mx_cfdi_populate_all() — lectura XML</li>
+                    <li>✓ _mx_cfdi_populate_tax_lines() — impuestos</li>
+                    <li>✓ action_post() — override con bloqueo</li>
+                    <li>✓ _mx_cfdi_check_validations_on_post()</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ ARCHIVOS ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #0d6efd; font-size: 1.5rem; text-align: center;">Estructura del Módulo</h2>
+        <div style="background: #212529; color: #f8f9fa; padding: 20px; border-radius: 8px; font-family: monospace; font-size: 0.87rem; line-height: 1.8;">
+            <div style="color: #ffc107;">l10n_mx_edi_cfdi_validator/</div>
+            <div style="margin-left: 20px; color: #adb5bd;">├── __init__.py</div>
+            <div style="margin-left: 20px; color: #adb5bd;">├── __manifest__.py</div>
+            <div style="margin-left: 20px; color: #ffc107;">├── models/</div>
+            <div style="margin-left: 40px; color: #adb5bd;">├── __init__.py</div>
+            <div style="margin-left: 40px; color: #74c0fc;">├── mx_cfdi_tax_line.py     <span style="color: #6c757d;">← nuevo modelo mx.cfdi.tax.line</span></div>
+            <div style="margin-left: 40px; color: #74c0fc;">├── res_company.py          <span style="color: #6c757d;">← 12 campos Boolean de config</span></div>
+            <div style="margin-left: 40px; color: #74c0fc;">├── res_config_settings.py  <span style="color: #6c757d;">← related fields para ajustes</span></div>
+            <div style="margin-left: 40px; color: #74c0fc;">└── account_move.py         <span style="color: #6c757d;">← lógica principal (~220 líneas)</span></div>
+            <div style="margin-left: 20px; color: #ffc107;">├── views/</div>
+            <div style="margin-left: 40px; color: #a9d1a9;">├── res_config_settings_views.xml</div>
+            <div style="margin-left: 40px; color: #a9d1a9;">└── account_move_views.xml  <span style="color: #6c757d;">← pestaña CFDI</span></div>
+            <div style="margin-left: 20px; color: #ffc107;">└── security/</div>
+            <div style="margin-left: 40px; color: #adb5bd;">└── ir.model.access.csv</div>
+        </div>
+    </div>
+
+    <!-- ══ NOTAS ══ -->
+    <div style="background: #fff8f0; padding: 25px; border-radius: 10px; margin-bottom: 30px; border-left: 5px solid #fd7e14;">
+        <h3 style="margin: 0 0 15px 0; color: #e07b00; font-size: 1.2rem;">⚠️ Notas de Implementación</h3>
+
+        <p style="color: #5d6d7e; margin: 0 0 10px 0;">
+            <strong>1. Trigger de lectura XML:</strong> Los campos CFDI se pueblan automáticamente
+            cuando el usuario adjunta un XML a través del flujo estándar
+            (<em>Pestaña CFDI → Cargar archivo</em>). El override de
+            <code>_l10n_mx_edi_import_cfdi_invoice</code> en <code>account.move</code>
+            captura el evento y llama a <code>_mx_cfdi_populate_all()</code>.
+        </p>
+        <p style="color: #5d6d7e; margin: 0 0 10px 0;">
+            <strong>2. Facturas existentes:</strong> Para facturas que ya tienen CFDI adjunto
+            antes de instalar el módulo, use el botón <strong>"Releer XML"</strong>
+            que aparece en la pestaña CFDI.
+        </p>
+        <p style="color: #5d6d7e; margin: 0 0 10px 0;">
+            <strong>3. Validaciones en tiempo real:</strong> Los campos de resultado de validación
+            son <em>computed sin almacenar</em>, por lo que siempre reflejan la configuración
+            actual de la empresa sin necesidad de revalidación manual.
+        </p>
+        <p style="color: #5d6d7e; margin: 0 0 10px 0;">
+            <strong>4. Bloqueo condicional:</strong> El override de <code>action_post()</code>
+            solo evalúa las validaciones que están activas (<code>True</code>) en la empresa.
+            Las validaciones desactivadas nunca bloquean la confirmación.
+        </p>
+        <p style="color: #5d6d7e; margin: 0;">
+            <strong>5. Estatus SAT:</strong> La validación de estatus SAT lee el campo
+            <code>l10n_mx_edi_cfdi_sat_state</code> que ya mantiene el módulo base
+            <code>l10n_mx_edi</code>. Para que esta validación funcione, primero debe
+            haberse consultado el SAT desde la pestaña CFDI estándar.
+        </p>
+    </div>
+
+    <!-- ══ RESUMEN ══ -->
+    <div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #0d6efd;">Resumen</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
+            <div><div style="font-size: 2rem; font-weight: 700; color: #0d6efd;">4</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Archivos Python</p></div>
+            <div><div style="font-size: 2rem; font-weight: 700; color: #198754;">12</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Validaciones configurables</p></div>
+            <div><div style="font-size: 2rem; font-weight: 700; color: #6f42c1;">16</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Campos de datos XML</p></div>
+            <div><div style="font-size: 2rem;">🔄</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Lectura automática al adjuntar</p></div>
+            <div><div style="font-size: 2rem;">🔒</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Bloqueo en confirmar</p></div>
+            <div><div style="font-size: 2rem;">⚙️</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Config por empresa</p></div>
+        </div>
+    </div>
+
+    <!-- ══ FOOTER ══ -->
+    <div style="text-align: center; padding: 25px; background: #0d6efd; color: white; border-radius: 10px;">
+        <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 8px;">l10n_mx_edi_cfdi_validator — Validador CFDI de Proveedor</div>
+        <div style="font-size: 0.9rem; opacity: 0.85;">
+            Versión 18.0.1.0.0 | Odoo 18 Enterprise / Community | Python 3.10+ | Licencia LGPL-3
+        </div>
+    </div>
+
+</body>
+</html>

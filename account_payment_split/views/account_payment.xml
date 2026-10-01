@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_account_payment_form_multi">
+        <field name="name">view.account.split.payment.register.invoices</field>
+        <field name="model">account.split.payment.register</field>
+        <field name="arch" type="xml">
+            <form string="Register a Split Payment">
+                <!-- Invisible fields -->
+                <field name="currency_id" invisible="1" force_save="1" groups="base.group_multi_currency" />
+                <field name="payment_type" invisible="1" force_save="1" />
+                <field name="partner_type" invisible="1" force_save="1" />
+                <field name="company_id" invisible="1" force_save="1" />
+                <field name="company_currency_id" invisible="1" force_save="1" />
+                <field name="hide_payment_method_line" invisible="1" />
+                <field name="available_payment_method_line_ids" invisible="1" />
+                <field name="country_code" invisible="1" force_save="1" />
+                <field name="there_is_a_difference" force_save="1" invisible="1" />
+                <!-- I would like to add company_currency_id field in the model -->
+                <group>
+                    <group name="group1">
+                        <field name="journal_id" options="{'no_open': True, 'no_create': True}" required="1" />
+                        <field
+                            name="payment_method_line_id"
+                            required="1"
+                            options="{'no_create': True, 'no_open': True}"
+                            invisible="hide_payment_method_line"
+                        />
+                        <!-- TODO: Check if partner_bank_id field has any use for us -->
+                        <!-- TODO: Check if group_payment field has any use for us -->
+                    </group>
+                    <group name="group2">
+                        <label for="amount" />
+                        <div name="amount_div" class="o_row">
+                            <field name="amount" />
+                        </div>
+                        <field name="company_currency_amount" readonly='1' force_save='1' />
+                        <field name="payment_date" />
+                        <field name="dummy_amount" force_save="1" invisible="1" />
+                        <field name="custom_rate" />
+                        <!-- TODO: Implement this field when there is only one payment and/or one line to be paid -->
+                        <field name="communication" />
+                    </group>
+                    <!-- TODO: If we implement the offset this group (name="group3") will become useful -->
+                    <group
+                        name="group3"
+                        invisible="not there_is_a_difference"
+                        groups="account.group_account_readonly"
+                    >
+                        <label for="payment_difference" />
+                        <div>
+
+                            <div
+                                invisible="payment_difference == 0" 
+                            >
+                                <field name="payment_difference" force_save="1" />
+                                <label for="company_difference" string=" (Global Excess) to be booked as " />
+                                <field name="company_difference" force_save="1" />
+                            </div>
+                            <div
+                                invisible="payment_difference == 0"
+                            >
+                                <field name="excess_payment_difference" force_save="1" />
+                                <label for="excess_company_difference" string=" (In Line Excess) to be booked as " />
+                                <field name="excess_company_difference" force_save="1" />
+                            </div>
+                            <div
+                                invisible="defect_payment_difference == 0"
+                            >
+                                <div invisible="payment_difference_handling != 'open'" >
+                                    <field name="defect_payment_difference" force_save="1" />
+                                    <label for="defect_company_difference" string=" (In Line Defect) as " />
+                                    <field name="defect_company_difference" force_save="1" />
+                                    <div>
+                                        <label
+                                            for="defect_payment_difference"
+                                            string="This amount will remain unpaid "
+                                        />
+                                    </div>
+                                </div>
+                                <div invisible="payment_difference_handling == 'open'" >
+                                    <field name="defect_payment_difference" force_save="1" />
+                                    <label
+                                        for="excess_company_difference"
+                                        string=" (In Line Defect) to be booked as "
+                                    />
+                                    <field name="defect_company_difference" force_save="1" />
+                                </div>
+                            </div>
+
+                            <field name="payment_difference_handling" widget="radio" nolabel="1" />
+                            <div invisible="payment_difference_handling == 'open'">
+                                <label for="writeoff_account_id" string="Post Difference In" class="oe_edit_only" />
+                                <field
+                                    name="writeoff_account_id"
+                                    string="Post Difference In"
+                                    options="{'no_create': True}"
+                                    domain="[('deprecated', '=', False), ('company_id', '=', company_id)]"
+                                    invisible="payment_difference_handling == 'reconcile'"
+                                />
+                                <label for="writeoff_label" class="oe_edit_only" string="Label" />
+                                <field name="writeoff_label" />
+                            </div>
+                        </div>
+                    </group>
+                    <notebook colspan="4">
+                    <page string="Payments on Invoices">
+                        <field name="payment_invoice_ids" nolabel="1">
+                            <list
+                                    editable="top"
+                                    create="0"
+                                    delete="1"
+                                    decoration-danger="payment_amount &gt; amount"
+                                    decoration-info="payment_amount &lt; amount"
+                                >
+                                <field name="invoice_id" readonly='1' force_save='1' />
+                                <field name="partner_id" readonly='1' force_save='1' optional="hide" />
+                                <field name="date" readonly='1' force_save='1' optional="hide" />
+                                <field name="date_due" readonly='1' force_save='1' optional="hide" />
+                                <field name="amount" readonly='1' force_save='1' />
+                                <field name="payment_currency_due_amount" readonly='1' force_save='1' />
+                                <field name="payment_currency_date_amount" readonly='1' force_save='1' invisible="0" />
+                                <field name="payment_amount" />
+                                <field name="currency_id" invisible='1' />
+                                <field name="rate" readonly='1' force_save='1' optional="hide" />
+                                <field name="use_rate" readonly='0' force_save='1' optional="hide" string='.' />
+                                <field name="payment_currency_amount" sum='Amount Currency' />
+                                <field name="payment_currency_id" invisible='1' />
+                                <field
+                                        name="company_currency_amount"
+                                        readonly='1'
+                                        force_save='1'
+                                        optional="hide"
+                                        sum='Amount in Company Currency'
+                                    />
+                                <field name="company_currency_id" invisible='1' />
+                                <field
+                                        name="inline_payment_difference"
+                                        readonly='1'
+                                        force_save='1'
+                                        optional="hide"
+                                        sum='Amount in Payment Currency'
+                                    />
+                                <field
+                                        name="inline_company_difference"
+                                        readonly='1'
+                                        force_save='1'
+                                        optional="hide"
+                                        sum='Amount in Company Currency'
+                                    />
+                            </list>
+                        </field>
+                        </page>
+                    </notebook>
+                </group>
+                <footer>
+                    <button
+                        string="Create Payment"
+                        name="action_create_payments"
+                        type="object"
+                        class="oe_highlight"
+                        data-hotkey="q"
+                    />
+                    <button string="Cancel" class="btn btn-secondary" special="cancel" data-hotkey="z" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_invoice_from_list" model="ir.actions.server">
+        <field name="name">Register a Split Payment</field>
+        <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]" />
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="binding_model_id" ref="account.model_account_move" />
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.action_register_split_payment()
+        </field>
+    </record>
+</odoo>

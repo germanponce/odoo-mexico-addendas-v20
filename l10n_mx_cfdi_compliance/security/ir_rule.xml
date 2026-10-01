@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2026 ANFEPI - Roberto Requejo Jimenez | License OPL-1 -->
+<odoo>
+    <data noupdate="1">
+
+        <!-- Multi-company strict isolation -->
+        <record id="rule_cfdi_document_company" model="ir.rule">
+            <field name="name">CFDI Document: multi-company</field>
+            <field name="model_id" ref="model_l10n_mx_cfdi_document"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_cfdi_compliance_user'))]"/>
+        </record>
+
+        <record id="rule_cfdi_document_auditor" model="ir.rule">
+            <field name="name">CFDI Document: auditor read all</field>
+            <field name="model_id" ref="model_l10n_mx_cfdi_document"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('group_cfdi_compliance_auditor'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="rule_compliance_result_company" model="ir.rule">
+            <field name="name">Compliance Result: multi-company</field>
+            <field name="model_id" ref="model_l10n_mx_compliance_result"/>
+            <field name="domain_force">['|',('document_id.company_id','=',False),('document_id.company_id','in',company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_cfdi_compliance_user'))]"/>
+        </record>
+
+        <record id="rule_audit_log_company" model="ir.rule">
+            <field name="name">Audit Log: multi-company</field>
+            <field name="model_id" ref="model_l10n_mx_compliance_audit_log"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_cfdi_compliance_user'))]"/>
+        </record>
+
+        <record id="rule_audit_log_auditor" model="ir.rule">
+            <field name="name">Audit Log: auditor read all</field>
+            <field name="model_id" ref="model_l10n_mx_compliance_audit_log"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('group_cfdi_compliance_auditor'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="rule_compliance_profile_company" model="ir.rule">
+            <field name="name">Compliance Profile: multi-company</field>
+            <field name="model_id" ref="model_l10n_mx_compliance_profile"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_cfdi_compliance_user'))]"/>
+        </record>
+
+        <record id="rule_coordinado_relation_company" model="ir.rule">
+            <field name="name">Coordinado Relation: multi-company</field>
+            <field name="model_id" ref="model_l10n_mx_cfdi_coordinado_relation"/>
+            <field name="domain_force">['|',('controladora_company_id','=',False),('controladora_company_id','in',company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_cfdi_compliance_user'))]"/>
+        </record>
+
+    </data>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         Visibilidad por TIPO + DIRECCION. Reglas GLOBALES (se AND'ean con la
+         regla company grupal). Manager/Auditor ven TODO (bypass). Usuario
+         normal solo ve docs cuyo tipo_comprobante este permitido por sus campos
+         can_see_compliance_* Y cuya direccion este permitida. Estos campos se
+         configuran por usuario en la pestania "Permisos CFDI Compliance"
+         (ver models/res_users.py + views/res_users_view.xml). Un usuario sin
+         ningun tipo o sin ninguna direccion marcada -> no ve nada.
+         noupdate=0 para mantener el control de acceso en upgrades.
+    ═════════════════════════════════════════════════════════════════════ -->
+    <data noupdate="0">
+        <record id="rule_cfdi_document_type_dir" model="ir.rule">
+            <field name="name">CFDI Document: visibilidad por tipo + direccion</field>
+            <field name="model_id" ref="model_l10n_mx_cfdi_document"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[(1, '=', 1)] if (user.has_group('l10n_mx_cfdi_compliance.group_cfdi_compliance_manager') or user.has_group('l10n_mx_cfdi_compliance.group_cfdi_compliance_auditor')) else ['&amp;', ('tipo_comprobante', 'in', [t for t, f in [('I', user.can_see_compliance_ingreso), ('E', user.can_see_compliance_egreso), ('P', user.can_see_compliance_pago), ('N', user.can_see_compliance_nomina), ('T', user.can_see_compliance_traslado)] if f]), ('direccion', 'in', [d for d, f in [('emitido', user.can_see_compliance_emitido), ('recibido', user.can_see_compliance_recibido)] if f])]</field>
+        </record>
+        <record id="rule_compliance_result_type_dir" model="ir.rule">
+            <field name="name">Compliance Result: visibilidad por tipo + direccion</field>
+            <field name="model_id" ref="model_l10n_mx_compliance_result"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[(1, '=', 1)] if (user.has_group('l10n_mx_cfdi_compliance.group_cfdi_compliance_manager') or user.has_group('l10n_mx_cfdi_compliance.group_cfdi_compliance_auditor')) else ['&amp;', ('document_id.tipo_comprobante', 'in', [t for t, f in [('I', user.can_see_compliance_ingreso), ('E', user.can_see_compliance_egreso), ('P', user.can_see_compliance_pago), ('N', user.can_see_compliance_nomina), ('T', user.can_see_compliance_traslado)] if f]), ('document_id.direccion', 'in', [d for d, f in [('emitido', user.can_see_compliance_emitido), ('recibido', user.can_see_compliance_recibido)] if f])]</field>
+        </record>
+    </data>
+</odoo>

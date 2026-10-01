@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+addenda_amece_gln_partner_access,addenda.amece.gln.partner,model_addenda_amece_gln_partner,,1,1,1,1
+addenda_amece_gtin_product_access,addenda.amece.gtin.product,model_addenda_amece_gtin_product,,1,1,1,1

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_cfdi_document_list" model="ir.ui.view">
+        <field name="name">l10n_mx.cfdi.document.list</field>
+        <field name="model">l10n_mx.cfdi.document</field>
+        <field name="arch" type="xml">
+            <list string="CFDIs"
+                  decoration-success="compliance_state in ('passed','authorized')"
+                  decoration-warning="compliance_state == 'warning'"
+                  decoration-danger="compliance_state in ('blocked','rejected','error')"
+                  decoration-info="compliance_state == 'authorization_required'"
+                  decoration-muted="compliance_state == 'pending'">
+                <field name="fecha"/>
+                <field name="rfc_emisor"/>
+                <field name="nombre_emisor" optional="show"/>
+                <field name="serie" optional="hide"/>
+                <field name="folio"/>
+                <field name="uuid" optional="hide"/>
+                <field name="total" sum="total"/>
+                <field name="moneda" optional="show"/>
+                <field name="metodo_pago"/>
+                <field name="forma_pago" optional="show"/>
+                <field name="uso_cfdi" optional="show"/>
+                <field name="compliance_score" widget="progressbar"/>
+                <field name="compliance_state"/>
+                <field name="is_coordinado_cross" optional="hide"/>
+                <field name="related_move_id" optional="show"/>
+                <field name="related_purchase_id" optional="hide"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_cfdi_document_form" model="ir.ui.view">
+        <field name="name">l10n_mx.cfdi.document.form</field>
+        <field name="model">l10n_mx.cfdi.document</field>
+        <field name="arch" type="xml">
+            <form string="CFDI">
+                <header>
+                    <button name="action_run_compliance" type="object" string="Validar Compliance" class="btn-primary"
+                            invisible="compliance_state in ('validating',)"/>
+                    <button name="action_open_override_wizard" type="object" string="Autorizar Override" class="btn-warning"
+                            invisible="compliance_state not in ('blocked','authorization_required','warning')"
+                            groups="l10n_mx_cfdi_compliance.group_cfdi_compliance_authorizer"/>
+                    <button name="action_reject" type="object" string="Rechazar" class="btn-danger"
+                            invisible="compliance_state in ('rejected',)"
+                            groups="l10n_mx_cfdi_compliance.group_cfdi_compliance_authorizer"
+                            confirm="Confirmar rechazo del CFDI?"/>
+                    <button name="action_reprocess" type="object" string="Reprocesar"/>
+                    <field name="compliance_state" widget="statusbar"
+                           statusbar_visible="pending,validating,passed,warning,authorization_required,blocked,authorized,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_results" type="object" class="oe_stat_button" icon="fa-list-alt">
+                            <field name="result_count" widget="statinfo" string="Reglas"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Coordinado" bg_color="bg-info" invisible="not is_coordinado_cross"/>
+                    <widget name="web_ribbon" title="BLOQUEADO" bg_color="bg-danger" invisible="compliance_state != 'blocked'"/>
+                    <div class="oe_title">
+                        <h1><field name="display_name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Identificacion">
+                            <field name="uuid"/>
+                            <field name="serie"/>
+                            <field name="folio"/>
+                            <field name="fecha"/>
+                            <field name="fecha_timbrado"/>
+                            <field name="tipo_comprobante"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Compliance">
+                            <field name="profile_id"/>
+                            <field name="compliance_score" widget="progressbar"/>
+                            <field name="last_validation_date"/>
+                            <field name="last_pipeline_ms" string="Pipeline (ms)"/>
+                            <field name="attachment_id"/>
+                            <field name="xml_hash" groups="base.group_no_one"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Emisor">
+                            <field name="rfc_emisor"/>
+                            <field name="nombre_emisor"/>
+                            <field name="regimen_fiscal_emisor"/>
+                        </group>
+                        <group string="Receptor">
+                            <field name="rfc_receptor"/>
+                            <field name="nombre_receptor"/>
+                            <field name="regimen_fiscal_receptor"/>
+                            <field name="domicilio_fiscal_receptor"/>
+                            <field name="uso_cfdi"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Pago">
+                            <field name="metodo_pago"/>
+                            <field name="forma_pago"/>
+                            <field name="moneda"/>
+                            <field name="tipo_cambio"/>
+                        </group>
+                        <group string="Importes">
+                            <field name="subtotal"/>
+                            <field name="descuento"/>
+                            <field name="total_impuestos_trasladados"/>
+                            <field name="total_impuestos_retenidos"/>
+                            <field name="total"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Coordinados" invisible="not is_coordinado_cross">
+                        <field name="is_coordinado_cross"/>
+                        <field name="receptor_company_id"/>
+                        <field name="coordinado_relation_id"/>
+                    </group>
+                    <group string="Vinculos">
+                        <field name="related_move_id"/>
+                        <field name="related_purchase_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Resultados de Reglas">
+                            <field name="result_ids" readonly="1">
+                                <list decoration-success="passed" decoration-danger="not passed and severity == 'error'"
+                                      decoration-warning="not passed and severity == 'warning'"
+                                      decoration-info="not passed and severity == 'authorization'"
+                                      decoration-muted="overridden">
+                                    <field name="rule_code"/>
+                                    <field name="rule_name"/>
+                                    <field name="rule_category"/>
+                                    <field name="severity"/>
+                                    <field name="passed" widget="boolean_toggle" readonly="1"/>
+                                    <field name="message"/>
+                                    <field name="overridden" optional="show"/>
+                                    <field name="override_user_id" optional="hide"/>
+                                    <field name="override_reason" optional="hide"/>
+                                    <field name="execution_ms" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_cfdi_document_search" model="ir.ui.view">
+        <field name="name">l10n_mx.cfdi.document.search</field>
+        <field name="model">l10n_mx.cfdi.document</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="uuid"/>
+                <field name="rfc_emisor"/>
+                <field name="nombre_emisor"/>
+                <field name="folio"/>
+                <field name="related_move_id"/>
+                <field name="related_purchase_id"/>
+                <separator/>
+                <filter name="filter_blocked" string="Bloqueados" domain="[('compliance_state','=','blocked')]"/>
+                <filter name="filter_auth" string="Requieren Autorizacion" domain="[('compliance_state','=','authorization_required')]"/>
+                <filter name="filter_warning" string="Warnings" domain="[('compliance_state','=','warning')]"/>
+                <filter name="filter_passed" string="Aprobados" domain="[('compliance_state','in',('passed','authorized'))]"/>
+                <filter name="filter_coordinado" string="Coordinados" domain="[('is_coordinado_cross','=',True)]"/>
+                <separator/>
+                <filter name="filter_nomina" string="Nomina" domain="[('tipo_comprobante','=','N')]"/>
+                <filter name="filter_ingresos" string="Ingresos" domain="[('tipo_comprobante','=','I')]"/>
+                <separator/>
+                <filter name="this_month" string="Este mes" domain="[('fecha','&gt;=',(context_today()).strftime('%Y-%m-01'))]"/>
+                <separator/>
+                <filter name="group_state" string="Estado" context="{'group_by':'compliance_state'}"/>
+                <filter name="group_emisor" string="Emisor" context="{'group_by':'rfc_emisor'}"/>
+                <filter name="group_company" string="Compania" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                <filter name="group_tipo" string="Tipo de comprobante" context="{'group_by':'tipo_comprobante'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_cfdi_documents" model="ir.actions.act_window">
+        <field name="name">CFDIs</field>
+        <field name="res_model">l10n_mx.cfdi.document</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_cfdi_document_search"/>
+    </record>
+
+</odoo>

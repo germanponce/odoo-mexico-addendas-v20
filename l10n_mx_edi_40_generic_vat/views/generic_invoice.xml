@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Factura -->
+
+        <record  model="ir.ui.view" id="view_move_form_l10n_mx_edi_40_generic_vat">
+            <field name="name">account.move.form.l10n_mx_edi_40_generic_vat</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <field name="invoice_vendor_bill_id" position="after">
+                    <field name="invoice_general_public" invisible="1"/>
+                </field>
+                <notebook position="inside">
+                    <page name="info_global" string="Factura global"  invisible="invoice_general_public == False">
+                        <group cols="4">
+                            <group>
+                                <field name="fg_periodicity" readonly="l10n_mx_edi_cfdi_uuid != False" force_save="True"/>
+                                <field name="fg_months" readonly="l10n_mx_edi_cfdi_uuid != False" force_save="True"/>
+                                <field name="fg_year" readonly="l10n_mx_edi_cfdi_uuid != False" force_save="True"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+    </data>
+</odoo>

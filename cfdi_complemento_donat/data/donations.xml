@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="donations_40" inherit_id="l10n_mx_edi.cfdiv40">
+        <xpath expr="//*[name()='cfdi:Comprobante']" position="attributes">
+            <t t-if="complemento_donaciones" xmlns:cfdi="http://www.sat.gob.mx/cfd/4"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <attribute name="xmlns:donat" t-value="'http://www.sat.gob.mx/donat'"/>
+                <attribute name="xsi:schemaLocation" t-value="'http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.sat.gob.mx/donat http://www.sat.gob.mx/sitio_internet/cfd/donat/donat11.xsd'"/>
+            </t>
+        </xpath>
+
+        <xpath expr="*" position="inside">
+            <t t-if="complemento_donaciones">
+                <cfdi:Complemento
+                    xmlns:cfdi="http://www.sat.gob.mx/cfd/4"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <donat:Donatarias
+                        xsi:schemaLocation="http://www.sat.gob.mx/sitio_internet/cfd/donat/donat11.xsd"
+                        xmlns:donat="http://www.sat.gob.mx/donat"
+                        version="1.1"
+                        t-att-noAutorizacion="noAutorizacion"
+                        t-att-fechaAutorizacion="fechaAutorizacion"
+                        t-att-leyenda="leyenda"/>
+                </cfdi:Complemento>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>

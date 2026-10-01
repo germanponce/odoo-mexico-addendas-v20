@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="global_invoice_complement" inherit_id="l10n_mx_edi_40.cfdiv40">
+        <!-- Ajustes Dinamicos para el cambio de los conceptos -->
+        <xpath expr="//*[name()='cfdi:Concepto']" position="attributes">
+              <attribute name="t-att-ClaveProdServ">line.get_unspsc_code_dynamic()</attribute>
+              <attribute name="t-att-Descripcion">line.get_edi_description_dynamic('descripcion')</attribute>
+              <attribute name="t-att-ClaveUnidad">line.get_edi_description_dynamic('claveunidad')</attribute>
+              <attribute name="t-att-Unidad">line.get_edi_description_dynamic('unidad')</attribute>
+        </xpath>
+        <!-- <xpath expr="//*[name()='cfdi:Receptor']" position="attributes">
+            <attribute name="t-att-Rfc">record.get_edi_receptor_dynamic_info('rfc', customer_rfc)</attribute>
+            <attribute name="t-att-DomicilioFiscalReceptor">record.get_edi_receptor_dynamic_info('codigopostalreceptor', customer.zip if customer.country_id.code == 'MX' else issued_address.zip or supplier.zip)</attribute>
+            <attribute name="t-att-RegimenFiscalReceptor">record.get_edi_receptor_dynamic_info('regimenfiscalreceptor', fiscal_regime)</attribute>
+            <attribute name="t-att-UsoCFDI">record.get_edi_receptor_dynamic_info('usocfdi', record.l10n_mx_edi_usage if record.l10n_mx_edi_usage  else 'S01')</attribute>
+        </xpath>
+        <xpath expr="//*[name()='cfdi:Emisor']" position="before">
+            <t t-if="record.global_invoice" xmlns:cfdi="http://www.sat.gob.mx/cfd/4">
+                <cfdi:InformacionGlobal t-att-Periodicidad="record.fg_periodicity" 
+                                        t-att-Meses="record.fg_months" 
+                                        t-att-Año="record.fg_year"/>
+            </t>
+        </xpath> -->
+
+    </template>
+
+
+</odoo>

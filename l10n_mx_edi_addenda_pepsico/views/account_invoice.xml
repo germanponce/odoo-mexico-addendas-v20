@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record model="ir.ui.view" id="addenda_sale_fields_pepsico_form">
+            <field name="name">addenda_sale_fields_form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.sale_order_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="pepsico" string="Addenda Pepsico" invisible="addenda_type != 'pepsico'">
+                        <group>
+                            <field name="x_pepsico_idPedido"/>
+                        </group>
+                        <group>
+                            <field name="x_payment_request"/>
+                            <field name="x_reception"/>
+                        </group>
+                    </group>
+                    
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="addenda_invoice_fields_pepsico_form">
+            <field name="name">addenda_invoice_fields_form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.account_move_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="pepsico" string="Addenda Pepsico" invisible="addenda_type != 'pepsico'">
+                        <group>
+                            <field name="x_pepsico_idPedido"/>
+                        </group>
+                        <group>
+                            <field name="x_payment_request"/>
+                            <field name="x_reception"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

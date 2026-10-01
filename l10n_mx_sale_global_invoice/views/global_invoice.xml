@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Factura -->
+
+        <record  model="ir.ui.view" id="view_move_form_l10n_mx_global">
+            <field name="name">account.move.form.l10n_mx_einvoice</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <field name="invoice_vendor_bill_id" position="after">
+                    <field name="invoice_edi_activity" invisible="move_type != 'out_invoice'" />
+                </field>
+                
+            </field>
+        </record>
+
+        <!-- Wizard Global Ventas -->
+        <record id="view_sale_order_invoice_wizard" model="ir.ui.view">
+            <field name="name">Sale Orders to Invoice</field>
+            <field name="model">sale.order.invoice_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Pedidos a Facturar">
+                    <group string="Este Asistente permite generar Facturación a Publico en General y Facturación Estandar" col="4" colspan="4">
+                        <field name="date"/>
+                        <field name="journal_id" domain="[('type', '=', 'sale')]"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="fg_periodicity"/>
+                        </group>
+                        <group>
+                            <field name="fg_months"/>
+                            <field name="fg_year" invisible="1"/>
+                        </group>
+                    </group>
+                    <button name="check_all_public_invoice" type="object" string="Todas Publico en General" icon="fa-check-square-o" class="oe_right oe_link"/>
+
+                    <separator string="Ventas a Facturar" colspan="4"/>
+                    <field name="ticket_ids" colspan="4" nolabel="1">
+                        <list editable="top" create="false">
+                            <field name="date_order"/>
+                            <field name="ticket_id"/>
+                            <field name="sale_reference"/>
+                            <field name="user_id"/>
+                            <field name="amount_total" sum="total"/>
+                            <field name="partner_id"/>
+                            <field name="invoice_2_general_public" readonly="partner_id == False" force_save="1"/>
+                        </list>
+                    </field>
+                    <footer>
+                        <button name="create_invoice_from_sales" string="Crear Facturas" type="object" class="oe_highlight"/>
+                        ó
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+            
+        <!-- <act_window
+            name="Creación de Factura Global"
+            id="action_sale_order_invoice"
+            res_model="sale.order.invoice_wizard"
+            binding_model="sale.order"
+            binding_views="list"
+            view_mode="form"
+            target="new"
+            /> -->
+
+       <record id="action_sale_order_invoice_fx" model="ir.actions.act_window">
+           <field name="name">Creación Factura Global</field>
+           <field name="res_model">sale.order.invoice_wizard</field>
+           <field name="view_mode">form</field>
+           <field name="target">new</field>
+           <field name="binding_model_id" ref="sale.model_sale_order"/>
+           <field name="binding_view_types">list</field>
+       </record>
+
+
+        <!-- Herencia de Objetos y Formularios -->
+
+        <record id="view_partner_pos_invoice_form" model="ir.ui.view">
+            <field name="name">res.partner.pos.invoice.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="property_account_position_id" position="after" >
+                    <field name="use_as_general_public" />
+                </field>
+            </field>
+        </record>
+
+        <record id="product_uom_form_view_pos_invoice" model="ir.ui.view">
+            <field name="name">product.uom.pos.invoice.form.inherit</field>
+            <field name="model">uom.uom</field>
+            <field name="inherit_id" ref="uom.product_uom_form_view"/>
+            <field name="arch" type="xml">
+                <field name="relative_uom_id" position="after" >
+                    <field name="use_4_invoice_general_public" />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_res_config_settings_global_invoice" model="ir.ui.view">
+            <field name="name">res.config.settings.pos.invoice.form.inherit</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//block[@name='invoicing_setting_container']" position="after">
+
+                    <block title="Facturación Global" name="invoicing_global_container">
+                        
+                        <setting id="global_concept" string="Concepto Facturación Global" help="Utilizado para el detalle de la Factura Global" company_dependent="1">
+                            <field name="product_for_global_invoice" class="o_light_label" options="{'no_create': True, 'no_create_edit': True}"/>
+                        </setting>
+                    </block>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="company_form_global_invoice" model="ir.ui.view">
+            <field name="name">company.form.global</field>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <field name="phone" position="before">
+                    <field name="product_for_global_invoice" required="1" domain="[('product_for_global_invoice','=',True)]"/>
+                    <field name="invoice_public_default" />
+                </field>
+            </field>
+        </record>
+
+        <!-- Cuenta Contable en Impuestos para Factura Global -->
+        <!-- v19 (2026-07-11): vistas deshabilitadas por incompatibilidad de validacion en v19
+             (campo property_account_income_global_id check_company en form de account.tax/product.category).
+             Son de la feature RETIRADA de factura global de ventas; el campo sigue existiendo en el modelo.
+             Se deshabilitan solo las VISTAS para permitir instalar el modulo (conceptos publico gral en Python).
+        <record model="ir.ui.view" id="form_account_tax_global_invoice_einvoice_inhrt">
+            <field name="name">account.tax.cfdi.global</field>
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_tax_form"/>
+            <field name="arch" type="xml">
+                <field name="cash_basis_transition_account_id" position="after">
+                    <separator string="Factura Global" colspan="2" />
+                    <field name="property_account_income_global_id" options="{'no_create': True, 'no_create_edit': True}" />
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="form_product_category_global_invoice_einvoice_inhrt">
+            <field name="name">product.category.cfdi.global</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="account.view_category_property_form"/>
+            <field name="arch" type="xml">
+                <field name="property_account_expense_categ_id" position="after">
+                    <separator string="Factura Global" colspan="2" />
+                    <field name="property_account_income_global_id" options="{'no_create': True, 'no_create_edit': True}" />
+                </field>
+            </field>
+        </record>
+        -->
+        <!-- fin vistas deshabilitadas v19 -->
+
+    </data>
+</odoo>

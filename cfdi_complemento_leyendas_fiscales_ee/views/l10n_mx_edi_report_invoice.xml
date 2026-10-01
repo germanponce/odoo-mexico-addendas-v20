@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_invoice_document" priority="100" inherit_id="l10n_mx_edi.report_invoice_document">
+        <xpath expr="//div[@id='complement']" position="before">
+            <table class="table table-condensed" name="leyendas_ids" style="font-size:14px;" t-if="o.complemento_leyendas_fiscales">
+                        <thead>
+                            <tr>
+                                <td>Disposición Fiscal</td>
+                                <td>Norma</td>
+                                <td>Texto Leyenda</td>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody">
+                          <tr t-foreach="o.leyendas_fiscales_ids" t-as="leyenda">
+                                <td ><span t-field="leyenda.disposicion"/></td>
+                                <td ><span t-field="leyenda.norma"/></td>
+                                <td ><span t-field="leyenda.texto_leyenda"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+        </xpath>
+    </template>
+</odoo>

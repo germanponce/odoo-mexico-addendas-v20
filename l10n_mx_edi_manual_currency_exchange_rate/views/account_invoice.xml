@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="l10n_mx_edi_view_invoice_exchange_rate_field_add_inherit" model="ir.ui.view">
+            <field name="name">l10n_mx_edi.view.invoice.exchange.rate.field.add.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <!--
+                    Odoo 19 ya trae nativo el campo "invoice_currency_rate" (editable en
+                    borrador, con botón de refrescar al tipo de cambio automático) y su
+                    contraparte "expected_currency_rate". Este módulo solo necesita seguir
+                    aportando la fecha de referencia alterna ("exchange_rate_date"): al
+                    definirla, account.move._get_invoice_currency_rate_date() la usa en vez
+                    de la fecha de factura, y todo el resto del cómputo nativo de Odoo 19
+                    (invoice_currency_rate, expected_currency_rate, montos, widget de pagos
+                    pendientes) queda automáticamente alineado con esa fecha.
+                -->
+                <group id="header_right_group" position="inside">
+                    <field name="exchange_rate_date" groups="base.group_multi_currency"/>
+                </group>
+            </field>
+        </record>
+    </data>
+</odoo>

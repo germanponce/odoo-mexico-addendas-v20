@@ -1,0 +1,88 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="addenda_walmart_sale_fields_form">
+            <field name="name">addenda_walmart_sale_fields_form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.sale_order_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="walmart" string="Adenda Walmart" 
+                        invisible="addenda_type != 'walmart'">
+                        <group>
+                            <field name="l10n_mx_edi_walmart_order_name"/>
+                            <field name="l10n_mx_edi_walmart_notes" />
+                        </group>
+                        <group>
+                            <field name="l10n_mx_edi_walmart_date_order"/>
+                            <field name="l10n_mx_edi_walmart_date_delivery"/>
+                            <field name="l10n_mx_edi_walmart_cedis"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="addenda_walmart_invoice_fields_form">
+            <field name="name">addenda_walmart_invoice_fields_form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.account_move_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="walmart" string="Adenda Walmart" invisible="addenda_type != 'walmart'">
+                        <group>
+                            <field name="l10n_mx_edi_walmart_order_name"/>
+                            <field name="l10n_mx_edi_walmart_notes" />
+                        </group>
+                        <group>
+                            <field name="l10n_mx_edi_walmart_date_order"/>
+                            <field name="l10n_mx_edi_walmart_date_delivery"/>
+                            <field name="l10n_mx_edi_walmart_cedis"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="addenda_walmart_partner_fields_form">
+            <field name="name">addenda_walmart_partner_fields_form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='fiscal_information']" position="inside">
+                    <separator string="Walmart (Adenda)" />
+                    <newline/>
+                    <field name="l10n_mx_edi_walmart_gln"/>     
+                    <field name="l10n_mx_edi_walmart_supplier_code"/>     
+                </xpath>
+            </field>
+        </record>
+
+        <!-- <record model="ir.ui.view" id="addenda_walmart_product_fields_form">
+            <field name="name">addenda_walmart_product_fields_form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.product_template_only_form_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="soriana_descarga" string="Addenda Soriana (Descarga Remision)">
+                        
+                    </group>
+                    
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="addenda_walmart_product_fields_form">
+            <field name="name">addenda_walmart_product_fields_form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.product_template_only_form_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <field name="barcode" position="after">
+                    <field name="x_codigo_soriana" />
+                </field>
+            </field>
+        </record> -->
+
+
+    </data>
+</odoo>

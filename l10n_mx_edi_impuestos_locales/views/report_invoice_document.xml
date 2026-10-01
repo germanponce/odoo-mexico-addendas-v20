@@ -1,0 +1,21 @@
+<odoo>
+    <template id="bck_addenda_fields_report_invoice_document" inherit_id="account.report_invoice_document">
+        <xpath expr="//p[@t-if='o.narration']" position="before">
+            <t t-if="o.use_fiscal_legends_complement">
+              <div class="row" id="complement">
+                  <div style="font-size:smaller;">
+                      <div>
+                          <span><strong>Fiscal Disposition: </strong></span><span class="nowrap" t-esc="o.customer_fiscal_disposition"/>
+                      </div>
+                      <div>
+                          <span><strong>Legend Text: </strong></span><span class="nowrap" t-esc="o.customer_legend_text"/>
+                      </div>
+                      <div>
+                          <span><strong>Rule: </strong></span><span class="nowrap" t-esc="o.customer_rule"/>
+                      </div>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>

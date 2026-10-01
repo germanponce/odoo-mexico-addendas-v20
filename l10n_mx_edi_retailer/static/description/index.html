@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Migración de Addendas MX EDI a Odoo 19</title>
+</head>
+<body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;margin:0;padding:20px;background:#f8f9fa;">
+
+<div style="text-align:center;background:linear-gradient(135deg,#004c97 0%,#1a6b3c 100%);color:white;padding:40px 20px;border-radius:10px;margin-bottom:30px;">
+    <div style="font-size:3rem;margin-bottom:12px;">🧾</div>
+    <h1 style="margin:0 0 10px 0;font-size:2.2rem;font-weight:700;">Migración de Addendas MX EDI a Odoo 19</h1>
+    <p style="margin:0 0 15px 0;font-size:1.1rem;opacity:0.9;">Del sistema de templates QWeb (Odoo 17/18) al modelo <code style="background:rgba(255,255,255,0.15);padding:1px 6px;border-radius:4px;">l10n_mx_edi.addenda</code> (Odoo 19)</p>
+    <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+        <span style="background:rgba(255,255,255,0.2);padding:6px 15px;border-radius:15px;font-size:0.9rem;">12 addendas migradas</span>
+        <span style="background:rgba(255,255,255,0.2);padding:6px 15px;border-radius:15px;font-size:0.9rem;">3 módulos estructurales</span>
+        <span style="background:rgba(255,255,255,0.2);padding:6px 15px;border-radius:15px;font-size:0.9rem;">l10n_mx_edi 19.0</span>
+    </div>
+</div>
+
+<!-- CONTEXTO -->
+<div style="background:#fff8e7;padding:25px;border-radius:10px;margin-bottom:30px;border-left:5px solid #f39c12;box-shadow:0 4px 15px rgba(0,0,0,0.05);">
+    <h3 style="margin:0 0 12px 0;color:#d68910;font-size:1.2rem;">📌 Contexto y Propósito</h3>
+    <p style="margin:0 0 10px 0;color:#5d6d7e;font-size:0.92rem;">
+        En Odoo 17/18, una addenda se implementaba como un <code>&lt;template&gt;</code> QWeb heredado directamente sobre
+        el template de generación del CFDI (<code>l10n_mx_edi.cfdiv40</code>), con acceso a un contexto rico de variables
+        (<code>emisor</code>, <code>conceptos_list</code>, <code>format_float</code>, etc.) y activado mediante un campo
+        <code>l10n_mx_edi_addenda_flag</code> sobre <code>ir.ui.view</code>.
+    </p>
+    <p style="margin:0;color:#5d6d7e;font-size:0.92rem;">
+        Odoo 19 reemplazó por completo ese mecanismo: ahora existe un modelo dedicado <code>l10n_mx_edi.addenda</code>,
+        vinculado al partner vía <code>l10n_mx_edi_addenda_ids</code> (Many2many), cuyo <code>arch</code> se renderiza con
+        QWeb recibiendo <strong>únicamente la variable <code>record</code></strong> (la factura). Ya no hay contexto
+        enriquecido: cada addenda debe calcular sus propios valores a partir del registro. Este documento resume el
+        trabajo de migración de 12 addendas de clientes distintos, dos módulos estructurales de soporte, y las lecciones
+        técnicas encontradas en el camino.
+    </p>
+</div>
+
+<!-- CAMBIO DE ARQUITECTURA -->
+<div style="background:white;padding:30px;border-radius:10px;margin-bottom:30px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:1px solid #e0e0e0;">
+    <h2 style="margin:0 0 20px 0;color:#004c97;font-size:1.4rem;text-align:center;">Cambio de Arquitectura: Antes / Después</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+        <tr style="background:#d5eafc;">
+            <th style="padding:8px;text-align:left;border:1px solid #e0e0e0;">Concepto</th>
+            <th style="padding:8px;text-align:left;border:1px solid #e0e0e0;">Odoo 17 / 18</th>
+            <th style="padding:8px;text-align:left;border:1px solid #e0e0e0;">Odoo 19</th>
+        </tr>
+        <tr>
+            <td style="padding:8px;border:1px solid #e0e0e0;">Definición</td>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>&lt;template&gt;</code> + <code>ir.ui.view</code> con <code>l10n_mx_edi_addenda_flag</code></td>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>record model="l10n_mx_edi.addenda"</code> con campo <code>arch</code></td>
+        </tr>
+        <tr style="background:#f4f9fd;">
+            <td style="padding:8px;border:1px solid #e0e0e0;">Envoltorio obligatorio</td>
+            <td style="padding:8px;border:1px solid #e0e0e0;">(ninguno)</td>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>&lt;t t-xml-node="addenda"&gt;</code> o <code>"complemento"</code></td>
+        </tr>
+        <tr>
+            <td style="padding:8px;border:1px solid #e0e0e0;">Vinculación al cliente</td>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>partner_id.l10n_mx_edi_addenda_id</code> (Many2one)</td>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>partner_id.l10n_mx_edi_addenda_ids</code> (Many2many)</td>
+        </tr>
+        <tr style="background:#f4f9fd;">
+            <td style="padding:8px;border:1px solid #e0e0e0;">Directiva de salida QWeb</td>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>t-esc</code> / <code>t-raw</code></td>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>t-out</code> (único usado en los ejemplos del core)</td>
+        </tr>
+        <tr>
+            <td style="padding:8px;border:1px solid #e0e0e0;">Contexto de render</td>
+            <td style="padding:8px;border:1px solid #e0e0e0;">Decenas de variables sueltas (<code>fecha</code>, <code>emisor</code>, <code>conceptos_list</code>...)</td>
+            <td style="padding:8px;border:1px solid #e0e0e0;">Solo <code>record</code> (la factura). Todo lo demás se calcula en el arch o en Python.</td>
+        </tr>
+        <tr style="background:#f4f9fd;">
+            <td style="padding:8px;border:1px solid #e0e0e0;">Complementos SAT (no addenda)</td>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>t-inherit_id="l10n_mx_edi.cfdiv40"</code> + xpath sobre <code>cfdi:Comprobante</code></td>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>t-xml-node="complemento"</code>, se inserta en <code>cfdi:Complemento</code> automáticamente</td>
+        </tr>
+        <tr>
+            <td style="padding:8px;border:1px solid #e0e0e0;">Namespace/schemaLocation extra</td>
+            <td style="padding:8px;border:1px solid #e0e0e0;">Editado a mano sobre <code>cfdi:Comprobante</code> vía xpath</td>
+            <td style="padding:8px;border:1px solid #e0e0e0;">Declarado localmente en el elemento raíz del complemento (obligatorio para que cargue), opcionalmente reforzado con <code>t-xml-node="comprobante"</code></td>
+        </tr>
+    </table>
+</div>
+
+<!-- ADDENDAS MIGRADAS -->
+<div style="background:white;padding:30px;border-radius:10px;margin-bottom:30px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:1px solid #e0e0e0;">
+    <h2 style="margin:0 0 20px 0;color:#004c97;font-size:1.4rem;text-align:center;">Addendas de Cliente Migradas</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
+
+        <div style="background:#eaf4fb;border-radius:10px;padding:16px;border-left:4px solid #0071ce;">
+            <h3 style="margin:0 0 6px 0;color:#004c97;font-size:0.95rem;">Amazon</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">Primer caso migrado; definió el patrón base de conversión template→<code>l10n_mx_edi.addenda</code>.</p>
+        </div>
+
+        <div style="background:#eaf4fb;border-radius:10px;padding:16px;border-left:4px solid #0071ce;">
+            <h3 style="margin:0 0 6px 0;color:#004c97;font-size:0.95rem;">Basware</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">Ya casi en formato nuevo; solo le faltaba el envoltorio <code>t-xml-node="addenda"</code>.</p>
+        </div>
+
+        <div style="background:#eaf4fb;border-radius:10px;padding:16px;border-left:4px solid #0071ce;">
+            <h3 style="margin:0 0 6px 0;color:#004c97;font-size:0.95rem;">AMECE 7.1</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">Múltiples <code>t-esc</code>→<code>t-out</code> y limpieza de comentarios duplicados en el arch.</p>
+        </div>
+
+        <div style="background:#eaf4fb;border-radius:10px;padding:16px;border-left:4px solid #0071ce;">
+            <h3 style="margin:0 0 6px 0;color:#004c97;font-size:0.95rem;">Fresko AMC 7.1</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">Mismo esquema que AMECE; comparte campos/métodos <code>l10n_mx_edi_amece_*</code>.</p>
+        </div>
+
+        <div style="background:#eaf4fb;border-radius:10px;padding:16px;border-left:4px solid #0071ce;">
+            <h3 style="margin:0 0 6px 0;color:#004c97;font-size:0.95rem;">Coppel</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">~25 conversiones <code>t-raw</code>→<code>t-out</code>; verificar filtro de líneas en <code>get_invoice_lines()</code>.</p>
+        </div>
+
+        <div style="background:#fdf3e3;border-radius:10px;padding:16px;border-left:4px solid #f39c12;">
+            <h3 style="margin:0 0 6px 0;color:#d68910;font-size:0.95rem;">AstraZeneca</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">Traía además un parche a <code>cfdi:Concepto</code> vía xpath — no migrable como XML. Se reescribió como override Python de <code>_l10n_mx_edi_add_invoice_cfdi_values</code>.</p>
+        </div>
+
+        <div style="background:#eaf4fb;border-radius:10px;padding:16px;border-left:4px solid #0071ce;">
+            <h3 style="margin:0 0 6px 0;color:#004c97;font-size:0.95rem;">BovedaFiscal (Tony)</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">Ya usaba <code>t-att-*</code> en todo; migración estructural directa.</p>
+        </div>
+
+        <div style="background:#eaf4fb;border-radius:10px;padding:16px;border-left:4px solid #0071ce;">
+            <h3 style="margin:0 0 6px 0;color:#004c97;font-size:0.95rem;">INSABI</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">Addenda compacta; migración directa sin sorpresas.</p>
+        </div>
+
+        <div style="background:#eaf4fb;border-radius:10px;padding:16px;border-left:4px solid #0071ce;">
+            <h3 style="margin:0 0 6px 0;color:#004c97;font-size:0.95rem;">Pepsico</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;"><code>get_invoice_lines()</code> declarado pero sin usar; el <code>t-foreach</code> real no filtra líneas de sección/nota.</p>
+        </div>
+
+        <div style="background:#fdf3e3;border-radius:10px;padding:16px;border-left:4px solid #f39c12;">
+            <h3 style="margin:0 0 6px 0;color:#d68910;font-size:0.95rem;">Soriana</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">Bug de origen: usaba <code>sale_model</code> sin declararlo (<code>NameError</code> garantizado). Corregido al migrar.</p>
+        </div>
+
+        <div style="background:#fdf3e3;border-radius:10px;padding:16px;border-left:4px solid #f39c12;">
+            <h3 style="margin:0 0 6px 0;color:#d68910;font-size:0.95rem;">Walmart</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;"><code>folio_number</code> y <code>serie_number</code> usados sin definir, y <code>partner_id</code> sin prefijo <code>record.</code>. Requiere definir el origen real del folio/serie antes de producción.</p>
+        </div>
+
+        <div style="background:#fbe9e7;border-radius:10px;padding:16px;border-left:4px solid #e74c3c;">
+            <h3 style="margin:0 0 6px 0;color:#c0392b;font-size:0.95rem;">Liverpool (Detallista)</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">Caso más grave: el módulo activo reemplazaba <strong>todo</strong> <code>cfdi:Comprobante</code>, rompiendo el timbrado de <strong>toda</strong> la compañía, no solo Liverpool. Reescrito por completo como <code>t-xml-node="complemento"</code>.</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- COMPLEMENTO DETALLISTA -->
+<div style="background:white;padding:30px;border-radius:10px;margin-bottom:30px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:1px solid #e0e0e0;">
+    <h2 style="margin:0 0 20px 0;color:#004c97;font-size:1.4rem;text-align:center;">Caso Especial: Complemento Detallista (<code style="font-size:1rem;">l10n_mx_edi_retailer</code>)</h2>
+    <p style="margin:0 0 20px 0;color:#5d6d7e;font-size:0.9rem;text-align:center;">
+        No es una addenda sino un <strong>complemento SAT</strong>, y además dependía de un módulo (<code>l10n_mx_edi_extended</code>) no disponible al migrar.
+        Se reconstruyó desde cero con arquitectura nativa de Odoo 19.
+    </p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;">
+        <div style="background:#f4f9fd;border-radius:8px;padding:16px;">
+            <div style="font-size:1.3rem;margin-bottom:6px;">🧩</div>
+            <h3 style="margin:0 0 6px 0;color:#2c3e50;font-size:0.9rem;">Campos nativos</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">El campo empacado <code>x_complement_retailer_data</code> (pipe-delimited) y los <code>ir.model.fields</code> dinámicos se reemplazaron por 7 campos reales en <code>account.move</code>, vía herencia Python.</p>
+        </div>
+        <div style="background:#f4f9fd;border-radius:8px;padding:16px;">
+            <div style="font-size:1.3rem;margin-bottom:6px;">🪄</div>
+            <h3 style="margin:0 0 6px 0;color:#2c3e50;font-size:0.9rem;">Wizard real</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;"><code>l10n_mx_edi.retailer.wizard</code> (TransientModel Python) reemplaza el modelo definido dinámicamente vía <code>ir.model</code>/<code>ir.model.fields</code> y el <code>ir.actions.server</code> con código embebido.</p>
+        </div>
+        <div style="background:#f4f9fd;border-radius:8px;padding:16px;">
+            <div style="font-size:1.3rem;margin-bottom:6px;">🏢</div>
+            <h3 style="margin:0 0 6px 0;color:#2c3e50;font-size:0.9rem;">Config. en Compañía</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">Los 4 <code>ir.config_parameter</code> (GLN comprador/vendedor, id. alterno, GLN destino) pasaron a ser campos de <code>res.company</code>, visibles y editables desde ahí.</p>
+        </div>
+        <div style="background:#f4f9fd;border-radius:8px;padding:16px;">
+            <div style="font-size:1.3rem;margin-bottom:6px;">⚠️</div>
+            <h3 style="margin:0 0 6px 0;color:#2c3e50;font-size:0.9rem;">Aviso de datos faltantes</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">La factura muestra los valores de compañía en modo lectura dentro de "Addendas", con una alerta y acceso directo si falta configurar algo.</p>
+        </div>
+        <div style="background:#f4f9fd;border-radius:8px;padding:16px;">
+            <div style="font-size:1.3rem;margin-bottom:6px;">🧮</div>
+            <h3 style="margin:0 0 6px 0;color:#2c3e50;font-size:0.9rem;">Reconstrucción de cifras</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">Traslados/retenciones, descuento total y tipo de cambio se recalcularon con el mismo criterio del core (<code>tax.amount &lt; 0</code> = retención). <strong>Pendiente de verificar</strong> contra la lógica original de <code>l10n_mx_edi_extended</code>.</p>
+        </div>
+        <div style="background:#f4f9fd;border-radius:8px;padding:16px;">
+            <div style="font-size:1.3rem;margin-bottom:6px;">🔗</div>
+            <h3 style="margin:0 0 6px 0;color:#2c3e50;font-size:0.9rem;">Estándar de integración</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.8rem;">Toda la vista de factura y compañía se insertó dentro de la página "Addendas" que ya expone <code>l10n_mx_edi_addendas_base</code>, sin duplicar estructura.</p>
+        </div>
+    </div>
+</div>
+
+<!-- MODULOS ESTRUCTURALES -->
+<div style="background:white;padding:30px;border-radius:10px;margin-bottom:30px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:1px solid #e0e0e0;">
+    <h2 style="margin:0 0 20px 0;color:#004c97;font-size:1.4rem;text-align:center;">Otros Módulos Migrados</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;">
+
+        <div style="background:white;padding:22px;border-radius:10px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:1px solid #e0e0e0;">
+            <div style="width:42px;height:42px;background:linear-gradient(45deg,#0071ce,#004c97);border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:bold;margin-bottom:10px;font-size:0.75rem;">PY</div>
+            <h3 style="margin:0 0 8px 0;color:#2c3e50;font-size:0.95rem;">l10n_mx_edi_addendas_base</h3>
+            <ul style="color:#5d6d7e;padding-left:0;list-style:none;font-size:0.82rem;">
+                <li>✓ Estándar de dónde colocar campos por addenda (página vacía en cada modelo + <code>addenda_type</code>)</li>
+                <li>✓ Menú "Addendas &amp; Complementos (MX)" en Contabilidad, con acción/vistas propias</li>
+                <li>✓ Corregido: <code>UserError</code> usado sin importar</li>
+                <li>✓ Corregido: <code>sale.order.create()</code> referenciaba un campo inexistente (<code>res.order_id</code>)</li>
+                <li>✓ Agregada dependencia faltante a <code>l10n_mx_edi</code></li>
+            </ul>
+        </div>
+
+        <div style="background:white;padding:22px;border-radius:10px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:1px solid #e0e0e0;">
+            <div style="width:42px;height:42px;background:linear-gradient(45deg,#0071ce,#004c97);border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:bold;margin-bottom:10px;font-size:0.75rem;">PY</div>
+            <h3 style="margin:0 0 8px 0;color:#2c3e50;font-size:0.95rem;">l10n_mx_edi_manual_currency_exchange_rate</h3>
+            <ul style="color:#5d6d7e;padding-left:0;list-style:none;font-size:0.82rem;">
+                <li>✓ Odoo 19 ya trae tipo de cambio manual nativo (<code>invoice_currency_rate</code>, editable en borrador)</li>
+                <li>✓ Se simplificó a un solo hook: <code>_get_invoice_currency_rate_date()</code></li>
+                <li>✓ Se conservó, a petición, el override del widget de pagos pendientes — rebasado sobre el cuerpo real de Odoo 19</li>
+                <li>✓ Se eliminó el override completo de <code>_get_tax_included_unit_price</code> (~40 líneas) por uno delgado</li>
+            </ul>
+        </div>
+
+        <div style="background:white;padding:22px;border-radius:10px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:1px solid #e0e0e0;">
+            <div style="width:42px;height:42px;background:linear-gradient(45deg,#27ae60,#1a6b3c);border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:bold;margin-bottom:10px;font-size:0.75rem;">MX</div>
+            <h3 style="margin:0 0 8px 0;color:#2c3e50;font-size:0.95rem;">l10n_mx_edi_retailer</h3>
+            <ul style="color:#5d6d7e;padding-left:0;list-style:none;font-size:0.82rem;">
+                <li>✓ Migrado de xpath sobre <code>cfdiv40</code> a <code>t-xml-node="complemento"</code></li>
+                <li>✓ Wizard real + campos nativos (ver sección anterior)</li>
+                <li>✓ Configuración de GLN movida a <code>res.company</code></li>
+                <li>✓ Tests reescritos con la API real de <code>TestMxEdiCommon</code> de Odoo 19</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+<!-- LECCIONES TECNICAS -->
+<div style="background:white;padding:30px;border-radius:10px;margin-bottom:30px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:1px solid #e0e0e0;">
+    <h2 style="margin:0 0 25px 0;color:#004c97;font-size:1.5rem;text-align:center;">Errores Encontrados y Lecciones Técnicas</h2>
+
+    <div style="display:grid;grid-template-columns:1fr;gap:14px;">
+
+        <div style="background:#fbe9e7;border-radius:8px;padding:16px 20px;border-left:4px solid #e74c3c;">
+            <h3 style="margin:0 0 6px 0;color:#c0392b;font-size:0.95rem;">1. Comentarios múltiples dentro del <code>arch</code></h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.85rem;">El limpiador de comentarios del core (<code>re.sub(r"&lt;!--.*--&gt;", ...)</code>) es <em>greedy</em>: con 2+ comentarios <code>&lt;!-- --&gt;</code>, borra todo el contenido real entre el primero y el último. Apareció en AMECE, Fresko, Soriana, y de nuevo (auto-inflingido) en el Complemento Detallista. Regla: nunca más de un comentario dentro del <code>arch</code>; si hace falta explicar algo, el comentario va <strong>fuera</strong> del campo <code>arch</code>.</p>
+        </div>
+
+        <div style="background:#fbe9e7;border-radius:8px;padding:16px 20px;border-left:4px solid #e74c3c;">
+            <h3 style="margin:0 0 6px 0;color:#c0392b;font-size:0.95rem;">2. Más de un elemento raíz en un campo <code>type="xml"</code></h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.85rem;">Cuando el arch necesita dos bloques hermanos (p.ej. <code>t-xml-node="comprobante"</code> + <code>"complemento"</code>), el propio cargador de Odoo (<code>_fix_multiple_roots</code> en <code>odoo/tools/convert.py</code>) los envuelve automáticamente en un <code>&lt;data&gt;</code> — que el decodificador de addendas no sabe interpretar. Solución: envolver todo en un único <code>&lt;t&gt;</code> explícito (tal como hace el propio <code>DEFAULT_ADDENDA_ARCH</code> de ejemplo del core).</p>
+        </div>
+
+        <div style="background:#fbe9e7;border-radius:8px;padding:16px 20px;border-left:4px solid #e74c3c;">
+            <h3 style="margin:0 0 6px 0;color:#c0392b;font-size:0.95rem;">3. Campo/método singular → plural</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.85rem;"><code>partner_id.l10n_mx_edi_addenda_id</code> y <code>_l10n_mx_edi_cfdi_invoice_append_addenda()</code> (singular) ya no existen: ahora es <code>l10n_mx_edi_addenda_ids</code> (Many2many) y <code>_l10n_mx_edi_cfdi_invoice_append_addendas()</code> (recordset). Apareció en <code>addendas_base</code>, en el módulo original de AstraZeneca y en Liverpool.</p>
+        </div>
+
+        <div style="background:#fff8e7;border-radius:8px;padding:16px 20px;border-left:4px solid #f39c12;">
+            <h3 style="margin:0 0 6px 0;color:#d68910;font-size:0.95rem;">4. Namespace/schemaLocation de un complemento</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.85rem;">Debe declararse <strong>localmente</strong> en el elemento raíz del complemento (p.ej. <code>&lt;detallista:detallista xmlns:detallista="..."&gt;</code>) — es obligatorio para que el archivo cargue como XML válido. El bloque opcional <code>t-xml-node="comprobante"</code> (para consolidar el <code>schemaLocation</code> en la cabecera junto con otros complementos, como Carta Porte) es un mecanismo <em>adicional</em>, no un sustituto, y se aplica de forma incondicional (no respeta <code>t-if</code>).</p>
+        </div>
+
+        <div style="background:#fff8e7;border-radius:8px;padding:16px 20px;border-left:4px solid #f39c12;">
+            <h3 style="margin:0 0 6px 0;color:#d68910;font-size:0.95rem;">5. <code>t-esc</code> / <code>t-raw</code> deprecados</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.85rem;">Ningún ejemplo del core de Odoo 19 usa <code>t-esc</code> ni <code>t-raw</code> — solo <code>t-out</code>. Además de compatibilidad, es una mejora real: <code>t-raw</code> no escapaba el texto, arriesgando XML inválido si un campo trae <code>&amp;</code>, <code>&lt;</code> o <code>&gt;</code>.</p>
+        </div>
+
+        <div style="background:#fbe9e7;border-radius:8px;padding:16px 20px;border-left:4px solid #e74c3c;">
+            <h3 style="margin:0 0 6px 0;color:#c0392b;font-size:0.95rem;">6. Xpath sobre <code>cfdiv40</code> ya no es viable</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.85rem;">En Odoo 17/18, <code>cfdiv40</code> recibía decenas de variables sueltas (<code>emisor</code>, <code>conceptos_list</code>...) en su contexto QWeb. En Odoo 19, el template solo recibe datos ya empaquetados; para complementos SAT (no addendas), la migración correcta es <code>t-xml-node="complemento"</code>, no heredar y reescribir el template completo. El caso Liverpool mostraba exactamente este patrón, y de haberse instalado tal cual, habría roto el timbrado de <strong>toda</strong> la compañía, no solo de esa addenda.</p>
+        </div>
+
+        <div style="background:#eafaf1;border-radius:8px;padding:16px 20px;border-left:4px solid #27ae60;">
+            <h3 style="margin:0 0 6px 0;color:#1a6b3c;font-size:0.95rem;">7. Bugs de origen detectados de paso</h3>
+            <p style="margin:0;color:#5d6d7e;font-size:0.85rem;">Varias addendas ya traían errores desde Odoo 17/18, independientes de la migración: variables usadas sin declarar (<code>sale_model</code> en Soriana, <code>folio_number</code>/<code>serie_number</code> en Walmart), typos de referencia (<code>partner_id</code> sin <code>record.</code> en Walmart), imports faltantes (<code>UserError</code> en <code>addendas_base</code>) y un campo inexistente referenciado en <code>sale.order.create()</code>. Se corrigieron de paso.</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- CHECKLIST -->
+<div style="background:#fff8e7;padding:25px;border-radius:10px;margin-bottom:30px;border-left:5px solid #f39c12;box-shadow:0 4px 15px rgba(0,0,0,0.05);">
+    <h3 style="margin:0 0 15px 0;color:#d68910;font-size:1.2rem;">✅ Checklist para Migrar una Nueva Addenda a Odoo 19</h3>
+    <ol style="color:#5d6d7e;padding-left:20px;margin:0;font-size:0.9rem;">
+        <li style="margin-bottom:8px;">Reemplazar <code>&lt;template&gt;</code> + <code>ir.ui.view</code>/<code>l10n_mx_edi_addenda_flag</code> por <code>record model="l10n_mx_edi.addenda"</code> con campos <code>name</code> y <code>arch</code>.</li>
+        <li style="margin-bottom:8px;">Envolver el contenido en <code>&lt;t t-xml-node="addenda"&gt;</code> (addenda de cliente) o <code>"complemento"</code> (complemento SAT oficial).</li>
+        <li style="margin-bottom:8px;">Si hay más de un bloque <code>t-xml-node</code> hermano, envolver todo en un <code>&lt;t&gt;</code> explícito adicional.</li>
+        <li style="margin-bottom:8px;">Reemplazar todo <code>t-esc</code>/<code>t-raw</code> por <code>t-out</code>.</li>
+        <li style="margin-bottom:8px;">Dejar como máximo un comentario <code>&lt;!-- --&gt;</code> dentro del <code>arch</code> (idealmente ninguno).</li>
+        <li style="margin-bottom:8px;">Si el complemento declara su propio namespace, hacerlo en su elemento raíz (no solo vía <code>t-xml-node="comprobante"</code>).</li>
+        <li style="margin-bottom:8px;">Revisar que no queden referencias a <code>l10n_mx_edi_addenda_id</code> (singular) ni a variables de contexto QWeb del <code>cfdiv40</code> viejo — solo <code>record</code> está disponible.</li>
+        <li>Validar el arch simulando el decodificador real del core antes de instalar (extracción de <code>t-xml-node</code>, limpieza de comentarios, namespaces).</li>
+    </ol>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center;padding:25px;background:#004c97;color:white;border-radius:10px;">
+    <div style="font-size:1.2rem;font-weight:600;margin-bottom:8px;">Migración de Addendas MX EDI — Odoo 17/18 → Odoo 19</div>
+    <div style="font-size:0.9rem;opacity:0.85;">
+        12 addendas de cliente + 3 módulos estructurales migrados<br>
+        Compatible con Odoo 19 | Localización México (<code>l10n_mx_edi</code>) | CFDI 4.0
+    </div>
+</div>
+</body>
+</html>

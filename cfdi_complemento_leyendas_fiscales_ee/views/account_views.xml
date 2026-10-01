@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="complemento_leyenda_fiscal_action" model="ir.actions.act_window">
+        <field name="name">Leyendas Fiscales</field>
+        <field name="res_model">complemento.leyenda.fiscal</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_fiscal_legends" name="Leyendas Fiscales" action="complemento_leyenda_fiscal_action" parent="account.account_account_menu"/>
+</odoo>

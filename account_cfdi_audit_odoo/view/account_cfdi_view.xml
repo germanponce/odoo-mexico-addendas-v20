@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="menu_cfdi_audit" name="Auditoría CFDIs" 
+                  parent="account.menu_finance_entries" sequence="199"/>
+        
+            
+        <record id="view_account_cfdi_form" model="ir.ui.view">
+            <field name="name">account.cfdi.form</field>
+            <field name="model">account.cfdi</field>
+            <field name="arch" type="xml">
+                <form string="CFDI del Portal del SAT">
+                    <header>
+                        <button name="audit_cfdis" type="object" string="Auditar CFDI" class="oe_highlight" groups="account.group_account_invoice"/>
+                        <field name="state" widget="statusbar" statusbar_visible="ok"/>
+                    </header>
+                    <sheet string="CFDI">
+                        <div>
+                            <h1 class="mt0">
+                                <field name="folio_fiscal" class="oe_inline"/>
+                            </h1>
+                        </div>
+                        <group colspan="4" col="4">
+                            <field name="cfdi_version" />
+                            <field name="sat_estado" />
+                            <field name="date_sat_estado" />
+                            <field name="tipo_cfdi" />
+                            <field name="date_audit" />
+                            <field name="uso_cfdi" />
+                            <field name="fecha_emision" />
+                            <field name="no_certificado" />
+                            <field name="fecha_certificacion" />
+                            <field name="pay_method" />
+                            <newline />
+                            <separator string="Datos Emisor" colspan="2"/>
+                            <separator string="Datos Receptor" colspan="2"/>
+                            <field name="rfc_emisor" />
+                            <field name="rfc_receptor" />
+                            <field name="razon_social_emisor" />
+                            <field name="razon_social_receptor" />
+                            <separator string="···" colspan="4"/>                            
+                            <field name="total" />
+                            <field name="monto_pago" invisible="tipo_cfdi != 'P'"/>
+                            <field name="currency_id" />
+                            <field name="pago_currency_id" invisible="tipo_cfdi != 'P'"/>
+                            <field name="currency_name" />
+                            <field name="file" filename="filename"/>
+                            <field name="filename" invisible="1" />
+                            <separator string="Registros relacionados..." colspan="4" />
+                            <notebook colspan="4">
+                                <page string="Facturas Relacionadas">
+                                    <field name="invoice_ids" nolabel="1" colspan="4">
+                                        <list string="Facturas relacionadas">
+                                            <field name="name" />
+                                            <field name="partner_id" />
+                                            <field name="invoice_date" />
+                                            <field name="ref" />
+                                            <field name="currency_id" />
+                                            <field name="amount_total" />
+                                            <field name="state" />
+                                            <field name="payment_state" />
+                                        </list>
+                                    </field>
+                                </page>
+                                <page string="Recibo Electrónico de Pagos Relacionados">
+                                    <field name="payment_ids" nolabel="1" colspan="4">
+                                        <list string="Pagos relacionados">
+                                            <field name="partner_id" />
+                                            <field name="date" />
+                                            <field name="name" />
+                                            <field name="ref" />
+                                            <field name="currency_id" />
+                                            <field name="amount" />
+                                            <field name="state" />
+                                        </list>
+                                    </field>
+                                </page>                                
+                                <!--<page string="Complementos de Contabilidad Electrónica">
+                                    <field name="aml_complement_ids" nolabel="1" colspan="4">
+                                        <list string="Complementos de Contabilidad Electrónica">
+                                            <field name="compl_date" />
+                                            <field name="move_id" />
+                                            <field name="move_line_id" />
+                                            <field name="type_id" />
+                                            <field name="amount" />
+                                            <field name="compl_currency_id" />
+                                            <field name="rfc" />
+                                            <field name="rfc2" />
+                                        </list>
+                                    </field>
+                                </page>-->
+                            </notebook>
+                            <field name="notes" nolabel="1" colspan="4" placeholder="Observaciones..." />
+                       </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        
+        <record id="view_account_cfdi_list" model="ir.ui.view">
+            <field name="name">account.cfdi.list</field>
+            <field name="model">account.cfdi</field>
+            <field name="arch" type="xml">
+                <list string="CFDIs del Portal del SAT" >
+                    <field name="cfdi_version" />
+                    <field name="folio_fiscal" />
+                    <field name="fecha_emision" />
+                    <field name="fecha_certificacion" />
+                    <field name="rfc_emisor" />
+                    <!--<field name="razon_social_emisor" />-->
+                    <field name="rfc_receptor" />
+                    <!--<field name="razon_social_receptor" />-->
+                    <field name="total" />
+                    <field name="currency_id" />
+                    <field name="sat_estado" />
+                    <field name="state" />
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                </list>
+            </field>
+        </record>
+        
+        <record id="view_account_cfdi_search" model="ir.ui.view">
+            <field name="name">account.cfdi.search</field>
+            <field name="model">account.cfdi</field>
+            <field name="arch" type="xml">
+                <search string="CFDIs del Portal del SAT">
+                    <filter name="tipo_cfdi_ingreso" string="Tipo Ingreso" domain="[('tipo_cfdi','in',('I','INGRESO'))]"/>
+                    <filter name="tipo_cfdi_egreso" string="Tipo Egreso" domain="[('tipo_cfdi','in',('E','EGRESO'))]"/>
+                    <filter name="tipo_cfdi_pago" string="Tipo Pago" domain="[('tipo_cfdi','=','P')]"/>
+                    <filter name="tipo_cfdi_nomina" string="Tipo Nómina" domain="[('tipo_cfdi','in',('N','NOMINA'))]"/>
+                    <filter name="tipo_cfdi_traslado" string="Tipo Traslado" domain="[('tipo_cfdi','in',('T','TRASLADO'))]"/>
+
+                    <field name="folio_fiscal" string="Folio Fiscal"/>
+                    <field name="total" string="Monto"/>
+                    <field name="no_certificado" string="Certificado"/>
+                    <field name="rfc_emisor" string="RFC Emisor"/>
+                    <field name="rfc_receptor" string="RFC Receptor"/>
+                    <field name="razon_social_emisor" string="Razón Social Emisor"/>
+                    <field name="razon_social_receptor" string="Razón Social Receptor"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Estado" name="state" context="{'group_by':'state'}"/>
+                        <filter string="Vigentes" name="sat_estado" context="{'group_by':'sat_estado'}"/>
+                        <filter string="RFC Emisor" name="rfc_emisor" context="{'group_by':'rfc_emisor'}"/>
+                        <filter string="RFC Receptor" name="rfc_receptor" context="{'group_by':'rfc_receptor'}"/>
+                        <filter string="Nombre Emisor" name="razon_social_emisor" context="{'group_by':'razon_social_emisor'}"/>
+                        <filter string="Nombre Receptor" name="razon_social_receptor" context="{'group_by':'razon_social_receptor'}"/>
+                        <filter string="Fecha Emisión" name="fecha_emision" context="{'group_by':'fecha_emision'}"/>
+                        <filter string="Tipo CFDI" name="tipo_cfdi" context="{'group_by':'tipo_cfdi'}"/>
+                        <filter string="Certificado" name="no_certificado" context="{'group_by':'no_certificado'}"/>
+                        <filter string="Moneda" name="currency_id" context="{'group_by':'currency_id'}"/>
+                        <filter string="Moneda Nombre" name="currency_name" context="{'group_by':'currency_name'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="action_account_cfdi" model="ir.actions.act_window">
+            <field name="name">Auditoría de CFDIs</field>
+            <field name="res_model">account.cfdi</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_account_cfdi_search"/>
+            <field name="view_id" ref="view_account_cfdi_list"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                CFDIs del Portal del SAT.
+              </p><p>
+                Si no tiene filtro activo y no ve ningún registro es necesario
+                que descargue el ZIP con archivos XML del Portal del SAT.
+              </p>
+            </field>
+        </record>
+        
+        <menuitem action="action_account_cfdi" id="menu_action_account_cfdi" 
+                  parent="menu_cfdi_audit" sequence="98"/>
+        
+        
+
+        <record id="view_account_cfdi_wizard_zipfile" model="ir.ui.view">
+            <field name="name">account.cfdi.wizard.zipfile</field>
+            <field name="model">account.cfdi.wizard.zipfile</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Obtener CFDIs de archivo ZIP del Portal del SAT">
+                    <p class="oe_grey">
+                        Seleccione el archivo ZIP que descargó desde el portal del SAT
+                    </p>
+                    <group colspan="4" col="4">
+                        <field name="zip_file" colspan="4"/>
+                    </group>
+                    <footer>
+                        <button name="get_cfdis_from_zipfile" string="Procesar archivo ZIP" 
+                                class="oe_highlight" type="object"/>
+                        or
+                        <button special="cancel" string="Cancelar" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        
+        <record id="action_account_cfdi_wizard_zipfile" model="ir.actions.act_window">
+            <field name="name">Procesar ZIP de Portal del SAT</field>
+            <field name="res_model">account.cfdi.wizard.zipfile</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>        
+        
+        <menuitem action="action_account_cfdi_wizard_zipfile" 
+                  id="menu_action_account_cfdi_wizard" 
+                  parent="menu_cfdi_audit" sequence="99"/>
+
+
+        <record id="view_account_cfdi_wizard_audit" model="ir.ui.view">
+            <field name="name">account.cfdi.wizard.audit</field>
+            <field name="model">account.cfdi.wizard.audit</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Auditar CFDIs">
+                    <p class="oe_grey">
+                        Se van a auditar los registros seleccionados.
+                    </p>
+                    <footer>
+                        <button name="audit_cfdis" string="Auditar" class="oe_highlight" type="object"/>
+                        or
+                        <button special="cancel" string="Cancelar" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        
+            <record id="action_account_cfdi_wizard_audit" model="ir.actions.act_window">
+                <field name="name">Auditar CFDIs</field>
+                <field name="res_model">account.cfdi.wizard.audit</field>
+                <field name="binding_model_id" ref="account_cfdi_audit_odoo.model_account_cfdi"/>
+                <field name="view_mode">form</field>
+                <field name="target">new</field>
+            </record>        
+
+        
+    </data>
+</odoo>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_compliance_rule_list" model="ir.ui.view">
+        <field name="name">l10n_mx.compliance.rule.list</field>
+        <field name="model">l10n_mx.compliance.rule</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="default_severity"/>
+                <field name="default_weight"/>
+                <field name="requires_internet"/>
+                <field name="sat_reference"/>
+                <field name="is_active_in_registry"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_compliance_rule_form" model="ir.ui.view">
+        <field name="name">l10n_mx.compliance.rule.form</field>
+        <field name="model">l10n_mx.compliance.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                        <h3><field name="code" readonly="1"/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category"/>
+                            <field name="default_severity"/>
+                            <field name="default_weight"/>
+                            <field name="short_circuit_on_fail"/>
+                            <field name="requires_internet"/>
+                        </group>
+                        <group>
+                            <field name="sat_reference"/>
+                            <field name="technical_class"/>
+                            <field name="avg_execution_ms"/>
+                            <field name="is_active_in_registry"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_compliance_rules" model="ir.actions.act_window">
+        <field name="name">Catalogo de Reglas</field>
+        <field name="res_model">l10n_mx.compliance.rule</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

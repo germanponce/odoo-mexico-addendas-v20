@@ -1,0 +1,2036 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_mx_sat_sync_itadmin_ee
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-17 02:19+0000\n"
+"PO-Revision-Date: 2025-04-16 20:03-0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.6\n"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__invoice_count model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__invoice_count
+msgid "# de facturas"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__payment_count model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__payment_count
+msgid "# de pagos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid ", </span> Move tax total: <span level=\"2\">"
+msgstr ", </span> Impuesto total Movto.: <span level=\"2\">"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid ", </span> Move total: <span level=\"2\">"
+msgstr ", </span> Total Movto.: <span level=\"2\">"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid ", </span> Partner document number: <span level=\"2\">"
+msgstr ", </span> #Documento del Contacto: <span level=\"2\">"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid ", </span> Your Company RFC: <span level=\"2\">"
+msgstr ", </span> RFC de la Compañía: <span level=\"2\">"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__01 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__01
+msgid "01 - Efectivo"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__02 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__02
+msgid "02 - Cheque nominativo"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__03 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__03
+msgid "03 - Transferencia electrónica de fondos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__04 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__04
+msgid "04 - Tarjeta de Crédito"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__05 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__05
+msgid "05 - Monedero electrónico"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__06 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__06
+msgid "06 - Dinero electrónico"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__08 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__08
+msgid "08 - Vales de despensa"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__12 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__12
+msgid "12 - Dación en pago"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__13 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__13
+msgid "13 - Pago por subrogación"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__14 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__14
+msgid "14 - Pago por consignación"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__15 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__15
+msgid "15 - Condonación"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__17 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__17
+msgid "17 - Compensación"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__23 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__23
+msgid "23 - Novación"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__24 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__24
+msgid "24 - Confusión"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__25 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__25
+msgid "25 - Remisión de deuda"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__26 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__26
+msgid "26 - Prescripción o caducidad"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__27 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__27
+msgid "27 - A satisfacción del acreedor"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__28 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__28
+msgid "28 - Tarjeta de débito"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__29 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__29
+msgid "29 - Tarjeta de servicios"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__30 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__30
+msgid "30 - Aplicación de anticipos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__31 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__31
+msgid "31 - Intermediario pagos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__forma_pago__99 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__forma_pago__99
+msgid "99 - Por definir"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "</span> was not found or is disabled.</div>"
+msgstr "</span> no se encontró o esta inactivo.</div>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<button class=\"dnd-alert-button\" tag=\"partner\">Create Partner</button>"
+msgstr "<button class=\"dnd-alert-button\" tag=\"partner\">Crear Contacto</button>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<button class=\"dnd-alert-button\" tag=\"remove\" t-on-click=\"remove_xml\">Remove XML</button>"
+msgstr "<button class=\"dnd-alert-button\" tag=\"remove\" t-on-click=\"remove_xml\">Eliminar XML</button>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<button class=\"dnd-alert-button\" tag=\"remove\">Remove XML</button>"
+msgstr "<button class=\"dnd-alert-button\" tag=\"remove\">Eliminar XML</button>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<button class=\"dnd-alert-button\" tag=\"tryagain\" id=\"tryagain\">Try again</button>"
+msgstr "<button class=\"dnd-alert-button\" tag=\"tryagain\" id=\"tryagain\">Intente de nuevo</button>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<button id=\"remove_all_xml\" class=\"dnd-alert-remove-all-wrong-xml-button\" style=\"background-color: #31708f; border: 0px solid; margin: 0 5px 0 0; color: #ffffff;\" tag=\"remove\">Remove all wrong XML</button>"
+msgstr "<button id=\"remove_all_xml\" class=\"dnd-alert-remove-all-wrong-xml-button\" style=\"background-color: #31708f; border: 0px solid; margin: 0 5px 0 0; color: #ffffff;\" tag=\"remove\">Eliminar XML’s incorrectos</button>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<button id=\"remove_xml\" class=\"dnd-alert-button remove\" tag=\"remove\" t-on-click=\"remove_xml\">Remove XML</button>"
+msgstr "<button id=\"remove_xml\" class=\"dnd-alert-button remove\" tag=\"remove\" t-on-click=\"remove_xml\">Eliminar XML</button>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">Some taxes</span> do not exist: <span level=\"2\">"
+msgstr "<div><span level=\"1\">Algunos impuestos</span> no existen: <span level=\"2\">"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">Some taxes</span> do not have account assigned: <span level=\"2\">"
+msgstr "<div><span level=\"1\">Algunos impuestos</span> no tienen cuenta asignada: <span level=\"2\">"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">The DocumentType is \"E\" and The XML UUID</span> is not related to any invoice. <span level=\"1\">UUID: </span>"
+msgstr "<div><span level=\"1\">Tipo de Documento es \"E\" y el UUID del XML</span> no esta relacionado con una factura. <span level=\"1\">UUID: </span>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">The XML Currency</span> <span level=\"2\">"
+msgstr "<div><span level=\"1\">Moneda en el XML</span> <span level=\"2\">"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">The XML Folio</span> does not match with <span level=\"1\">Partner document number</span>: "
+msgstr "<div><span level=\"1\">El Folio en el XML</span> no concuerda con<span level=“1”>#Documento del Contacto</span>: "
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">The XML Issuer RFC</span> does not match with <span level=\"1\">your Company RFC</span>: "
+msgstr "<div><span level=\"1\">El RFC del emisor</span> no concuerda con <span level=\"1\">el RFC de la Compañia</span>: "
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">The XML Receptor RFC</span> does not match with <span level=\"1\">your Company RFC</span>: "
+msgstr "<div><span level=\"1\">El RFC del Receptor</span> no concuerda con  <span level=\"1\">el RFCA de la Compñía</span>: "
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">The XML UUID</span> belong to other move. <span level=\"1\">UUID: </span>"
+msgstr "<div><span level=\"1\">El UUID del XML </span> pertenece a otro movimiento. <span level=\"1\">UUID: </span>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">The XML amount total</span> does not match with <span level=\"1\">move total</span>: "
+msgstr "<div><span level=\"1\">El Monto Total en el XMLl</span> no concuerda con el <span level=\"1\">total del movimiento</span>:"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">The XML partner</span> was not found: <span level=\"2\">"
+msgstr "<div><span level=\"1\">El Contacto en el XML</span> no fue encontrado: <span level=\"2\">"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">The XML reference</span> matches another move reference. <span level=\"1\">Partner: </span>"
+msgstr "<div><span level=\"1\">La Referencia en el XML</span> coincide con otro movimiento. <span level=\"1\">Contacto: </span>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">The XML state</span> is CANCELLED in SATs system. "
+msgstr "<div><span level=\"1\">El Estado del XML</span> es CANCELADO en el SAT."
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">The XML tax total amount</span> does not match with <span level=\"1\">Move tax total amount</span>: "
+msgstr "<div><span level=\"1\">El monto del impuesto en el XML</span> no concuerda con <span level=\"1\">Impuesto del Movto.</span>:"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">UUID</span> not found in the XML.</div>"
+msgstr "<div><span level=\"1\">UUID</span> no encontrado en el XML.</div>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><span level=\"1\">Unable to generate moves from an XML with version 3.2.</span>You can create the move manually and then attach the xml.</div>"
+msgstr "<div><span level=\"1\">No se pueden generar movimientos de un XML versión 3.2</span>Se pueden capturar los movimientos y después, adjuntar el XML.</div>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div><strong>Info!</strong> XML data could not be read correctly.</div>"
+msgstr "<div><strong>Info!</strong> La información del XML no se pudo extraer de forma correcta.</div>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div>The <span level=\"1\">TipoDeComprobante</span> is <span level=\"1\">\"E\"</span> and The XML UUIDs are not related to any move. <span level=\"1\">UUID: </span>"
+msgstr "<div>El <span level=\"1\">TipoDeComprobante</span> es <span level=\"1\">\"E\"</span> y el UUID en el XML UUID no esta relacionado con una factura. <span level=\"1\">UUID: </span>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<div>The <span level=\"1\">TipoDeComprobante</span> is <span level=\"1\">\"E\"</span> and The node CFDI related is not set</span> Manually reconcile with the appropiate move. <span level=\"1\">UUID: </span>"
+msgstr "<div>El <span level=\"1\">TipoDeComprobante</span> es <span level=\"1\">\"E\"</span> y el NODO relacionado esta vacío</span> Reconcilie de forma manual con el movimiento que le corresponde. <span level=\"1\">UUID: </span>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.res_config_settings_view_form_l10n_mx_sat_sync_itadmin
+msgid "<span class=\"o_form_label\">MX E-Signatures</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<span level=\"1\"> Reference: </span>"
+msgstr "<span level=\"1\"> Referencia: </span>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "<span> | Certificado SAT:</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span> | Certificado de emisor:</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "<span> | Fecha de certificación:</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "<span> | Fecha de emisión:</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "<span> | Folio fiscal:</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "<span> | Lugar de expedición:</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "<span> | Regimen Fiscal:</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>Cantidad</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>Complemento de cadena original de certificación digital SAT</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>Código unidad</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>Código</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>Descripción</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>Expedido en</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>Extra Info</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>Impuestos</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "<span>Issued from</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>Precio unitario</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>Sello digital del SAT</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>Sello digital del emisor</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>Subtotal</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<span>Wrong File: <span class=\"index-alert\"></span>/${self.alerts_in_queue.total}<b style=\"font-size:15px;font-wight:900;\">&#8226;</b> ${key}</span></div>"
+msgstr "<span>Archivo Erróneo: <span class=\"index-alert\"></span>/${self.alerts_in_queue.total}<b style=\"font-size:15px;font-wight:900;\">&#8226;</b> ${key}</span></div>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>| Certificado SAT:</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>| Fecha de certificación:</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>| Fecha de emisión:</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>| Folio fiscal:</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>| Lugar de expedición:</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<span>| Regimen Fiscal:</span>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "<strong>Cliente: </strong>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid ""
+"<strong>Emisor</strong>\n"
+"                <br/>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<strong>Este documento es una representación impresa de un CFDI</strong>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "<strong>Fecha de pago: </strong>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<strong>Info!</strong> Some files are already loaded.<br>"
+msgstr "<strong>Info!</strong> Algunos archivos ya están cargados.<br>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "<strong>Info!</strong> You only can upload XML files.<br>"
+msgstr "<strong>Info!</strong> Sólo se pueden agregar archivos XML.<br>"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "<strong>Proveedor: </strong>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<strong>Subtotal</strong>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "<strong>Total</strong>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_import_cfdi_invoice_process_message_form
+msgid "<strong>XML existentes:</strong>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_import_cfdi_invoice_process_message_form
+msgid "<strong>XML importados:</strong>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_import_cfdi_invoice_process_message_form
+msgid "<strong>XML no importados:</strong>"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,help:l10n_mx_sat_sync_itadmin_ee.field_res_config_settings__product_type_default
+msgid ""
+"A stockable product is a product for which you manage stock. The \"Inventory\" app has to be installed.\n"
+"A consumable product, on the other hand, is a product for which stock is not managed.\n"
+"A service is a non-material product you provide.\n"
+"A digital content is a non-material product you sell online. The files attached to the products are the one that are sold on the e-commerce such as e-books, music, pictures,... The \"Digital Product\" module has to be installed."
+msgstr ""
+"Un producto almacenable (Bienes con trazabilidad) administra inventario. La aplicación de Inventario debe de estar instalada.\n"
+"Un producto consumible (Bienes sin Trazabilidad), no administra inventario pero registra movimientos de entrada y salida.\n"
+"Un producto servicio es algo intangible, que la empresa provee.\n"
+"Un contenido digital, es un servicio "
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.ui.menu,name:l10n_mx_sat_sync_itadmin_ee.main_manu_attachment_cfdi_invoices
+msgid "ADD"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__res_config_settings__download_type__api
+msgid "API"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__solicitud_ws__estado_solicitud__1
+msgid "Aceptada"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__g01
+msgid "Adquisición de mercancías"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.actions.act_window,help:l10n_mx_sat_sync_itadmin_ee.action_attachment_cfdi_supplier_invoices
+msgid "Also you will find here all the related documents and download it by clicking on any individual document."
+msgstr "También encontrará a aquí todos los documentos relacionados y descargarlos con un click en cualquier documento."
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.multi_file_attach_xmls_wizard_form_view
+msgid "Anexar XML's"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,help:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__content
+msgid "Archivo Cer"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,help:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__key
+msgid "Archivo Key"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/xml/attach_xmls_template.xml:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/xml/attach_xmls_template.xml:0
+msgid "Arrastre y suelte sus archivos aquí"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_multi_file_attach_xmls_wizard
+msgid "AttachXmlsWizard"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_ir_attachment
+msgid "Attachment"
+msgstr "Archivo adjunto"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_account_bank_statement_line__attachment_id model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_account_move__attachment_id
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_account_payment__attachment_id
+msgid "Attachment Sync"
+msgstr "Sincronizar Adjuntos"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_attachment_tree_cfdi_sat_invoices_files
+msgid "Attachments"
+msgstr "Archivos Adjuntos"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.server,name:l10n_mx_sat_sync_itadmin_ee.ir_cron_automatic_fetch_cfdi_invoices_ir_actions_server
+msgid "Auto Import CFDI SAT Invoice"
+msgstr "Importar CFDI del SAT automáticamente "
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "Balance"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "Balance previo"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "Barcode"
+msgstr "Código de Barras"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_res_config_settings__buscar_producto_por_clave_sat
+msgid "Buscar producto por clave SAT"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_res_company_form_inherit_form_cfdi_account_files_invoice
+msgid "CFDI SAT Sync"
+msgstr "Sincronizar CFDI con SAT"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__cfdi_uuid model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__cfdi_uuid
+msgid "CFDI UUID"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/xml/attach_xmls_template.xml:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/xml/attach_xmls_template.xml:0
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_import_cfdi_invoice_from_ir_attachment_form model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_import_cfdi_invoice_process_message_form
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_import_cfdi_invoice_xml_attachment_form model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_reconcile_cfdi_invoice_from_ir_attachment_form
+msgid "Cancelar"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "Cantidad pagada"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__content
+msgid "Certificado Cer"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_res_company__l10n_mx_esignature_ids
+msgid "Certificado FIEL"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__key
+msgid "Certificado Key"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_cfdi_invoice_attachment
+msgid "CfdiInvoiceAttachment"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.actions.act_window,help:l10n_mx_sat_sync_itadmin_ee.action_attachment_cfdi_supplier_invoices
+msgid "Click here to create new documents."
+msgstr "Click para crear nuevo documento."
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__client_name
+msgid "Cliente"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__cod_estatus
+msgid "Codigo Solicitud"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__cod_descarga
+msgid "Codigo descarga"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__cod_verifica
+msgid "Codigo verificacion"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_res_company
+msgid "Companies"
+msgstr "Empresas"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__company_id
+msgid "Company"
+msgstr "Empresa"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__company_id
+msgid "Compañia"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__i06
+msgid "Comunicacion telefónica"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__i07
+msgid "Comunicación Satelital"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.act_window,name:l10n_mx_sat_sync_itadmin_ee.action_reconcile_vendor_cfdi_xml_bill_popup model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_reconcile_cfdi_invoice_from_ir_attachment_form
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_xml_entry_reconcile_ir_attachment_tree model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_xml_invoice_reconcile_ir_attachment_tree
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_xml_payment_reconcile_ir_attachment_tree
+msgid "Conciliar"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_reconcile_cfdi_invoice_from_ir_attachment_form model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_xml_invoice_reconcile_ir_attachment_tree
+msgid "Conciliar compras"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_xml_payment_reconcile_ir_attachment_tree
+msgid "Conciliar pagos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_xml_entry_reconcile_ir_attachment_tree
+msgid "Conciliar polizas"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__cfdi_condicion_pago model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__cfdi_condicion_pago
+msgid "Condición de pago"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.res_config_settings_view_form_l10n_mx_sat_sync_itadmin
+msgid "Configure your E-Signatures."
+msgstr "Configurar E-Firmas."
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__i01
+msgid "Construcciones"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__password model:ir.model.fields,help:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__password
+msgid "Contraseña del Certificado"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__creado_en_odoo model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__creado_en_odoo
+msgid "Creado en odoo"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_res_config_settings__product_type_default
+msgid "Crear Productos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__cfdi_invoice_attachment__si_producto_no_tiene_codigo__crear_automatico
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__res_config_settings__si_producto_no_tiene_codigo__crear_automatico
+msgid "Crear automatico"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.actions.act_window,help:l10n_mx_sat_sync_itadmin_ee.l10n_mx_esignature_certificate_list_action
+msgid "Create the first esignature"
+msgstr "Crear la primera e-firma"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__create_uid model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_descarga_x_dia_wizard__create_uid
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_import_invoice_process_message__create_uid
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__create_uid
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_multi_file_attach_xmls_wizard__create_uid
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_reconcile_vendor_cfdi_xml_bill__create_uid model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__create_uid
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__create_date model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_descarga_x_dia_wizard__create_date
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_import_invoice_process_message__create_date
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__create_date
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_multi_file_attach_xmls_wizard__create_date
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_reconcile_vendor_cfdi_xml_bill__create_date model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__create_date
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "Cuenta Ben."
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "Cuenta Ord.."
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__i05
+msgid "Dados, troqueles, moldes, matrices y herramental"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.form_solicitud_ws_view
+msgid "Datos de solicitud"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_tax_form_inherit_form
+msgid "Datos del impuesto"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.form_solicitud_ws_view
+msgid "Descarga"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.server,name:l10n_mx_sat_sync_itadmin_ee.action_descarga_dia model:ir.ui.menu,name:l10n_mx_sat_sync_itadmin_ee.menu_action_descarga_dia
+msgid "Descarga Dia"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_tax_form_inherit_form
+msgid "Descarga Masiva"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_descarga_x_dia_wizard
+msgid "DescargaXDiaWizard"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_import_cfdi_invoice_xml_attachment_form
+msgid "Descargar"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.server,name:l10n_mx_sat_sync_itadmin_ee.action_download_state_from_sat
+msgid "Descargar estado del SAT"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.server,name:l10n_mx_sat_sync_itadmin_ee.action_unlink_xml_attahchment_from_invoice
+msgid "Desconcilar"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__cfdi_descuento model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__cfdi_descuento
+msgid "Descuento"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__g02
+msgid "Devoluciones, descuentos o bonificaciones"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__supplier_journal_id
+msgid "Diario de facturas compras"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__journal_id
+msgid "Diario de facturas venta"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__credit_supplier_journal_id
+msgid "Diario de notas de crédito compra"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__credit_journal_id
+msgid "Diario de notas de crédito venta"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__display_name model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_descarga_x_dia_wizard__display_name
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_import_invoice_process_message__display_name
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__display_name
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_multi_file_attach_xmls_wizard__display_name
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_reconcile_vendor_cfdi_xml_bill__display_name model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__display_name
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__display_name
+msgid "Display Name"
+msgstr "Nombre"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.act_window,name:l10n_mx_sat_sync_itadmin_ee.action_attachment_cfdi_supplier_invoices model:ir.ui.menu,name:l10n_mx_sat_sync_itadmin_ee.menu_action_attachment_cfdi_supplier_invoices
+msgid "Documentos digitales"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__d04
+msgid "Donativos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_multi_file_attach_xmls_wizard__dragndrop
+msgid "Dragndrop"
+msgstr "Arrastar-y-Soltar"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__tipo_comprobante__e
+msgid "Egreso"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "Emisor Acc. Ben."
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "Emisor Acc. Ord."
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__solicitud_ws__state__draft
+msgid "En espera"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__solicitud_ws__estado_solicitud__2
+msgid "En proceso"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__i04
+msgid "Equipo de cómputo y accesorios"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__i03
+msgid "Equipo de transporte"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__solicitud_ws__estado_solicitud__4 model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__solicitud_ws__state__cancel
+msgid "Error"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "Error checking XML data."
+msgstr "Error al validar información del XML."
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "Error creating move."
+msgstr "Error al crear el movimiento."
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "Error creating partner."
+msgstr "Error al crear el Contacto."
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__estado model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__estado
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__state model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.form_solicitud_ws_view
+msgid "Estado"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__estado_solicitud
+msgid "Estado solicitud"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__res_config_settings__tipo_conciliacion__01
+msgid "Exacta"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_import_invoice_process_message__existed_attachment
+msgid "Existed Attachment"
+msgstr "Adjunto ya Existe"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.server,name:l10n_mx_sat_sync_itadmin_ee.action_zip_xml_attahchment_from_invoice
+msgid "Exportar XML"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.report,name:l10n_mx_sat_sync_itadmin_ee.action_facturas_de_clientes_print_report model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__invoice_id
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "Factura"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__cfdi_type__t
+msgid "Factura de traslado cliente"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__cfdi_type__st
+msgid "Factura de traslado proveedor"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__invoice_ids model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__invoice_ids
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_ir_attachment_form_inherit_cfdi_account_files_invoice
+msgid "Facturas"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__cfdi_type__i
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__reconcile_vendor_cfdi_xml_bill__typo_de_combante__i
+msgid "Facturas de clientes"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__cfdi_type__si
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__reconcile_vendor_cfdi_xml_bill__typo_de_combante__si
+msgid "Facturas de proveedor"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__date_cfdi model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__date_cfdi
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__date
+msgid "Fecha"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__fecha_factura
+msgid "Fecha Factura"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_descarga_x_dia_wizard__end_date
+msgid "Fecha Final"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__fecha_certificacion
+msgid "Fecha certificacion"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "Fecha de factura"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_descarga_x_dia_wizard__start_date
+msgid "Fecha de inicio"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__fecha
+msgid "Fecha de solicitud"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__date_end
+msgid "Fecha expiración"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__fecha_fin
+msgid "Fecha fin"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__date_start model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__fecha_inicio
+msgid "Fecha inicio"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_account_bank_statement_line__l10n_mx_edi_cfdi_uuid_cusom
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_account_move__l10n_mx_edi_cfdi_uuid_cusom
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_account_payment__l10n_mx_edi_cfdi_uuid_cusom
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_purchase_order__l10n_mx_edi_cfdi_uuid_cusom
+msgid "Fiscal Folio UUID"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__serie_folio model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__serie_folio
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__number_folio
+msgid "Folio"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__folio_fiscal
+msgid "Folio Fiscal"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__folio_factura
+msgid "Folio factura"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_res_config_settings__download_type
+msgid "Forma de descarga"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__forma_pago model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__forma_pago
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__forma_pago model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "Forma de pago"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/cfdi_invoice.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/cfdi_invoice.py:0
+msgid "Formato no soportado \"{}\", importa solo archivos XML"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__d08
+msgid "Gastos de transportación escolar obligatoria"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__g03
+msgid "Gastos en general"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__d03
+msgid "Gastos funerales"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__d02
+msgid "Gastos médicos por incapacidad o discapacidad"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.act_window,name:l10n_mx_sat_sync_itadmin_ee.action_generate_supplier_invoice_from_attachment
+msgid "Genera facturas"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.act_window,name:l10n_mx_sat_sync_itadmin_ee.action_generate_so_po_from_attachment
+msgid "Genera pedidos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__solicitud_ws__state__done
+msgid "Hecho"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_account_bank_statement_line__hide_message model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_account_move__hide_message
+msgid "Hide Message"
+msgstr "Ocultar Mensaje"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__d01
+msgid "Honorarios médicos, dentales y gastos hospitalarios"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__id model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_descarga_x_dia_wizard__id
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_import_invoice_process_message__id model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__id
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_multi_file_attach_xmls_wizard__id model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_reconcile_vendor_cfdi_xml_bill__id
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__id model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__id_solicitud
+msgid "ID Solicitud"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__cfdi_ieps model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__cfdi_ieps
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__account_tax__impuesto__003
+msgid "IEPS"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__cfdi_isr model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__cfdi_isr
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__account_tax__impuesto__001
+msgid "ISR"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__cfdi_iva model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__cfdi_iva
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__account_tax__impuesto__002
+msgid "IVA"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_import_invoice_process_message
+msgid "ImportInvoiceProcessMessage"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/xml/attach_xmls_template.xml:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/xml/attach_xmls_template.xml:0
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_import_cfdi_invoice_from_ir_attachment_form
+msgid "Importar"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.server,name:l10n_mx_sat_sync_itadmin_ee.action_importar_xml model:ir.ui.menu,name:l10n_mx_sat_sync_itadmin_ee.menu_action_importar_xml
+msgid "Importar XML"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_import_cfdi_invoice_from_ir_attachment_form
+msgid "Importar facturas de compra"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__cfdi_total model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__cfdi_total
+msgid "Importe"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_import_invoice_process_message__imported_attachment
+msgid "Imported Attachment"
+msgstr "Adjunto Importado"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_account_tax__impuesto
+msgid "Impuesto"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__account_tax__impuesto__004
+msgid "Impuesto Local"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__tipo_comprobante__i
+msgid "Ingreso"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__invoice_type
+msgid "Invoice Type"
+msgstr "Tipo de Factura"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento contable"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_res_config_settings__last_cfdi_fetch_date
+msgid "Last CFDI fetch date"
+msgstr "Última Fecha de lectura de CFDI"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__write_uid model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_descarga_x_dia_wizard__write_uid
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_import_invoice_process_message__write_uid
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__write_uid
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_multi_file_attach_xmls_wizard__write_uid
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_reconcile_vendor_cfdi_xml_bill__write_uid model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__write_uid
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__write_uid
+msgid "Last Updated by"
+msgstr "Actualizado por"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__write_date model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_descarga_x_dia_wizard__write_date
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_import_invoice_process_message__write_date
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__write_date
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_multi_file_attach_xmls_wizard__write_date
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_reconcile_vendor_cfdi_xml_bill__write_date model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__write_date
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__write_date
+msgid "Last Updated on"
+msgstr "Actualizado el"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.server,name:l10n_mx_sat_sync_itadmin_ee.action_update_extra_info_xml
+msgid "Leer información adicional XML"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_l10n_mx_esignature_certificate model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_res_config_settings__l10n_mx_esignature_ids
+msgid "MX E-signature"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__mensaje_descarga
+msgid "Mensaje de descarga"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__mensaje
+msgid "Mensaje de solicitud"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__mensaje_ver
+msgid "Mensaje de verificacion"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__i02
+msgid "Mobiliario y equipo de oficina por inversiones"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__moneda model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "Moneda"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__amount
+msgid "Monto"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/xml/attach_xmls_template.xml:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/xml/attach_xmls_template.xml:0
+msgid "Mostrar adjuntos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__methodo_pago model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__methodo_pago
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "Método de pago"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_import_invoice_process_message__name
+msgid "Name"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/models/res_company.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/models/res_company.py:0
+msgid "No valid E-Signature found."
+msgstr "No se encontró una E-Firma válida."
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "Nombre del banco Acc. Ord."
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__nombre_tercero model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__nombre_tercero
+msgid "Nombre tercero"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__tipo_comprobante__n
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__cn01
+msgid "Nomina"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__cfdi_type__n
+msgid "Nominas de empleados"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_import_invoice_process_message__not_imported_attachment
+msgid "Not Imported Attachment"
+msgstr "No se importó el Adjunto"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__cfdi_type__e
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__reconcile_vendor_cfdi_xml_bill__typo_de_combante__e
+msgid "Notas de crédito clientes"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__cfdi_type__se
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__reconcile_vendor_cfdi_xml_bill__typo_de_combante__se
+msgid "Notas de crédito proveedor"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__numero_cfdis
+msgid "Numero CFDIs"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__numero_cetificado
+msgid "Numero cetificado"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__serial_number
+msgid "Numero de serie"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__cfdi_type__sn
+msgid "Nómina propia"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_import_cfdi_invoice_process_message_form
+msgid "OK"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.multi_file_attach_xmls_wizard_form_view
+msgid "Ok"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__i08
+msgid "Otra maquinaria y equipo"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__methodo_pago__ppd
+msgid "PPD"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__methodo_pago__pue
+msgid "PUE"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.actions.report,name:l10n_mx_sat_sync_itadmin_ee.action_attachment_payment_report model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__payment_id
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__tipo_comprobante__p
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__cp01
+msgid "Pago"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__payment_ids model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__payment_ids
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_ir_attachment_form_inherit_cfdi_account_files_invoice
+msgid "Pagos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__reconcile_vendor_cfdi_xml_bill__typo_de_combante__p
+msgid "Pagos de clientes"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__reconcile_vendor_cfdi_xml_bill__typo_de_combante__sp
+msgid "Pagos de proveedor"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__d10
+msgid "Pagos por servicios educativos (colegiaturas)"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__paquete_b64
+msgid "Paquete b64"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__paquetes
+msgid "Paquetes"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "Parcialidad"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__payment_type
+msgid "Payment Type"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_account_payment
+msgid "Payments"
+msgstr "Pagos"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__d07
+msgid "Primas por seguros de gastos médicos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__product_id
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__cfdi_invoice_attachment__si_producto_no_tiene_codigo__buscar_manual
+msgid "Producto por defecto"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "Proveedor"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_purchase_order
+msgid "Purchase Order"
+msgstr "Orden de compra"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__reconcile_vendor_cfdi_xml_bill__typo_de_combante__pe
+msgid "Póliza egreso"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__reconcile_vendor_cfdi_xml_bill__typo_de_combante__pi
+msgid "Póliza ingreso"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__cfdi_type__p
+msgid "REP de clientes"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__ir_attachment__cfdi_type__sp
+msgid "REP de proveedores"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__holder_vat model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__client_rfc
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.l10n_mx_esignature_certificate_search_view model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.l10n_mx_esignature_certificate_tree_view
+msgid "RFC"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,help:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__holder_vat
+msgid "RFC del certificado"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__rfc_tercero model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__rfc_tercero
+msgid "RFC tercero"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "RFC:"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__res_config_settings__tipo_conciliacion__02
+msgid "Rango"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_res_config_settings__rango
+msgid "Rango +/-"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__solicitud_ws__estado_solicitud__5
+msgid "Rechazada"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__reconcile_vendor_cfdi_xml_bill__typo_de_combante__rc
+msgid "Recibo de compra"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "Recibo de pago:"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__reconcile_vendor_cfdi_xml_bill__typo_de_combante__rv
+msgid "Recibo de venta"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.act_window,name:l10n_mx_sat_sync_itadmin_ee.action_xml_payment_reconcile_view
+msgid "Reconcile Payment XML File"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.act_window,name:l10n_mx_sat_sync_itadmin_ee.action_xml_entry_reconcile_view model:ir.actions.act_window,name:l10n_mx_sat_sync_itadmin_ee.action_xml_invoice_reconcile_view
+msgid "Reconcile XML File"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_reconcile_vendor_cfdi_xml_bill
+msgid "ReconcileVendorCfdiXmlBill"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_report_l10n_mx_sat_sync_itadmin_ee_attachment_payment_report
+msgid "ReportPaymentFromXMLFile"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_report_l10n_mx_sat_sync_itadmin_ee_facturas_de_clientes
+msgid "Reportfacturas_de_clientes"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__cfdi_ieps_ret model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__cfdi_ieps_ret
+msgid "Ret IEPS"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__cfdi_isr_ret model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__cfdi_isr_ret
+msgid "Ret ISR"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__cfdi_iva_ret model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__cfdi_iva_ret
+msgid "Ret IVA"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.res_config_settings_view_form_l10n_mx_sat_sync_itadmin
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.view_res_company_form_inherit_form_cfdi_account_files_invoice
+msgid "SAT Synchronization"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_account_bank_statement_line__l10n_mx_edi_cfdi_sat_state
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_account_move__l10n_mx_edi_cfdi_sat_state
+msgid "SAT status"
+msgstr "Estado en el SAT"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__selo_sat
+msgid "Sello SAT"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__selo_digital_cdfi
+msgid "Sello digital CFDI"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__si_producto_no_tiene_codigo
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_res_config_settings__si_producto_no_tiene_codigo
+msgid "Si producto no se encuentra"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,help:l10n_mx_sat_sync_itadmin_ee.field_cfdi_invoice_attachment__product_id
+msgid "Si un producto del XML no se encuentra en la base de datos, utilizará el producto por defecto en vez de crear un nuevo producto."
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__uso_cfdi__s01
+msgid "Sin efectos fiscales"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.server,name:l10n_mx_sat_sync_itadmin_ee.action_sincronizar_sat model:ir.ui.menu,name:l10n_mx_sat_sync_itadmin_ee.menu_action_sincronizar_sat
+msgid "Sincronizar SAT"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__account_move__l10n_mx_edi_cfdi_sat_state__skip
+msgid "Skip"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.form_solicitud_ws_view
+msgid "Solicitud"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__rfc_emisor
+msgid "Solicitud de emitidos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_solicitud_ws__rfc_receptor
+msgid "Solicitud de recibidos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_solicitud_ws
+msgid "SolicitudWS"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.act_window,name:l10n_mx_sat_sync_itadmin_ee.action_tree_solicitud_ws model:ir.ui.menu,name:l10n_mx_sat_sync_itadmin_ee.menu_action_tree_solicitud_ws
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.form_solicitud_ws_view model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.search_solicitud_ws_view
+msgid "Solicitudes WS"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.tree_solicitud_ws_view
+msgid "Soliciutdes"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_res_config_settings__solo_documentos_de_proveedor
+msgid "Solo documentos de proveedor"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/attach_xmls_wizard.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/attach_xmls_wizard.py:0
+msgid "Something went wrong. The parameter for XML files must be a dictionary."
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/models/ir_attachment.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/models/ir_attachment.py:0
+msgid "Sorry, you are not allowed to access this document."
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__cfdi_subtotal model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__cfdi_subtotal
+msgid "Subtotal"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_account_tax
+msgid "Tax"
+msgstr "Impuesto"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__solicitud_ws__estado_solicitud__3
+msgid "Terminada"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/models/esignature.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/models/esignature.py:0
+msgid "The certificate content is invalid."
+msgstr "El contenido del certificado es inválido."
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/models/esignature.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/models/esignature.py:0
+msgid "The certificate is expired since %s"
+msgstr "El certificado esta vencido desde "
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/models/esignature.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/models/esignature.py:0
+msgid "The certificate key and/or password is/are invalid."
+msgstr "La la contraseña o llave del certificado es (o son) inválido(s)."
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,help:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__date_end
+msgid "The date on which the certificate expires"
+msgstr "Fecha en la que el certificado expira(ó)"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,help:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__date_start
+msgid "The date on which the certificate starts to be valid"
+msgstr "Fecha a partir de la cual el certificado es válido"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.res_config_settings_view_form_l10n_mx_sat_sync_itadmin
+msgid "The parameters to configure the MX E-Signature."
+msgstr "Parámetros para configurar la MX E-Firma."
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,help:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__serial_number
+msgid "The serial number to add to electronic documents"
+msgstr "El número de seria para agregar los documentos elctrónicos"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "There are files uploading"
+msgstr "Existen archivo en proceso de carga"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "There is no files selected"
+msgstr "No existen archivos seleccionados"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/models/res_company.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/models/res_company.py:0
+msgid "This partner was created when CFDI import process was being executed. Please verify that the datas of partner are correct."
+msgstr "Este Contacto fue creado por el proceso de importación del CFDI. Favor de verificar que la información del Contacto es la correcta."
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__tipocambio
+msgid "Tipo cambio"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_res_config_settings__tipo_conciliacion
+msgid "Tipo conciliación"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_reconcile_vendor_cfdi_xml_bill__typo_de_combante
+msgid "Tipo de Comprobante"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__tipo_relacion model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__tipo_relacion
+msgid "Tipo de Relación"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__cfdi_type model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__cfdi_type
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__tipo_comprobante model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "Tipo de comprobante"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__holder model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.l10n_mx_esignature_certificate_search_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.l10n_mx_esignature_certificate_tree_view
+msgid "Titular"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,help:l10n_mx_sat_sync_itadmin_ee.field_l10n_mx_esignature_certificate__holder
+msgid "Titular del certificado"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__solicitud_ws__estado_solicitud__0
+msgid "Token invalido"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__xml_invoice_reconcile__tipo_comprobante__t
+msgid "Traslado"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__attachment_id model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_attachment_payment_document
+msgid "UUID"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.server,name:l10n_mx_sat_sync_itadmin_ee.action_compute_cfdi_uuid
+msgid "UUID De XML"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__res_config_settings__si_producto_no_tiene_codigo__buscar_manual
+msgid "Usar producto por defecto"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_res_users
+msgid "User"
+msgstr "Usuario"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_ir_attachment__uso_cfdi model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_product_document__uso_cfdi
+msgid "Uso CFDI"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-python
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0 code:addons/l10n_mx_sat_sync_itadmin_ee/wizard/xml_invoice_reconcile.py:0
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__uso_cfdi
+msgid "Uso CFDI (cliente)"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.report_facturas_de_clientes_document
+msgid "Uso:"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.l10n_mx_esignature_certificate_form_view
+msgid "Validity"
+msgstr "Validez"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__solicitud_ws__estado_solicitud__6
+msgid "Vencida"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.server,name:l10n_mx_sat_sync_itadmin_ee.verifica_solicitud_descarga_ir_actions_server
+msgid "Verifica Solicitud Descarga SAT"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.form_solicitud_ws_view
+msgid "Verificación"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields.selection,name:l10n_mx_sat_sync_itadmin_ee.selection__res_config_settings__download_type__web
+msgid "Web"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "XML Attchments"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "XML Folio: <span level=\"2\">"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "XML Issuer RFC: <span level=\"2\">"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "XML Receptor RFC: <span level=\"2\">"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "XML amount total: <span level=\"2\">"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "XML removed, the TipoDeComprobante is not I nor E."
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "XML tax total: <span level=\"2\">"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model,name:l10n_mx_sat_sync_itadmin_ee.model_xml_invoice_reconcile
+msgid "XMLInvoiceReconcile"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/js/attach_xmls.js:0
+msgid "Your moves were created correctly"
+msgstr "Los movimientos se crearon de forma correcta"
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.l10n_mx_esignature_certificate_form_view
+msgid "esignature Form"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model_terms:ir.ui.view,arch_db:l10n_mx_sat_sync_itadmin_ee.l10n_mx_esignature_certificate_tree_view
+msgid "esignature Tree"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.actions.act_window,name:l10n_mx_sat_sync_itadmin_ee.l10n_mx_esignature_certificate_list_action
+msgid "l10n.mx.esignature.certificate.action"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#. odoo-javascript
+#: code:addons/itadmin/l10n_mx_sat_sync_itadmin_ee/static/src/xml/attach_xmls_template.xml:0 code:addons/l10n_mx_sat_sync_itadmin_ee/static/src/xml/attach_xmls_template.xml:0
+msgid "o de clic para subir los archivos"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_xml_invoice_reconcile__reconcilled
+msgid "¿Está conciliada?"
+msgstr ""
+
+#. module: l10n_mx_sat_sync_itadmin_ee
+#: model:ir.model.fields,field_description:l10n_mx_sat_sync_itadmin_ee.field_res_company__last_cfdi_fetch_date
+msgid "Última sincronización"
+msgstr ""

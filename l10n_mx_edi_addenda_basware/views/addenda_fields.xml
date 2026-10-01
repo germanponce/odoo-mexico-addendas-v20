@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- VISTAS PERSONALIZADAS PARA CAMPOS -->
+
+        <record id="sale_order_line_detail_form_view" model="ir.ui.view">
+            <field name="name">sale.order.line.detail.form</field>
+            <field name="model">sale.order.line</field>
+            <field name="arch" type="xml">
+                <form string="Detalle de Línea de Venta">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="x_orden_compra"/>
+                                <field name="x_linea_orden_compra"/>
+                                <field name="x_numero_contrato"/>
+                            </group>
+                            <group>
+                                <field name="x_codido_producto_comprador"/>
+                                <field name="x_documento_transporte"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Atributos">
+                                <field name="x_extra_info_ids">
+                                    <list editable="bottom">
+                                        <field name="ttype" string="Descripción"/>
+                                        <field name="value" string="Valor"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <field name="ttype" string="Descripción"/>
+                                            <field name="value" string="Valor"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <footer>
+                        <button string="Guardar y Cerrar" class="btn-primary" special="save"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_move_line_detail_form_view" model="ir.ui.view">
+            <field name="name">account.move.line.detail.form</field>
+            <field name="model">account.move.line</field>
+            <field name="arch" type="xml">
+                <form string="Detalle de Línea de Factura">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="x_orden_compra"/>
+                                <field name="x_linea_orden_compra"/>
+                                <field name="x_numero_contrato"/>
+                            </group>
+                            <group>
+                                <field name="x_codido_producto_comprador"/>
+                                <field name="x_documento_transporte"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Atributos">
+                                <field name="x_extra_info_ids">
+                                    <list editable="bottom">
+                                        <field name="ttype" string="Descripción"/>
+                                        <field name="value" string="Valor"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <field name="ttype" string="Descripción"/>
+                                            <field name="value" string="Valor"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <footer>
+                        <button string="Guardar y Cerrar" class="btn-primary" special="save"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <!-- ================== CAMPOS EXTRA ========================= -->
+        <record model="ir.ui.view" id="addenda_company_fields_basware_form">
+            <field name="name">addenda_company_fields_form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.res_company_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="bassware" string="Addenda Basware">
+                        <group>
+                            <field name="x_numero_proveedor"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="addenda_product_fields_bassware_form">
+            <field name="name">addenda_product_fields_bassware_form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.product_template_only_form_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="bassware" string="Addenda Basware">
+                        <group>
+                            <field name="x_codido_producto_comprador" />
+                            <!-- <field name="x_code"/> -->
+                            <!-- <field name="x_size"/> -->
+                        </group>
+                        <group>
+
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- <record model="ir.ui.view" id="addenda_product_variant_fields_form">
+            <field name="name">addenda_product_variant_fields_form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+            <field name="arch" type="xml">
+                <field name="default_code" position="after">
+                    <field name="x_code"/>
+                    <field name="x_size"/>
+                    <field name="x_model"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="addenda_product_product_fields_form">
+            <field name="name">addenda_product_product_fields_form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <field name="default_code" position="after">
+                    <separator string="Addenda Basware" />
+                    <field name="x_code"/>
+                    <field name="x_size"/>
+                    <field name="x_model"/>
+                </field>
+            </field>
+        </record> -->
+
+        <record model="ir.ui.view" id="addenda_sale_fields_basware_form">
+            <field name="name">addenda_sale_fields_form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.sale_order_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="bassware" string="Addenda Bassware" 
+                        invisible="addenda_type != 'basware'" >
+                        <group>
+                            <field name="x_orden_compra"/>
+                        </group>
+                        <group>
+                            <field name="x_numero_contrato"/>
+                        </group>
+                    </group>
+                    <group invisible="addenda_type != 'basware'">
+                        <group>
+                            <field name="x_persona_referencia"/>
+                            <field name="x_email"/>
+                            <field name="x_documento_transporte"/>
+                        </group>
+                        <group>
+                            <field name="x_numero_proveedor"/>
+                            <field name="x_codigo_destinatario" />
+                            <field name="x_iso_moneda" />
+                        </group>
+                    </group>
+                    <group invisible="addenda_type != 'basware'">
+                        <field name="x_fecha_pago"/>
+                        <field name="x_termino_pago"/>
+                    </group>
+                    <group string="Atributos" 
+                           invisible="addenda_type != 'basware'">
+                        <field name="x_extra_info_ids"
+                               invisible="addenda_type != 'basware'">
+                            <list editable="bottom">
+                                <field name="ttype" string="Descripción"/>
+                                <field name="value" string="Valor"/>
+                            </list>
+                            <form>
+                                <group>
+                                    <field name="ttype" string="Descripción"/>
+                                    <field name="value" string="Valor"/>
+                                </group>
+                            </form>
+                        </field>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="addenda_sale_order_line_fields_bassware_form">
+            <field name="name">addenda_sale_fields_form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']//list/field[@name='price_subtotal']" position="after">
+                    <button name="action_open_line_form" type="object" string="Addenda" />
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="addenda_invoice_fields_form">
+            <field name="name">addenda_invoice_fields_form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.account_move_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="bassware" string="Addenda Bassware" 
+                        invisible="addenda_type != 'basware'" >
+                        <group>
+                            <field name="x_orden_compra"/>
+                        </group>
+                        <group>
+                            <field name="x_numero_contrato"/>
+                        </group>
+                    </group>
+                    <group invisible="addenda_type != 'basware'">
+                        <group>
+                            <field name="x_persona_referencia"/>
+                            <field name="x_email"/>
+                            <field name="x_documento_transporte"/>
+                        </group>
+                        <group>
+                            <field name="x_numero_proveedor"/>
+                            <field name="x_codigo_destinatario" />
+                            <field name="x_iso_moneda" />
+                        </group>
+                    </group>
+                    <group invisible="addenda_type != 'basware'">
+                        <field name="x_fecha_pago"/>
+                        <field name="x_termino_pago"/>
+                    </group>
+                    <group string="Atributos">
+                        <field name="x_extra_info_ids"
+                               invisible="addenda_type != 'basware'">
+                            <list editable="bottom">
+                                <field name="ttype" string="Descripción"/>
+                                <field name="value" string="Valor"/>
+                            </list>
+                            <form>
+                                <group>
+                                    <field name="ttype" string="Descripción"/>
+                                    <field name="value" string="Valor"/>
+                                </group>
+                            </form>
+                        </field>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="addenda_account_move_line_fields_bassware_form">
+            <field name="name">addenda_account_fields_form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line_ids']//list/field[@name='display_type']" position="after">
+                    <button name="action_open_line_form" type="object" string="Addenda" />
+                </xpath>
+            </field>
+        </record>
+
+        <!-- <record model="ir.ui.view" id="addenda_picking_fields_form">
+            <field name="name">addenda_picking_fields_form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="l10n_mx_edi_addendas_base.stock_picking_addendas_extra_base"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+                    <group name="basware" string="Addenda Basware" invisible="addenda_type != 'Basware'">
+                        <group>
+                            <field name="x_qty_lote"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record> -->
+
+    </data>
+</odoo>

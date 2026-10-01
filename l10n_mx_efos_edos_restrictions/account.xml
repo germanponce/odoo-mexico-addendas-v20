@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- PLANIFICACION DE LA DESCARGA -->
+
+
+    <record id="cron_downloar_data_efos_edos_sat" model="ir.cron">
+        <field name="name">Sincronización de Listado de EFOS y EDOS con el SAT</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="user_id" ref="base.user_root" />
+        <field name="code">model._run_download_efos_edos_list_from_sat()</field>
+        <field name="state">code</field>
+    </record>
+
+
+    <!-- HERENCIA CLIENTES -->
+
+    <record model="ir.ui.view" id="res_partner_efos_edos_form">
+        <field name="name">res.partner.tree.efos.edos</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <label for="status_ok" />
+                <div>
+                    <field name="status_ok" readonly="1" />
+                    <button class="oe_inline oe_link" name="button_info_efo" string="Info" type="object" icon="fa-close" 
+                        invisible="status_ok == 'OK'"/>
+                </div>
+                
+            </field>
+        </field>
+    </record>
+
+    <!-- EFOS y EDOS -->
+
+    <record id="res_partner_efo_edo_tree" model="ir.ui.view">
+        <field name="name">res.partner.efo.edo.tree</field>
+        <field name="model">res.partner.efo.edo</field>
+        <field name="arch" type="xml">
+            <list string="Listado EFOS y EDOS" >
+                <field name="name"/>
+                <field name="rfc"/>
+                <field name="situacion"/>
+                <field name="numero_fecha"/>
+                <field name="omitir_validacion"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="res_partner_efo_edo_form" model="ir.ui.view">
+        <field name="name">res.partner.efo.edo.form</field>
+        <field name="model">res.partner.efo.edo</field>
+        <field name="arch" type="xml">
+            <form string="Registro EFO o EDO">
+                <sheet>
+                     <div class="oe_title">
+                    <label class="oe_edit_only" for="rfc" string="RFC"/>
+                    <h1><field name="rfc" placeholder="XAX000001" required="1"/></h1>
+                    
+                </div>
+
+                    
+                    <group >
+                        <field name="name" required="1"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="situacion" required="1"/>
+                        </group>
+                        <group>
+                            <field name="numero_fecha" required="1"/>
+                            <field name="omitir_validacion" required="1"/>
+                        </group>
+                    </group>
+                    
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="res_partner_efo_edo_search" model="ir.ui.view">
+        <field name="name">res.partner.efo.edo.serch</field>
+        <field name="model">res.partner.efo.edo</field>
+        <field name="arch" type="xml">
+            <search string="Busqueda de EFOS y EDOS">
+                <field name="name"/>
+                <field name="rfc"/>
+                <field name="situacion"/>
+                <field name="numero_fecha"/>
+                <field name="omitir_validacion"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_res_partner_efo_edo" model="ir.actions.act_window">
+        <field name="name">Catalogo EFOS y EDOS</field>
+        <field name="res_model">res.partner.efo.edo</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="res_partner_efo_edo_tree"/>
+    </record>
+
+    <menuitem id="catalogos_efos_edos" name="Catalogo de EFOS y EDOS" 
+              parent="account.menu_finance_receivables" sequence="110" action="action_res_partner_efo_edo"/>
+
+    <menuitem id="contacts_catalogos_efos_edos" name="EFOS y EDOS" 
+              parent="contacts.menu_contacts" sequence="1" />
+
+    <menuitem id="contacts_catalogos_efos_edos_act" name="Catalogo de EFOS y EDOS" 
+              parent="contacts_catalogos_efos_edos" sequence="1" action="action_res_partner_efo_edo"/>
+
+
+
+</odoo>

@@ -1,0 +1,109 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_mx_reports_diot
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-20 17:20+0000\n"
+"PO-Revision-Date: 2025-05-20 17:20+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_mx_reports_diot
+#: model:ir.model.fields.selection,name:l10n_mx_reports_diot.selection__res_partner__l10n_mx_type_of_operation__02
+msgid "02 - Disposal of assets"
+msgstr "02 - Enajenación de bienes"
+
+#. module: l10n_mx_reports_diot
+#: model:ir.model.fields.selection,name:l10n_mx_reports_diot.selection__res_partner__l10n_mx_type_of_operation__07
+msgid "07 - Import of goods or services"
+msgstr "07 - Importación de bienes o servicios"
+
+#. module: l10n_mx_reports_diot
+#: model:ir.model.fields.selection,name:l10n_mx_reports_diot.selection__res_partner__l10n_mx_type_of_operation__08
+msgid "08 - Import by virtual transfer"
+msgstr "08 - Importación por transferencia virtual"
+
+#. module: l10n_mx_reports_diot
+#: model:ir.model.fields.selection,name:l10n_mx_reports_diot.selection__res_partner__l10n_mx_type_of_operation__87
+msgid "87 - Global operations"
+msgstr "87 - Operaciones globales"
+
+#. module: l10n_mx_reports_diot
+#: model:ir.model,name:l10n_mx_reports_diot.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: l10n_mx_reports_diot
+#: model:ir.model,name:l10n_mx_reports_diot.model_l10n_mx_report_handler
+msgid "Mexican Account Report Custom Handler"
+msgstr "Manejador personalizado de informes de cuentas mexicanas"
+
+#. module: l10n_mx_reports_diot
+#: model:ir.model.fields,help:l10n_mx_reports_diot.field_res_partner__l10n_mx_type_of_operation
+#: model:ir.model.fields,help:l10n_mx_reports_diot.field_res_users__l10n_mx_type_of_operation
+msgid ""
+"Mexico: The type of operations that this supplier performs. This is the "
+"second column in DIOT report."
+msgstr ""
+"Indique el tipo de operaciones que realiza este proveedor. Es la segunda "
+"columna del informe DIOT"
+
+#. module: l10n_mx_reports_diot
+#: model:account.report.column,name:l10n_mx_reports_diot.account_report_column_paid_16_rda
+msgid "Paid 16% RDA"
+msgstr "Pagado 16% DDB"
+
+#. module: l10n_mx_reports_diot
+#. odoo-python
+#: code:addons/l10n_mx_reports_diot/models/l10n_mx_report_handler.py:0
+msgid "Partner missing informations"
+msgstr "Información que falta a los socios"
+
+#. module: l10n_mx_reports_diot
+#: model:account.report.column,name:l10n_mx_reports_diot.account_report_column_paid_8_rda
+msgid "RDA 8%"
+msgstr "DDB 8%"
+
+#. module: l10n_mx_reports_diot
+#: model:account.report.column,name:l10n_mx_reports_diot.account_report_column_importation_16_rda
+msgid "RDA Importation 16%"
+msgstr "Importación 16% DDB"
+
+#. module: l10n_mx_reports_diot
+#. odoo-python
+#: code:addons/l10n_mx_reports_diot/models/l10n_mx_report_handler.py:0
+msgid "See the list of partners"
+msgstr "Ver la lista de socios"
+
+#. module: l10n_mx_reports_diot
+#: model:account.report.column,name:l10n_mx_reports_diot.account_report_column_tax_importation_16
+msgid "Tax Importation 16%"
+msgstr "IVA Importación 16%"
+
+#. module: l10n_mx_reports_diot
+#: model:account.report.column,name:l10n_mx_reports_diot.account_report_column_tax_paid_16
+msgid "Tax Paid 16%"
+msgstr "IVA Pagado 16%"
+
+#. module: l10n_mx_reports_diot
+#. odoo-python
+#: code:addons/l10n_mx_reports_diot/models/l10n_mx_report_handler.py:0
+msgid ""
+"The report cannot be generated because the following partners do not have a "
+"valid state for the 8%% (border) tax."
+msgstr ""
+"El informe no se puede generar porque los siguientes proveedores no tienen "
+"un estado valido para el IVA del 8%%."
+
+#. module: l10n_mx_reports_diot
+#: model:ir.model.fields,field_description:l10n_mx_reports_diot.field_res_partner__l10n_mx_type_of_operation
+#: model:ir.model.fields,field_description:l10n_mx_reports_diot.field_res_users__l10n_mx_type_of_operation
+msgid "Type of Operation"
+msgstr "Tipo de Operación"

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="res.groups" id="import_group_manager">
+            <field name="name">Inventarios / Pedimentos Manager</field>
+        </record>
+        <record model="res.groups" id="import_group_user">
+            <field name="name">Inventarios / Pedimentos User</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- =====================================================================
+         Reporte PDF independiente: CFDI de Retenciones e Información de Pagos
+         Accesible desde account.payment cuando require_retention_cfdi = True.
+         ===================================================================== -->
+
+    <template id="report_retention_cfdi_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- ── Encabezado ─────────────────────────────────── -->
+                        <div class="row mb-4">
+                            <div class="col-12 text-center">
+                                <h3>CFDI de Retenciones e Información de Pagos</h3>
+                                <p class="text-muted">Versión 1.0 — Complemento SAT</p>
+                            </div>
+                        </div>
+
+                        <!-- ── Datos del comprobante ─────────────────────── -->
+                        <t t-set="ret_vals" t-value="o._get_payment_receipt_report_values().get('retention_cfdi', {})"/>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <th>Folio Fiscal (UUID):</th>
+                                        <td><t t-esc="ret_vals.get('uuid') or o.l10n_mx_edi_retention_uuid or '—'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Fecha de Expedición:</th>
+                                        <td><t t-esc="ret_vals.get('fecha_exp', '—')"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Fecha de Timbrado:</th>
+                                        <td><t t-esc="ret_vals.get('stamp_date', '—')"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Tipo de Retención:</th>
+                                        <td>
+                                            <span t-field="o.retention_type_id.code"/> —
+                                            <span t-field="o.retention_type_id.name"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <th>No. Certificado Emisor:</th>
+                                        <td><t t-esc="ret_vals.get('num_cert', '—')"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>No. Certificado SAT:</th>
+                                        <td><t t-esc="ret_vals.get('sat_certificate', '—')"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Pago Referencia:</th>
+                                        <td><span t-field="o.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Fecha de Pago:</th>
+                                        <td><span t-field="o.date"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <!-- ── Emisor ─────────────────────────────────────── -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <h5>Emisor</h5>
+                                <p>
+                                    <strong><span t-field="o.company_id.name"/></strong><br/>
+                                    RFC: <span t-field="o.company_id.vat"/>
+                                </p>
+                            </div>
+                            <!-- ── Receptor ───────────────────────────────── -->
+                            <div class="col-6">
+                                <h5>Receptor (Extranjero)</h5>
+                                <p>
+                                    <strong><span t-field="o.partner_id.name"/></strong><br/>
+                                    Núm. Reg. Id. Trib.: <span t-field="o.partner_id.vat"/><br/>
+                                    Nacionalidad: Extranjero
+                                </p>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <!-- ── Período ────────────────────────────────────── -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <h5>Período Fiscal</h5>
+                                <table class="table table-sm table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Ejercicio</th>
+                                            <th>Mes Inicio</th>
+                                            <th>Mes Fin</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><t t-esc="o.date.year if o.date else '—'"/></td>
+                                            <td>01 (Enero)</td>
+                                            <td>12 (Diciembre)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- ── Totales ────────────────────────────────────── -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <h5>Totales de Retención</h5>
+                                <table class="table table-sm table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Monto Total de Operaciones</th>
+                                            <th>Monto Total Gravado</th>
+                                            <th>Monto Total Exento</th>
+                                            <th>Monto Total Retenido</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-end">
+                                                <t t-esc="ret_vals.get('monto_tot_operacion', '')"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <t t-esc="ret_vals.get('monto_tot_operacion', '')"/>
+                                            </td>
+                                            <td class="text-end">0.00</td>
+                                            <td class="text-end">
+                                                <t t-esc="ret_vals.get('monto_tot_ret', '')"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- ── Impuestos Retenidos ────────────────────────── -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <h5>Impuestos Retenidos</h5>
+                                <table class="table table-sm table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Base de Retención</th>
+                                            <th>Impuesto</th>
+                                            <th>Monto Retenido</th>
+                                            <th>Tipo de Pago</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-end">
+                                                <t t-esc="ret_vals.get('monto_tot_operacion', '')"/>
+                                            </td>
+                                            <td>01 — ISR</td>
+                                            <td class="text-end">
+                                                <t t-esc="ret_vals.get('monto_tot_ret', '')"/>
+                                            </td>
+                                            <td>Pago definitivo</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- ── Sellos ─────────────────────────────────────── -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h6>Sello Digital del Emisor</h6>
+                                <p class="small text-break text-muted">
+                                    <t t-esc="ret_vals.get('sello', '—')"/>
+                                </p>
+                                <h6>Sello Digital del SAT</h6>
+                                <p class="small text-break text-muted">
+                                    <t t-esc="ret_vals.get('sat_sello', '—')"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- ── Cadena QR / info SAT ───────────────────────── -->
+                        <div class="row mt-3">
+                            <div class="col-12 text-center text-muted small">
+                                <p>
+                                    Este documento es una representación impresa de un CFDI
+                                    de Retenciones e Información de Pagos.
+                                    Verifique su autenticidad en <strong>www.sat.gob.mx</strong>.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ── Acción de reporte vinculada a account.payment ──────────────────── -->
+    <record id="action_report_retention_cfdi" model="ir.actions.report">
+        <field name="name">CFDI de Retención</field>
+        <field name="model">account.payment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_mx_edi_retentions_simple.report_retention_cfdi_document</field>
+        <field name="report_file">l10n_mx_edi_retentions_simple.report_retention_cfdi_document</field>
+        <field name="print_report_name">'Retencion_' + (object.name or '').replace('/', '_')</field>
+        <field name="binding_model_id" ref="account.model_account_payment"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

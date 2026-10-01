@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>l10n_mx_edi_retentions_simple — CFDI de Retenciones e Información de Pagos -  Versión Simplificada</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; background-color: #f8f9fa;">
+
+    <!-- ══ CABECERA ══ -->
+    <div style="text-align: center; background: linear-gradient(135deg, #0a3d62 0%, #1a6fa8 100%); color: white; padding: 40px 20px; border-radius: 10px; margin-bottom: 30px;">
+        <div style="width: 70px; height: 70px; background: rgba(255,255,255,0.15); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 15px;">🧾</div>
+        <h1 style="margin: 0 0 10px 0; font-size: 2.2rem; font-weight: 700;">CFDI de Retenciones e Información de Pagos</h1>
+        <p style="margin: 0 0 15px 0; font-size: 1.1rem; opacity: 0.9;">Módulo Odoo 19.0 — Argil Consulting ©</p>
+        <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">Versión 19.0.1.0.0</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">l10n_mx_edi_retentions_simple</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">Migrado de v14 → v19</span>
+        </div>
+    </div>
+
+    <!-- ══ DESCRIPCIÓN ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 15px 0; color: #0a3d62; font-size: 1.5rem; text-align: center;">¿Qué hace este módulo?</h2>
+        <p style="color: #5d6d7e; text-align: center; max-width: 800px; margin: 0 auto 15px auto;">
+            Genera el <strong>CFDI de Retenciones e Información de Pagos v1.0</strong> (SAT México) para pagos
+            a receptores extranjeros. Maneja la firma digital con <strong>SHA-1</strong> (requerida por el
+            esquema v1.0) y el timbrado vía <strong>PAC Finkok</strong> usando el WSDL exclusivo de retenciones.
+        </p>
+        <div style="background: #eaf4fb; border-left: 4px solid #1a6fa8; padding: 15px 20px; border-radius: 4px; max-width: 800px; margin: 0 auto;">
+            <strong style="color: #0a3d62;">Migración v14 → v19:</strong>
+            <span style="color: #5d6d7e;"> Se eliminó la dependencia de <code>account.edi.format</code> (removido en Odoo 17+)
+            y se reescribió sobre <code>l10n_mx_edi.document</code>. La firma ahora usa la librería
+            <code>cryptography</code> en lugar de <code>OpenSSL</code>. Los atributos <code>attrs</code>
+            en las vistas fueron reemplazados por <code>invisible</code> directo.</span>
+        </div>
+    </div>
+
+    <!-- ══ FLUJO PRINCIPAL ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 25px 0; color: #0a3d62; font-size: 1.5rem; text-align: center;">Flujo de Trabajo</h2>
+        <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 10px;">
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #1a6fa8, #0a3d62); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">💰</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">1. Crear Pago</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">Activa "Generar CFDI de Retención" y selecciona el Tipo de Retención</p>
+            </div>
+
+            <div style="font-size: 2rem; color: #0a3d62; flex: 0;">→</div>
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #2980b9, #1a6fa8); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">⚙️</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">2. Confirmar Pago</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">Valida el pago normalmente en Odoo</p>
+            </div>
+
+            <div style="font-size: 2rem; color: #0a3d62; flex: 0;">→</div>
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #8e44ad, #6c3483); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">✍️</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">3. Timbrar Retención</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">Presiona el botón "Timbrar Retención" para generar, sellar y enviar al PAC</p>
+            </div>
+
+            <div style="font-size: 2rem; color: #0a3d62; flex: 0;">→</div>
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #27ae60, #1a6b3c); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">✅</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">4. XML + PDF</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">Descarga el XML timbrado o imprime la representación impresa (PDF)</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ MODELOS ══ -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 20px; margin-bottom: 30px;">
+
+        <!-- retention.type -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; border-top: 4px solid #0a3d62;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #0a3d62, #1a6fa8); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8rem; margin-bottom: 15px;">RT</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">retention.type</h3>
+            <p style="color: #7f8c8d; margin: 0 0 12px 0; font-size: 0.85rem;">Catálogo SAT de tipos de retención (CveRetenc).</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.85rem;">
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>code</strong> — Clave SAT (p.ej. "14")</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>name</strong> — Descripción (p.ej. "Dividendos")</li>
+                <li style="padding: 3px 0;">✓ Constraint <code>unique(code)</code></li>
+            </ul>
+        </div>
+
+        <!-- account.payment (extensión) -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; border-top: 4px solid #2980b9;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #2980b9, #1a6fa8); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8rem; margin-bottom: 15px;">AP</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">account.payment (ext.)</h3>
+            <p style="color: #7f8c8d; margin: 0 0 12px 0; font-size: 0.85rem;">Campos y métodos de retención sobre el pago.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.85rem;">
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>require_retention_cfdi</strong> — Boolean toggle</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>retention_type_id</strong> → retention.type</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>l10n_mx_edi_retention_state</strong> — draft / sent / error</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>l10n_mx_edi_retention_uuid</strong> — Folio SAT</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>l10n_mx_edi_retention_attachment_id</strong> → ir.attachment</li>
+                <li style="padding: 3px 0;">✓ <strong>l10n_mx_edi_retention_error_message</strong> — Texto de error</li>
+            </ul>
+        </div>
+
+        <!-- l10n_mx_edi.document (extensión) -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; border-top: 4px solid #8e44ad;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #8e44ad, #6c3483); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem; margin-bottom: 15px;">DOC</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">l10n_mx_edi.document (ext.)</h3>
+            <p style="color: #7f8c8d; margin: 0 0 12px 0; font-size: 0.85rem;">Lógica de generación, firma y timbrado. Reemplaza <code>account.edi.format</code> de v14.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.85rem;">
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>_retention_cfdi_try_send(payment)</strong> — Orquestador</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>_build_retention_unsigned_xml(vals)</strong> — QWeb render</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>_retention_cadena_original(xml_node)</strong> — XSLT SAT</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>_retention_sign_sha1(cadena, cert)</strong> — SHA-1 con <code>cryptography</code></li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>_retention_sign_using_finkok(xml, co.)</strong> — SOAP PAC</li>
+                <li style="padding: 3px 0;">✓ <strong>_retention_extract_uuid(signed_xml)</strong> — Extrae UUID del TFD</li>
+            </ul>
+        </div>
+
+        <!-- ir.attachment / Reporte -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; border-top: 4px solid #27ae60;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #27ae60, #1a6b3c); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 22px; margin-bottom: 15px;">📄</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">Almacenamiento y Reporte</h3>
+            <p style="color: #7f8c8d; margin: 0 0 12px 0; font-size: 0.85rem;">XML en <code>ir.attachment</code>, PDF independiente.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.85rem;">
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ XML timbrado en <code>ir.attachment</code> ligado al pago</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ Reporte PDF QWeb autónomo (<em>sin depender de plantilla v14</em>)</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ Disponible en menú <em>Imprimir</em> del pago</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ Muestra Emisor, Receptor, Período, Totales, Sellos</li>
+                <li style="padding: 3px 0;">✓ Botón "XML Retención" para descarga directa</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ══ CAMBIOS DE MIGRACIÓN v14 → v19 ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #0a3d62; font-size: 1.5rem; text-align: center;">Cambios de Migración v14 → v19</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+
+            <div style="padding: 20px; background: #fef9e7; border-radius: 8px; border-left: 4px solid #f39c12;">
+                <h4 style="margin: 0 0 10px 0; color: #d68910;">❌ account.edi.format eliminado</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    <code>account.edi.format</code> fue removido en Odoo 17. El archivo
+                    <code>inherit_account_edi_format.py</code> se eliminó y toda su lógica
+                    se reescribió en la extensión de <code>l10n_mx_edi.document</code>.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #fef9e7; border-radius: 8px; border-left: 4px solid #f39c12;">
+                <h4 style="margin: 0 0 10px 0; color: #d68910;">❌ _l10n_mx_edi_decode_cfdi eliminado</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    El método <code>_l10n_mx_edi_decode_cfdi()</code> de <code>account.move</code>
+                    no existe en v19. La decodificación del XML de retención ahora la realiza
+                    <code>account.payment._l10n_mx_edi_decode_retention_xml()</code> directamente.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #fef9e7; border-radius: 8px; border-left: 4px solid #f39c12;">
+                <h4 style="margin: 0 0 10px 0; color: #d68910;">❌ OpenSSL → cryptography</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    <code>inherit_l10n_mx_edi_certificate.py</code> usaba <code>OpenSSL.crypto</code>.
+                    En v19, Odoo ya usa la librería <code>cryptography</code> para todos los certificados.
+                    El método <code>_retention_sign_sha1()</code> usa
+                    <code>hashes.SHA1()</code> + <code>PKCS1v15()</code>.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #fef9e7; border-radius: 8px; border-left: 4px solid #f39c12;">
+                <h4 style="margin: 0 0 10px 0; color: #d68910;">❌ account_internal_type eliminado</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    El campo <code>account_internal_type</code> fue removido. En v19 se usa
+                    <code>account_type</code> con valores como <code>'asset_receivable'</code>
+                    y <code>'liability_payable'</code>.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #1a6b3c;">✅ invisible en lugar de attrs</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    Todos los <code>attrs="{'invisible': [...]}"</code> de las vistas XML fueron
+                    reemplazados por <code>invisible="not require_retention_cfdi"</code> (sintaxis
+                    directa de v17+).
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #1a6b3c;">✅ Reporte PDF autónomo</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    El reporte ya no hereda de <code>l10n_mx_edi.report_payment_document_mx</code>
+                    (cuya estructura cambió en v17+). Ahora es un reporte QWeb independiente que
+                    lee los datos directamente del pago y del XML adjunto.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #1a6b3c;">✅ qweb eliminado del manifest</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    La clave <code>'qweb': []</code> fue removida del <code>__manifest__.py</code>
+                    (ya no existe en v17+). Los templates QWeb para reportes se registran en
+                    <code>'data'</code> con archivos XML normales.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #1a6b3c;">✅ Dependencias simplificadas</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    Se eliminaron <code>sale</code> y <code>account_accountant</code> de las
+                    dependencias. El módulo sólo requiere <code>base</code>, <code>account</code>
+                    y <code>l10n_mx_edi</code>.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ ARCHIVOS DEL MÓDULO ══ -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+            <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #3498db, #2980b9); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-bottom: 12px;">PY</div>
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">models/ (3 archivos Python)</h3>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0;">✓ <code>retention_type.py</code> — Catálogo SAT</li>
+                <li style="padding: 2px 0;">✓ <code>account_payment.py</code> — Campos + acciones + reporte</li>
+                <li style="padding: 2px 0;">✓ <code>l10n_mx_edi_document.py</code> — Firma + PAC</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+            <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #9b59b6, #8e44ad); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-bottom: 12px;">XML</div>
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">data/ y views/</h3>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0;">✓ <code>data/retentions_cfdi.xml</code> — Template QWeb del XML SAT</li>
+                <li style="padding: 2px 0;">✓ <code>views/inherit_account_payment_view.xml</code> — Form + List</li>
+                <li style="padding: 2px 0;">✓ <code>report/retention_cfdi_report.xml</code> — PDF autónomo</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+            <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #e74c3c, #c0392b); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 20px; margin-bottom: 12px;">⚠️</div>
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">SAT/ — XSLT obligatorio</h3>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0;">⚠ <code>SAT/retenciones.xslt</code> — Debes descargarlo del SAT</li>
+                <li style="padding: 2px 0;">✓ Sin él funciona en <strong>entorno de prueba</strong></li>
+                <li style="padding: 2px 0;">✓ En <strong>producción</strong> es obligatorio para cadena original</li>
+                <li style="padding: 2px 0; font-size: 0.78rem; color: #e74c3c;">Ver instrucciones en SAT/LEER_ESTO.txt</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+            <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #7f8c8d, #555); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.7rem; margin-bottom: 12px;">SEC</div>
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">Seguridad</h3>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0;">✓ <code>security/ir.model.access.csv</code></li>
+                <li style="padding: 2px 0;">✓ Lectura: <code>account.group_account_user</code></li>
+                <li style="padding: 2px 0;">✓ CRUD completo: <code>account.group_account_manager</code></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ══ CONFIGURACIÓN PAC ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #0a3d62; font-size: 1.5rem; text-align: center;">Configuración PAC — Finkok Retenciones</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+
+            <div style="padding: 20px; background: #fef9e7; border-radius: 8px; border-left: 4px solid #f39c12;">
+                <h4 style="margin: 0 0 10px 0; color: #d68910;">🧪 Entorno de Prueba</h4>
+                <p style="color: #5d6d7e; margin: 0 0 8px 0; font-size: 0.88rem;"><strong>WSDL:</strong></p>
+                <code style="font-size: 0.78rem; color: #c0392b;">https://demo-facturacion.finkok.com/servicios/soap/retentions.wsdl</code>
+                <p style="color: #5d6d7e; margin: 8px 0 0 0; font-size: 0.88rem;">Usuario: <code>cfdi@vauxoo.com</code> / Contraseña: <code>vAux00__</code></p>
+            </div>
+
+            <div style="padding: 20px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #1a6b3c;">🏭 Producción</h4>
+                <p style="color: #5d6d7e; margin: 0 0 8px 0; font-size: 0.88rem;"><strong>WSDL:</strong></p>
+                <code style="font-size: 0.78rem; color: #c0392b;">https://facturacion.finkok.com/servicios/soap/retentions.wsdl</code>
+                <p style="color: #5d6d7e; margin: 8px 0 0 0; font-size: 0.88rem;">Usa las mismas credenciales configuradas en <em>Contabilidad → Configuración → Ajustes → CFDI</em>.</p>
+            </div>
+
+            <div style="padding: 20px; background: #ebf5fb; border-radius: 8px; border-left: 4px solid #2980b9;">
+                <h4 style="margin: 0 0 10px 0; color: #1a5276;">ℹ️ Nota sobre SHA-1</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    El esquema <strong>Retenciones v1.0</strong> del SAT requiere firma SHA-1.
+                    Si en el futuro migras al esquema <strong>v2.0</strong>, cambia
+                    <code>hashes.SHA1()</code> por <code>hashes.SHA256()</code>
+                    en <code>_retention_sign_sha1()</code> del modelo
+                    <code>l10n_mx_edi.document</code>.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ BOTONES EN EL FORMULARIO ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #0a3d62; font-size: 1.5rem; text-align: center;">Controles en el Formulario de Pago</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+
+            <div style="text-align: center; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
+                <div style="font-size: 2rem;">🔘</div>
+                <strong style="color: #2c3e50;">Generar CFDI de Retención</strong>
+                <p style="color: #7f8c8d; font-size: 0.82rem; margin: 5px 0 0 0;">Boolean toggle que habilita todos los campos y botones del flujo de retención.</p>
+            </div>
+
+            <div style="text-align: center; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
+                <div style="font-size: 2rem;">📤</div>
+                <strong style="color: #2c3e50;">Timbrar Retención</strong>
+                <p style="color: #7f8c8d; font-size: 0.82rem; margin: 5px 0 0 0;">Visible en estado <em>draft</em> o <em>error</em>. Genera XML, firma SHA-1 y envía al PAC.</p>
+            </div>
+
+            <div style="text-align: center; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
+                <div style="font-size: 2rem;">🖨️</div>
+                <strong style="color: #2c3e50;">PDF Retención</strong>
+                <p style="color: #7f8c8d; font-size: 0.82rem; margin: 5px 0 0 0;">Visible sólo cuando el CFDI está timbrado (<em>sent</em>). Abre el reporte PDF.</p>
+            </div>
+
+            <div style="text-align: center; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
+                <div style="font-size: 2rem;">⬇️</div>
+                <strong style="color: #2c3e50;">XML Retención</strong>
+                <p style="color: #7f8c8d; font-size: 0.82rem; margin: 5px 0 0 0;">Descarga directa del XML timbrado (<code>ir.attachment</code>). Disponible al timbrar.</p>
+            </div>
+
+            <div style="text-align: center; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
+                <div style="font-size: 2rem;">🔄</div>
+                <strong style="color: #2c3e50;">Reintentar</strong>
+                <p style="color: #7f8c8d; font-size: 0.82rem; margin: 5px 0 0 0;">Visible sólo en estado <em>error</em>. Restablece a <em>draft</em> para un nuevo intento.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ NOTAS DE IMPLEMENTACIÓN ══ -->
+    <div style="background: #fff8f0; padding: 25px; border-radius: 10px; margin-bottom: 30px; border-left: 5px solid #e67e22; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <h3 style="margin: 0 0 15px 0; color: #d35400; font-size: 1.2rem;">⚠️ Notas importantes de implementación</h3>
+
+        <p style="color: #5d6d7e; margin: 0 0 12px 0;">
+            <strong>1. XSLT del SAT (obligatorio en producción):</strong> Descarga el archivo
+            <code>retenciones.xslt</code> del portal SAT y colócalo en
+            <code>l10n_mx_edi_retentions_simple/SAT/retenciones.xslt</code> antes de instalar en producción.
+            Sin él, en prueba funciona con cadena vacía pero en producción el PAC rechazará el sello.
+        </p>
+
+        <p style="color: #5d6d7e; margin: 0 0 12px 0;">
+            <strong>2. Método _get_pem_key del certificado:</strong> Si al firmar obtienes
+            <code>AttributeError</code>, verifica el nombre exacto del método de descifrado
+            de llave en tu versión de <code>l10n_mx_edi.certificate</code>. En v17+ es
+            <code>_get_pem_key(key, password)</code>; en versiones intermedias puede variar.
+        </p>
+
+        <p style="color: #5d6d7e; margin: 0 0 12px 0;">
+            <strong>3. Montos de retención:</strong> El método
+            <code>_l10n_mx_edi_get_retention_cfdi_values()</code> usa <code>move.amount_untaxed</code>
+            como base y <code>move.amount_tax</code> como monto retenido. Ajusta esta lógica
+            si tu caso de uso requiere un cálculo diferente (p.ej. retención parcial, múltiples impuestos).
+        </p>
+
+        <p style="color: #5d6d7e; margin: 0 0 12px 0;">
+            <strong>4. Receptor extranjero:</strong> El template actual genera siempre
+            <code>Nacionalidad="Extranjero"</code>. Si necesitas soportar receptores nacionales,
+            modifica el template <code>data/retentions_cfdi.xml</code> para usar el nodo
+            <code>&lt;retenciones:Nacional&gt;</code> en lugar de <code>&lt;retenciones:Extranjero&gt;</code>.
+        </p>
+
+        <p style="color: #5d6d7e; margin: 0;">
+            <strong>5. Cancelación:</strong> Esta versión no implementa la cancelación del CFDI
+            de Retención ante el SAT. Para cancelar, usa directamente el portal del PAC Finkok
+            con el UUID obtenido. Una futura versión puede añadir este flujo.
+        </p>
+    </div>
+
+    <!-- ══ RESUMEN ══ -->
+    <div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #0a3d62; font-size: 1.4rem;">Resumen del Módulo</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
+            <div><div style="font-size: 2rem; font-weight: 700; color: #0a3d62;">3</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Modelos Python</p></div>
+            <div><div style="font-size: 2rem; font-weight: 700; color: #2980b9;">4</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Archivos XML (data + views + report)</p></div>
+            <div><div style="font-size: 2rem;">🔑</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">SHA-1 con librería <code>cryptography</code></p></div>
+            <div><div style="font-size: 2rem;">🌐</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">SOAP Finkok WSDL de Retenciones</p></div>
+            <div><div style="font-size: 2rem;">📦</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">XML almacenado en ir.attachment</p></div>
+            <div><div style="font-size: 2rem;">🚫</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Sin account.edi.format (removido en v17)</p></div>
+        </div>
+    </div>
+
+    <!-- ══ FOOTER ══ -->
+    <div style="text-align: center; padding: 25px; background: #0a3d62; color: white; border-radius: 10px; margin-top: 10px;">
+        <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 8px;">l10n_mx_edi_retentions_simple — CFDI de Retenciones e Información de Pagos</div>
+        <div style="font-size: 0.9rem; opacity: 0.85;">
+            Versión 19.0.1.0.0 | Argil Consulting © | Migración v14 → v19<br>
+            Compatible con Odoo 19 Community / Enterprise | Python 3.10+ | PAC: Finkok
+        </div>
+    </div>
+
+</body>
+</html>

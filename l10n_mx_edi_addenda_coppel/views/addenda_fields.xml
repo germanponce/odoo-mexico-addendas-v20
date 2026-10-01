@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="addenda_company_fields_form">
+		    <field name="name">addenda_company_fields_form</field>
+		    <field name="model">res.company</field>
+		    <field name="inherit_id" ref="l10n_mx_edi_addendas_base.res_company_addendas_extra_base"/>
+		    <field name="arch" type="xml">
+		        <xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+	        		<group name="coppel" string="Addenda Coppel">
+	        			<group>
+	        				<field name="x_supplier_id"/>
+	        			</group>
+	        			<group>
+	        				<field name="x_supplier_type"/>
+	        				<field name="x_gln"/>
+	        			</group>
+	        		</group>
+		        </xpath>
+		    </field>
+		</record>
+		
+		<record model="ir.ui.view" id="addenda_product_fields_form">
+		    <field name="name">addenda_product_fields_form</field>
+		    <field name="model">product.template</field>
+		    <field name="inherit_id" ref="l10n_mx_edi_addendas_base.product_template_only_form_addendas_extra_base"/>
+		    <field name="arch" type="xml">
+		    	<xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+	        		<group name="coppel" string="Addenda Coppel">
+	        			<group>
+	        				<field name="x_gtin" />
+				        	<!-- <field name="x_code"/> -->
+							<!-- <field name="x_size"/> -->
+	        			</group>
+	        			<group>
+							<field name="x_model"/>
+	        			</group>
+	        		</group>
+		        </xpath>
+		    </field>
+		</record>
+
+		<!-- <record model="ir.ui.view" id="addenda_product_variant_fields_form">
+		    <field name="name">addenda_product_variant_fields_form</field>
+		    <field name="model">product.product</field>
+		    <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+		    <field name="arch" type="xml">
+		        <field name="default_code" position="after">
+		        	<field name="x_code"/>
+					<field name="x_size"/>
+					<field name="x_model"/>
+		        </field>
+		    </field>
+		</record>
+
+		<record model="ir.ui.view" id="addenda_product_product_fields_form">
+		    <field name="name">addenda_product_product_fields_form</field>
+		    <field name="model">product.product</field>
+		    <field name="inherit_id" ref="product.product_normal_form_view"/>
+		    <field name="arch" type="xml">
+		        <field name="default_code" position="after">
+		        	<separator string="Addenda Coppel" />
+		        	<field name="x_code"/>
+					<field name="x_size"/>
+					<field name="x_model"/>
+		        </field>
+		    </field>
+		</record> -->
+
+		<record model="ir.ui.view" id="addenda_sale_fields_form">
+		    <field name="name">addenda_sale_fields_form</field>
+		    <field name="model">sale.order</field>
+		    <field name="inherit_id" ref="l10n_mx_edi_addendas_base.sale_order_addendas_extra_base"/>
+		    <field name="arch" type="xml">
+		    	<xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+		    		<group name="coppel" string="Addenda Coppel" 
+		    			invisible="addenda_type != 'coppel'" >
+	        			<group>
+							<field name="x_reference_date"/>
+	        			</group>
+	        			<group>
+							<field name="x_fecha_promesa_ent"/>
+	        			</group>
+	        		</group>
+	        		<group invisible="addenda_type != 'coppel'">
+	        			<group>
+				        	<field name="x_order_no"/>
+							<field name="x_name_warehouse"/>
+							<field name="x_warehouse_code"/>
+	        			</group>
+	        			<group>
+							<field name="x_street_warehouse"/>
+							<field name="x_city_warehouse" />
+							<field name="x_zip_warehouse" />
+	        			</group>
+	        		</group>
+	        		<group invisible="addenda_type != 'coppel'">
+						<field name="x_qty_lote"/>
+	        			<field name="x_gln"/>
+	        		</group>
+	        		<group invisible="addenda_type != 'coppel'">
+	        			<group>
+	        				<field name="x_bodega_destino" />
+	        				<field name="x_flete_partner_id" options="{'no_create': True, 'no_create_edit': True}"/>
+	        			</group>
+	        			<group>
+	        				<field name="x_bodega_receptora" />
+	        			</group>
+	        		</group>
+		        </xpath>
+		    </field>
+		</record>
+
+		<record model="ir.ui.view" id="addenda_sale_order_line_fields_form">
+		    <field name="name">addenda_sale_fields_form</field>
+		    <field name="model">sale.order</field>
+		    <field name="inherit_id" ref="sale.view_order_form"/>
+		    <field name="arch" type="xml">
+		        <xpath expr="//field[@name='order_line']//list/field[@name='qty_invoiced']" position="after">
+		        	<field name="addenda_type" invisible="1"/>
+		        	<field name="x_qty" invisible="addenda_type != 'coppel'"/>
+		        	<field name="x_quantity" invisible="addenda_type != 'coppel'"/>
+		        </xpath>
+		    </field>
+		</record>
+
+		<record model="ir.ui.view" id="addenda_invoice_fields_form">
+		    <field name="name">addenda_invoice_fields_form</field>
+		    <field name="model">account.move</field>
+		    <field name="inherit_id" ref="l10n_mx_edi_addendas_base.account_move_addendas_extra_base"/>
+		    <field name="arch" type="xml">
+		    	<xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+		    		<group name="coppel" string="Addenda Coppel" invisible="addenda_type != 'coppel'">
+	        			<group>
+							<field name="x_reference_date"/>
+	        			</group>
+	        			<group>
+							<field name="x_fecha_promesa_ent"/>
+	        			</group>
+	        		</group>
+	        		<group invisible="addenda_type != 'coppel'">
+	        			<group>
+				        	<field name="x_order_no"/>
+							<field name="x_name_warehouse"/>
+							<field name="x_warehouse_code"/>
+	        			</group>
+	        			<group>
+							<field name="x_street_warehouse"/>
+							<field name="x_city_warehouse" />
+							<field name="x_zip_warehouse" />
+	        			</group>
+	        		</group>
+	        		<group invisible="addenda_type != 'coppel'">
+						<field name="x_qty_lote"/>
+	        			<field name="x_gln"/>
+	        		</group>
+	        		<group invisible="addenda_type != 'coppel'">
+	        			<group>
+	        				<field name="x_bodega_destino" />
+	        				<field name="x_flete_partner_id" options="{'no_create': True, 'no_create_edit': True}"/>
+	        			</group>
+	        			<group>
+	        				<field name="x_bodega_receptora" />
+	        			</group>
+	        		</group>
+		        </xpath>
+		    </field>
+		</record>
+
+		<!-- <record model="ir.ui.view" id="addenda_picking_fields_form">
+		    <field name="name">addenda_picking_fields_form</field>
+		    <field name="model">stock.picking</field>
+		    <field name="inherit_id" ref="l10n_mx_edi_addendas_base.stock_picking_addendas_extra_base"/>
+		    <field name="arch" type="xml">
+		    	<xpath expr="//page[@name='addendas_extra_fits']" position="inside">
+	        		<group name="coppel" string="Addenda Coppel" invisible="addenda_type != 'coppel'">
+	        			<group>
+				        	<field name="x_qty_lote"/>
+	        			</group>
+	        			<group>
+	        			</group>
+	        		</group>
+		        </xpath>
+		    </field>
+		</record> -->
+
+	</data>
+</odoo>

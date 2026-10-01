@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="menu_root_action" model="ir.actions.act_window">
+        <field name="name">CFDIs</field>
+        <field name="res_model">l10n_mx.cfdi.document</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_cfdi_compliance_root" name="CFDI Compliance" sequence="55" web_icon="l10n_mx_cfdi_compliance,static/description/icon.png"/>
+
+    <menuitem id="menu_cfdi_documents" parent="menu_cfdi_compliance_root" name="CFDIs" action="action_cfdi_documents" sequence="10"/>
+
+    <menuitem id="menu_cfdi_import" parent="menu_cfdi_compliance_root" name="Importar XMLs" action="action_cfdi_import_wizard" sequence="20"/>
+
+    <menuitem id="menu_cfdi_results" parent="menu_cfdi_compliance_root" name="Resultados de Reglas" action="action_compliance_results" sequence="30"/>
+
+    <menuitem id="menu_cfdi_audit" parent="menu_cfdi_compliance_root" name="Bitacora de Auditoria" action="action_audit_log" sequence="40"
+              groups="group_cfdi_compliance_auditor,group_cfdi_compliance_manager"/>
+
+    <menuitem id="menu_cfdi_pipeline_queue" parent="menu_cfdi_compliance_root"
+              name="Pipeline Queue" action="action_cfdi_pipeline_job" sequence="50"
+              groups="group_cfdi_compliance_manager"/>
+
+    <menuitem id="menu_cfdi_config" parent="menu_cfdi_compliance_root" name="Configuracion" sequence="90"
+              groups="group_cfdi_compliance_manager"/>
+    <menuitem id="menu_cfdi_profiles" parent="menu_cfdi_config" name="Perfiles de Compliance" action="action_compliance_profiles" sequence="10"/>
+    <menuitem id="menu_cfdi_rules" parent="menu_cfdi_config" name="Catalogo de Reglas" action="action_compliance_rules" sequence="20"/>
+    <menuitem id="menu_cfdi_coordinados" parent="menu_cfdi_config" name="Relaciones Coordinados" action="action_coordinado_relations" sequence="30"/>
+
+</odoo>

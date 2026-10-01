@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="l10n_mx_edi_addenda_amece" model="l10n_mx_edi.addenda">
+            <field name="name">AMECE 7.1</field>
+            <field name="arch" type="xml">
+                <t t-xml-node="addenda">
+                    <t t-set="sumary" t-value="record.getAddendaSumary()" />
+                    <t t-set="sale_model" t-value="'sale_line_ids' in record.invoice_line_ids._fields"/>
+                    <t t-set="sale_id" t-value="record.mapped('invoice_line_ids.sale_line_ids.order_id') if sale_model else False"/>
+                    <t t-set="pickings" t-value="sale_id.picking_ids.filtered(lambda x: x.state == 'done' and x.date_done)" />
+                    <requestForPayment
+                        type="SimpleInvoiceType"
+                        contentVersion="1.3.1"
+                        documentStructureVersion="AMC7.1"
+                        documentStatus="ORIGINAL"
+                        t-att-DeliveryDate="str(pickings[0].date_done)[0:10] if pickings else str(record.invoice_date)[0:10]">
+                        <requestForPaymentIdentification>
+                            <entityType t-out="'INVOICE' if record.move_type == 'out_invoice' else 'CREDIT_NOTE'"></entityType>
+                            <uniqueCreatorIdentification t-out="record.name.replace('/','').replace('_','')"></uniqueCreatorIdentification>
+                        </requestForPaymentIdentification>
+                        <specialInstruction code="ZZZ">
+                            <text t-out="record._l10n_mx_edi_cfdi_amount_to_text()"></text>
+                        </specialInstruction>
+                        <orderIdentification>
+                            <t t-if="record.l10n_mx_edi_amece_referenceidentification"><referenceIdentification type="ON"><t t-out="record.l10n_mx_edi_amece_referenceidentification"/></referenceIdentification></t>
+                            <t t-if="record.l10n_mx_edi_amece_referencedate"><ReferenceDate><t t-out="record.l10n_mx_edi_amece_referencedate"/></ReferenceDate></t>
+                        </orderIdentification>
+                        <t t-if="record.l10n_mx_edi_amece_additionalinformation"><AdditionalInformation>
+                            <referenceIdentification type="ATZ"><t t-out="record.l10n_mx_edi_amece_additionalinformation" /></referenceIdentification>
+                        </AdditionalInformation></t>
+                        <buyer>
+                            <gln><t t-out="record.partner_id.l10n_mx_edi_amece_gln" /></gln>
+                            <t t-if="record.l10n_mx_edi_amece_personordepartmentname"><contactInformation>
+                                <personOrDepartmentName>
+                                    <text><t t-out="record.l10n_mx_edi_amece_personordepartmentname" /></text>
+                                </personOrDepartmentName>
+                            </contactInformation></t>
+                        </buyer>
+                        <seller>
+                            <gln><t t-out="record.get_l10n_mx_edi_amece_gln()" /></gln>
+                            <alternatePartyIdentification type="SELLER_ASSIGNED_IDENTIFIER_FOR_A_PARTY"><t t-out="record.get_l10n_mx_edi_amece_alternateid()" /></alternatePartyIdentification>
+                        </seller>
+                        <t t-if="record.l10n_mx_edi_amece_shipto_id">
+                            <shipTo>
+                                <t t-if="record.l10n_mx_edi_amece_shipto_id"><gln><t t-out="record.l10n_mx_edi_amece_shipto_id.l10n_mx_edi_amece_gln"/></gln>
+                                <nameAndAddress>
+                                    <name><t t-out="record.l10n_mx_edi_amece_shipto_id.name" /></name>
+                                    <streetAddressOne><t t-out="record.getshipTostreetAddressOne(record.l10n_mx_edi_amece_shipto_id)" /></streetAddressOne>
+                                    <city><t t-out="record.l10n_mx_edi_amece_shipto_id.l10n_mx_edi_locality or record.l10n_mx_edi_amece_shipto_id.city_id.name" /></city>
+                                    <postalCode><t t-out="record.l10n_mx_edi_amece_shipto_id.zip" /></postalCode>
+                                </nameAndAddress></t>
+                            </shipTo>
+                        </t>
+                        <currency t-att-currencyISOCode="record.currency_id.name">
+                            <currencyFunction>BILLING_CURRENCY</currencyFunction>
+                            <rateOfChange>1</rateOfChange>
+                        </currency>
+                        <t t-set="indx" t-value="1"/>
+                        <t t-foreach="record.invoice_line_ids.filtered(lambda inv: not inv.display_type)" t-as="line">
+                            <t t-set="grossPrice" t-value="line.getGrossPrice()"/>
+                            <lineItem type="SimpleInvoiceLineItemType" t-att-number="indx">
+                                <tradeItemIdentification>
+                                    <gtin><t t-out="line.get_x_gtin_amece()" /></gtin>
+                                </tradeItemIdentification>
+                                <alternateTradeItemIdentification type="BUYER_ASSIGNED"><t t-out="line.product_id.default_code" /></alternateTradeItemIdentification>
+                                <tradeItemDescriptionInformation language="ES">
+                                    <longText><t t-out="line.name[:35]" /></longText>
+                                </tradeItemDescriptionInformation>
+                                <invoicedQuantity t-att-unitOfMeasure="(line.product_uom_id.name or '').replace('(', '').replace(')', '').replace('/', '')"><t t-out="line.quantity" /></invoicedQuantity>
+                                <grossPrice>
+                                    <Amount><t t-out="grossPrice" /></Amount>
+                                </grossPrice>
+                                <netPrice>
+                                    <Amount><t t-out="grossPrice" /></Amount>
+                                </netPrice>
+                                <t t-foreach="line.get_taxes_line_info()" t-as="tax">
+                                    <tradeItemTaxInformation>
+                                        <taxTypeDescription><t t-out="tax.get('tax_name','')" /></taxTypeDescription>
+                                        <tradeItemTaxAmount>
+                                        <taxPercentage><t t-out="'{0:0.2f}'.format(tax.get('tax_amount', 0.0))" /></taxPercentage>
+                                        <taxAmount><t t-out="'{0:0.2f}'.format(tax.get('total', 0.0))" /></taxAmount>
+                                        </tradeItemTaxAmount>
+                                        <taxCategory>TRANSFERIDO</taxCategory>
+                                    </tradeItemTaxInformation>
+                                </t>
+                                <totalLineAmount>
+                                    <grossAmount>
+                                        <Amount><t t-out="grossPrice * line.quantity" /></Amount>
+                                    </grossAmount>
+                                    <netAmount>
+                                        <Amount><t t-out="grossPrice * line.quantity" /></Amount>
+                                    </netAmount>
+                                </totalLineAmount>
+                            </lineItem>
+                            <t t-set="indx" t-value="indx + 1"/>
+                        </t>
+                        <totalAmount>
+                            <Amount><t t-out="sumary.get('baseAmount')" /></Amount>
+                        </totalAmount>
+                        <TotalAllowanceCharge allowanceOrChargeType="ALLOWANCE">
+                            <t t-if="sumary.get('descuento')"><Amount><t t-out="sumary.get('descuento', 0.0)" /></Amount></t>
+                            <t t-if="not sumary.get('descuento')"><Amount>0.0</Amount></t>
+                        </TotalAllowanceCharge>
+                        <baseAmount>
+                            <Amount><t t-out="sumary.get('baseAmount')" /></Amount>
+                        </baseAmount>
+                        <tax type="VAT">
+                            <taxPercentage>16.00</taxPercentage>
+                            <taxAmount><t t-out="sumary.get('taxAmount')" /></taxAmount>
+                            <taxCategory>TRANSFERIDO</taxCategory>
+                        </tax>
+                        <payableAmount>
+                            <Amount><t t-out="sumary.get('totalAmount')" /></Amount>
+                        </payableAmount>
+                    </requestForPayment>
+                </t>
+            </field>
+        </record>
+
+    </data>
+</odoo>

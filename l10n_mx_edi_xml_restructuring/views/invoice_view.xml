@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Herencia de Objetos y Formularios -->
+
+        <record id="l10n_mx_edi_reestructure_invoice_easy_form" model="ir.ui.view">
+            <field name="name">l10n_mx_edi_reestructure_product_product_easy_form.form.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//field[@name='ref']" position="after">
+                    <field name="payment_conditions" readonly="state != 'draft'"/>
+                 </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

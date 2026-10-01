@@ -1,0 +1,120 @@
+/* ═══════════════════════════════════════════
+   Partner Contacts Organized - Styles
+   ═══════════════════════════════════════════ */
+
+/* ── Botones de acción ── */
+.o_partner_contacts_actions .btn {
+    font-weight: 600;
+    padding: 7px 18px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+}
+
+/* ── Encabezados de sección ── */
+.o_partner_section h4 {
+    font-size: 1rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+/* ── Border-bottom coloreado por sección ── */
+.o_partner_section_contact .border-bottom {
+    border-bottom-width: 2px !important;
+    border-color: #0d6efd !important;
+}
+.o_partner_section_delivery .border-bottom {
+    border-bottom-width: 2px !important;
+    border-color: #198754 !important;
+}
+.o_partner_section_invoice .border-bottom {
+    border-bottom-width: 2px !important;
+    border-color: #e67e00 !important;
+}
+
+/* ── Kanban grid ── */
+.o_partner_section .o_kanban_renderer {
+    gap: 10px;
+}
+
+/* ── Cards base ── */
+.o_partner_section .o_kanban_record {
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    overflow: hidden;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.o_partner_section .o_kanban_record:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+/* ── Borde lateral por tipo ── */
+.o_partner_section_contact .o_kanban_record {
+    border-left: 3px solid #0d6efd;
+}
+.o_partner_section_delivery .o_kanban_record {
+    border-left: 3px solid #198754;
+}
+.o_partner_section_invoice .o_kanban_record {
+    border-left: 3px solid #e67e00;
+}
+
+/* ══════════════════════════════════════════
+   Ocultar ghost records (placeholders vacíos)
+   ══════════════════════════════════════════ */
+.o_partner_section .o_kanban_ghost {
+    display: none !important;
+}
+
+/* ══════════════════════════════════════════
+   Aside: sin fondo, solo ícono centrado
+   ══════════════════════════════════════════ */
+.o_partner_section .o_kanban_record .card {
+    align-items: stretch !important;
+}
+
+.o_partner_section .o_kanban_record .o_kanban_aside_full {
+    position: relative !important;
+    align-self: stretch !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+}
+
+/* Quitar fondo del div contenedor del ícono */
+.o_partner_section .o_kanban_record .o_kanban_aside_full > div {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Avatar imagen en contactos */
+.o_partner_section_contact .o_kanban_record .o_kanban_aside_full img {
+    object-fit: cover !important;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+/* ══════════════════════════════════════════ */
+
+/* ── Badge de contador ── */
+.o_partner_section .badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* ── Empty state ── */
+.o_partner_section .o_nocontent_help {
+    padding: 20px;
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_cfdi_override_wizard_form" model="ir.ui.view">
+        <field name="name">cfdi.override.wizard.form</field>
+        <field name="model">l10n_mx.cfdi.override.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Autorizar Override CFDI">
+                <sheet>
+                    <group>
+                        <field name="document_id" readonly="1"/>
+                    </group>
+                    <separator string="Reglas a sobrescribir"/>
+                    <field name="result_ids">
+                        <list>
+                            <field name="rule_code"/>
+                            <field name="rule_name"/>
+                            <field name="severity"/>
+                            <field name="message"/>
+                        </list>
+                    </field>
+                    <separator string="Justificacion"/>
+                    <group>
+                        <field name="reason" placeholder="Mínimo 30 caracteres. Razón comercial / fiscal..." nolabel="1"/>
+                        <field name="confirm_understanding"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_apply" type="object" string="Aplicar Override" class="btn-danger"/>
+                    <button special="cancel" string="Cancelar"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

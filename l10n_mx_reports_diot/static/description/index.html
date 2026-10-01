@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>MX Reports DIOT (2025)</title>
+</head>
+<body>
+  <h1>MX Reports DIOT (2025)</h1>
+  <p>
+    This module extends the DIOT (Declaración Informativa de Operaciones con Terceros) report functionality in Odoo for Mexican taxpayers. It adds new fields for the 2025 version and ensures the <code>.txt</code> file complies with the SAT requirements for DIOT submissions. This includes handling special cases for border zones (8% tax), identifying supplier types (national, foreign, global), and validating partner data (RFC, state, etc.).
+  </p>
+
+<h2>VIDEO</h2>
+    <p>
+    <a href="https://www.youtube.com/watch?v=6xUGfZNuxfc">
+        <img src="https://img.youtube.com/vi/6xUGfZNuxfc/maxresdefault.jpg" alt="Video demo DIOT 2025" style="width:600pt;">
+    </a>
+    </p>
+
+  <h2>Usage</h2>
+  <ol>
+    <li>
+      <strong>Configure your partners</strong> with the appropriate tax information, including:
+      <ul>
+        <li>RFC (Registro Federal de Contribuyentes).</li>
+        <li>Address (especially the state if they apply to border regions).</li>
+        <li>Type of operation and type of third party (national, foreign, global).</li>
+      </ul>
+    </li>
+    <li>
+      <strong>Set up the correct tax rates</strong>:
+      <ul>
+        <li>
+          For 8% or 16% (including import taxes at 16%), ensure you assign the proper tax tags in the tax configuration, particularly for the "Distribution for Refunds" section. The label should include the <code>"RDA"</code> suffix, for example: <code>+DIOT: 16% RDA</code>.
+        </li>
+        <li>
+          This step ensures Odoo correctly identifies refunds or partial credits when generating the DIOT report.
+        </li>
+      </ul>
+      <p>
+        <img src="tax_configuration_example.png" alt="Tax Configuration Example" style="width:600pt;">
+      </p>
+    </li>
+    <li>
+      <strong>Regenerate tax tags if you already have existing data</strong>:
+      <ul>
+        <li>
+          Install the <a href="https://github.com/odoo/odoo/tree/17.0/addons/account_update_tax_tags">account_update_tax_tags</a> module.
+        </li>
+        <li>
+          Access <strong>Accounting &gt; Configuration &gt; Settings</strong> and run the <strong>Update tax tags on existing Journal Entries</strong> for the period(s) you need to report. This will update existing cash basis entries with the correct tags.
+        </li>
+      </ul>
+      <p>
+        <img src="regenerate_cash_basis_tags.png" alt="Update tax tags on existing Journal Entries" style="width:600pt;">
+      </p>
+    </li>
+    <li>
+      <strong>Generate the DIOT file</strong>:
+      <ul>
+        <li>
+          From the <strong>Accounting</strong> menu (or the corresponding DIOT menu), generate the <code>.txt</code> file in UTF-8 encoding following SAT requirements.
+        </li>
+      </ul>
+      <p>
+        <img src="diot_generation.png" alt="Diot Generation" style="width:600pt;">
+      </p>
+    </li>
+    <li>
+      <strong>Validate or upload</strong> the <code>.txt</code> file:
+      <ul>
+        <li>
+          Use the SAT's DIOT tool or portal to ensure your operations are correctly reported before final submission.
+        </li>
+      </ul>
+    </li>
+  </ol>
+
+  <h2>Notes</h2>
+  <ul>
+    <li>
+      For border zones with 8% tax, a warning is displayed if the partner's state (address) is not correctly set.
+    </li>
+    <li>
+      The updated structure for the DIOT 2025 requires careful assignment of tax tags (including the RDA suffix for refunds) to match the SAT's new reporting fields.
+    </li>
+  </ul>
+
+  <h2>Credits</h2>
+  <h3>Contributors</h3>
+  <ul>
+    <li>Luis Torres &lt;luis_t@vauxoo.com&gt; (Planner/Developer)</li>
+  </ul>
+
+  <h2>Maintainer</h2>
+  <p>
+    This module is maintained by <strong>Vauxoo</strong>.
+  </p>
+  <p>
+    A Latin American company that provides training, coaching, development, and implementation of enterprise management systems. It bases its entire operational strategy on the use of Open Source Software, focusing primarily on Odoo.
+  </p>
+  <p>
+    <img src="https://s3.amazonaws.com/s3.vauxoo.com/description_logo.png" alt="Company Logo" style="width:600px;">
+  </p>
+</body>
+</html>

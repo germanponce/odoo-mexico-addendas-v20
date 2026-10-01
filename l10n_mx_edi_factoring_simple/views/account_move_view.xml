@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Migración v17 → v19:
+    - Eliminado el primer xpath que sobreescribía el context del botón
+      'account_invoice_payment_btn': en v19 el wizard recibe las facturas
+      automáticamente desde el context, ese override ya no es necesario.
+    - readonly="payment_state == 'paid'" se mantiene (expresión directa v19).
+    - El campo states={"posted": [("readonly", False)]} se eliminó del modelo;
+      el readonly/invisible se controla aquí en la vista.
+-->
+<odoo>
+    <record id="invoice_form" model="ir.ui.view">
+        <field name="name">l10n_mx_edi_factoring_simple.invoice.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='l10n_mx_edi_payment_method_id']" position="before">
+                <field
+                    name="l10n_mx_edi_factoring_id"
+                    options="{'no_create': True}"
+                    invisible="state != 'posted' or move_type != 'out_invoice'"
+                    readonly="payment_state == 'paid'"
+                    domain="[('id', '!=', partner_id), ('l10n_mx_edi_factoring', '=', True)]"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

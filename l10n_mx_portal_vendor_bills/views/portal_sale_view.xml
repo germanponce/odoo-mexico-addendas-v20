@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Desactivar la vista de ventas en el portal (solo mostrar compras) -->
+    <record id="sale.portal_my_home_sale" model="ir.ui.view">
+        <field name="active">False</field>
+    </record>
+</odoo>

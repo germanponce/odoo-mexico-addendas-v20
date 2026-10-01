@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--
+            Template QWeb para generar el XML de Retenciones e Información de Pagos v1.0.
+            Esquema SAT: http://www.sat.gob.mx/esquemas/retencionpago/1/retencionpagov1.xsd
+
+            Variables requeridas (desde _l10n_mx_edi_get_retention_cfdi_values):
+              certificate_number  — número de serie del certificado
+              certificate_key     — certificado en base64 (DER)
+              cfdi_payment_date   — fecha de expedición (ISO 8601 con offset)
+              retention_code      — CveRetenc (catálogo SAT)
+              supplier            — res.partner de la empresa (Emisor)
+              customer            — res.partner del receptor (Extranjero)
+              year                — ejercicio fiscal (int)
+              amount_untaxed      — base gravable formateada '%.2f'
+              amount_tax          — monto retenido formateado '%.2f'
+              amount_total        — total formateado '%.2f'
+        -->
+        <template id="retentions_cfdi">
+            <retenciones:Retenciones
+                xsi:schemaLocation="http://www.sat.gob.mx/esquemas/retencionpago/2 http://www.sat.gob.mx/esquemas/retencionpago/2/retencionpagov2.xsd http://www.sat.gob.mx/esquemas/retencionpago/1/pagosaextranjeros http://www.sat.gob.mx/esquemas/retencionpago/1/pagosaextranjeros/pagosaextranjeros.xsd"
+                xmlns:pagosaextranjeros="http://www.sat.gob.mx/esquemas/retencionpago/1/pagosaextranjeros"
+                xmlns:retenciones="http://www.sat.gob.mx/esquemas/retencionpago/2"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                Version="2.0"
+                Sello=""
+                t-att-LugarExpRetenc="customer.zip"
+                t-att-NoCertificado="certificate_number"
+                t-att-Certificado="certificate_key"
+                t-att-FechaExp="cfdi_payment_date[0:19]"
+                t-att-CveRetenc="retention_code">
+
+                <!-- Emisor: empresa que realiza la retención -->
+                <retenciones:Emisor
+                    t-att-RfcE="supplier.vat"
+                    t-att-NomDenRazSocE="supplier.name" 
+                    RegimenFiscalE="601"/>
+
+                <!-- Receptor: contribuyente extranjero -->
+                <retenciones:Receptor NacionalidadR="Extranjero">
+                    <retenciones:Extranjero
+                        t-att-NomDenRazSocR="customer.name"/>
+                </retenciones:Receptor>
+
+                <!-- Período fiscal: todo el ejercicio (ajustar si es parcial) -->
+                <retenciones:Periodo
+                    MesIni="01"
+                    MesFin="12"
+                    t-att-Ejercicio="year"/>
+
+                <!-- Totales -->
+                <retenciones:Totales
+                    t-att-MontoTotOperacion="amount_untaxed"
+                    t-att-MontoTotGrav="amount_untaxed"
+                    MontoTotExent="0.0"
+                    t-att-MontoTotRet="amount_tax">
+                    <!--
+                        ImpRetenidos: ajusta el Impuesto según el tipo de retención:
+                          01 = ISR, 02 = IVA, 03 = IEPS
+                    -->
+                    <retenciones:ImpRetenidos
+                        t-att-BaseRet="amount_untaxed"
+                        ImpuestoRet="001"
+                        t-att-MontoRet="amount_tax"
+                        TipoPagoRet="03"/>
+                </retenciones:Totales>
+
+                <retenciones:Complemento>
+                    <pagosaextranjeros:Pagosaextranjeros Version="1.0" EsBenefEfectDelCobro="NO">
+                      <pagosaextranjeros:NoBeneficiario PaisDeResidParaEfecFisc="US" DescripcionConcepto="Artistas, deportistas y espectáculos públicos" ConceptoPago="1" />
+                    </pagosaextranjeros:Pagosaextranjeros>
+                </retenciones:Complemento>
+
+            </retenciones:Retenciones>
+        </template>
+    </data>
+</odoo>

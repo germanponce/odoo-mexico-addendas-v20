@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!-- INHERIT view_partner_form -->
+        <record id="view_partner_form" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+               <xpath expr="//notebook" position="inside">
+                     <page name="info_ccp" string="Carta Porte">
+                            <group cols="4">
+                                <group>
+                                    <field name="cce_licencia"/>
+                                    <field name="codigotransportista"/>
+                                </group>
+                                <group>
+                                    <field name="cce_latitud"/>
+                                    <field name="cce_longitud"/>
+                                </group>
+                            </group>
+                     </page>
+               </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

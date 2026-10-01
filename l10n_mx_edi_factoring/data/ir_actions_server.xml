@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--
+            Acción de servidor que abre el wizard de Factoraje Financiero
+            desde la vista de lista (y formulario) de facturas de cliente.
+            Aparece en el menú "Acción" al seleccionar facturas.
+        -->
+        <record id="action_open_factoring_server" model="ir.actions.server">
+            <field name="name">Factoraje financiero</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <!-- Binding: disponible en la lista y formulario de facturas -->
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">
+if records:
+    action = records.open_factoring()
+            </field>
+        </record>
+    </data>
+</odoo>

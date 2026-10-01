@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="paperformat_a4_landscape" model="report.paperformat">
+        <field name="name">Traslado Letter</field>
+        <field name="default" eval="True"/>
+        <field name="format">Letter</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">5</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">5</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         ESTILOS GLOBALES
+    ═══════════════════════════════════════════════════════════════════ -->
+    <template id="cfdi_traslado_styles">
+        <style>
+            body { font-family: Arial, sans-serif; font-size: 7.5pt; color: #000; }
+            .cp-header-title {
+                background-color: #003366; color: #fff;
+                font-weight: bold; font-size: 9pt;
+                text-align: center; padding: 3px 6px;
+            }
+            .cp-section-title {
+                background-color: #003366; color: #fff;
+                font-weight: bold; font-size: 7.5pt;
+                padding: 2px 4px; text-transform: uppercase;
+            }
+            .cp-table { width: 100%; border-collapse: collapse; margin-bottom: 3px; }
+            .cp-table th {
+                background-color: #cce0ff; border: 1px solid #999;
+                padding: 2px 3px; font-size: 7pt; text-align: center;
+            }
+            .cp-table td { border: 1px solid #999; padding: 2px 3px; font-size: 7pt; vertical-align: top; }
+            .cp-table .lbl { font-weight: bold; background-color: #e8f0fe; white-space: nowrap; }
+            .cp-box { border: 1px solid #999; padding: 2px 4px; margin-bottom: 3px; }
+            .cp-label { font-weight: bold; }
+            .cp-cancelled { color: red; font-size: 16pt; text-align: center; font-weight: bold; border: 3px solid red; padding: 4px; }
+            .cp-seal { font-size: 6pt; word-break: break-all; color: #333; }
+            .cp-pedimento { font-size: 6.5pt; color: #444; padding-left: 8px; }
+            .cp-total-row { background-color: #d6e4ff; font-weight: bold; }
+            .text-center { text-align: center; }
+            .text-right { text-align: right; }
+            .w100 { width: 100%; }
+            hr.thin { border: none; border-top: 1px solid #333; margin: 3px 0; }
+            table.no-border td, table.no-border th { border: none; padding: 1px 3px; }
+        </style>
+    </template>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SECCIÓN 1 – ENCABEZADO (se repite en cada página)
+    ═══════════════════════════════════════════════════════════════════ -->
+    <template id="cfdi_traslado_header">
+        <t t-set="company" t-value="o.company_id"/>
+        <t t-set="auto" t-value="o.autotrasporte_ids"/>
+        <t t-set="figura" t-value="o.figuratransporte_ids and o.figuratransporte_ids[0] or False"/>
+
+        <!-- Cancelada -->
+        <t t-if="o.estado_factura == 'factura_cancelada'">
+            <div class="cp-cancelled">CFDI CANCELADO</div>
+        </t>
+
+        <!-- Fila 1: Logo | Datos empresa | Banner CARTA PORTE -->
+        <table class="cp-table" style="margin-bottom:2px;">
+            <tr>
+                <!-- Logo -->
+                <td style="width:18%;border:none;vertical-align:middle;">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                         style="max-height:70px;max-width:110px;"/>
+                </td>
+                <!-- Dirección empresa -->
+                <td style="width:52%;border:none;vertical-align:top;font-size:6.5pt;">
+                    <span style="font-weight:bold;font-size:8pt;">
+                        <t t-esc="company.nombre_fiscal or company.name"/>
+                    </span><br/>
+                    <t t-foreach="company.partner_id.child_ids.filtered(lambda c: c.type == 'other' or c.type == 'contact')" t-as="addr">
+                        <span t-field="addr.street"/>&#160;<span t-field="addr.street2"/>
+                        &#160;<span t-field="addr.city"/>&#160;<span t-field="addr.state_id.name"/>
+                        &#160;C.P.<span t-field="addr.zip"/><br/>
+                    </t>
+                    <t t-if="not company.partner_id.child_ids">
+                        <span t-field="company.partner_id.street"/>&#160;<span t-field="company.partner_id.street2"/>&#160;
+                        <span t-field="company.partner_id.city"/>&#160;<span t-field="company.partner_id.state_id.name"/>&#160;
+                        C.P.<span t-field="company.partner_id.zip"/>
+                    </t>
+                </td>
+                <!-- Banner -->
+                <td style="width:30%;border:1px solid #333;vertical-align:top;padding:2px;">
+                    <div class="cp-header-title">CARTA PORTE O TRASLADO</div>
+                    <table class="no-border w100" style="margin-top:2px;">
+                        <tr>
+                            <td class="lbl" style="width:40%;">
+                            	SERIE Y FOLIO
+                            </td>
+                            <td style="font-size:9pt;font-weight:bold;" class="text-center">
+                                <span t-esc="o._get_serie_xml()"/> <span t-esc="o._get_folio_xml()"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lbl">FECHA DE EXPEDICIÓN</td>
+                            <td>
+                            	<span t-esc="o._get_fecha_expedicion()"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lbl">LUGAR EXPEDICIÓN</td>
+                            <td>C.P. <span t-field="company.zip"/></td>
+                        </tr>
+                        <tr>
+                            <td class="lbl">Fecha</td>
+                            <td>
+                                <t t-if="o.factura_cfdi">
+                                    <span t-esc="str(o.invoice_datetime).replace('T', ' ')"/>
+                                </t>
+                                <t t-if="not o.factura_cfdi">
+                                    <span t-field="o.invoice_date"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Fila 2: RFC emisor | Régimen | Tipo comprobante | Datos receptor -->
+        <table class="cp-table" style="font-size:6.5pt;margin-bottom:2px;">
+            <tr>
+                <td class="lbl" style="width:15%;">R.F.C.</td>
+                <td style="width:20%;"><span t-field="company.vat"/></td>
+                <td class="lbl" style="width:22%;">Régimen Fiscal</td>
+                <td style="width:20%;"><span t-field="company.regimen_fiscal"/></td>
+                <td class="lbl" style="width:10%;">Tipo Comprobante</td>
+                <td style="width:13%;">T Traslado</td>
+            </tr>
+            <tr>
+                <td class="lbl">Uso CFDI</td>
+                <td><span t-field="o.uso_cfdi"/></td>
+                <td class="lbl">Exportación</td>
+                <td>01 No Aplica</td>
+                <td class="lbl">Régimen Receptor</td>
+                <td><span t-field="company.regimen_fiscal"/></td>
+            </tr>
+            <t t-if="o.IdCCP">
+                <tr>
+                    <td class="lbl">IdCCP</td>
+                    <td colspan="5"><span t-field="o.IdCCP"/></td>
+                </tr>
+            </t>
+        </table>
+
+        <!-- Fila 3: Transporte -->
+        <table class="cp-table" style="margin-bottom:2px;">
+            <thead>
+                <tr>
+                    <th style="width:22%;">Medio de Transporte</th>
+                    <th style="width:38%;">Tipo de Autotransporte</th>
+                    <th style="width:18%;">Peso Bruto Vehicular (Kg)</th>
+                    <th style="width:22%;">Transporte Internacional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <t t-if="o.tipo_transporte == '01'">01 Autotransporte Federal</t>
+                        <t t-if="o.tipo_transporte == '03'">03 Transporte Aéreo</t>
+                    </td>
+                    <td>
+                        <t t-if="auto">
+                            <span t-field="auto.confvehicular"/>
+                        </t>
+                    </td>
+                    <td class="text-center">
+                        <span t-esc="o.pesobrutototal or 0.0"/>
+                    </td>
+                    <td class="text-center"><span t-field="o.transpinternac"/></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Fila 4: Permiso SCT | Placas | Póliza | Aseguradora -->
+        <t>
+            <table class="cp-table" style="margin-bottom:2px;">
+                <thead>
+                    <tr>
+                        <th>Permiso STCC</th>
+                        <th>Número de Permiso</th>
+                        <th>Número de Placas</th>
+                        <th>Modelo</th>
+                        <th>No. de Póliza (Resp. Civil)</th>
+                        <th>Nombre de la Aseguradora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span t-field="o.permisosct"/></td>
+                        <td><span t-field="o.numpermisosct"/></td>
+                        <td><span t-field="auto.placavm"/></td>
+                        <td><span t-field="auto.aniomodelo"/></td>
+                        <td><span t-field="auto.numpoliza"/></td>
+                        <td><span t-field="auto.nombreaseg"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Fila 5: Seguro de carga -->
+            <t t-if="o.nombreaseg_merc or o.numpoliza_merc">
+                <table class="cp-table" style="margin-bottom:2px;">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Seguro de la Carga Transportada</th>
+                        </tr>
+                        <tr>
+                            <th style="width:50%;">No. de Póliza Carga</th>
+                            <th style="width:50%;">Nombre Aseguradora Carga</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span t-field="o.numpoliza_merc"/></td>
+                            <td><span t-field="o.nombreaseg_merc"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+
+            <!-- Fila 6: Operador -->
+            <t t-if="figura">
+                <table class="cp-table" style="margin-bottom:2px;">
+                    <thead>
+                        <tr>
+                            <th>R.F.C. Operador</th>
+                            <th>Nombre Operador</th>
+                            <th>Tipo Figura</th>
+                            <th>No. Licencia</th>
+                            <th>No. de Póliza Carga</th>
+                            <th>Nombre Aseguradora Carga</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.figuratransporte_ids" t-as="fig">
+                            <tr>
+                                <td><span t-field="fig.figura_id.vat"/></td>
+                                <td><span t-field="fig.figura_id.name"/></td>
+                                <td>
+                                    <span t-field="fig.tipofigura.clave"/>&#160;
+                                    <span t-field="fig.tipofigura.descripcion"/>
+                                </td>
+                                <td><span t-field="fig.figura_id.cce_licencia"/></td>
+                                <td><span t-field="o.numpoliza_merc"/></td>
+                                <td><span t-field="o.nombreaseg_merc"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+        </t>
+        <hr class="thin"/>
+    </template>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SECCIÓN 2 – CONCEPTOS / PRODUCTOS
+         Columnas: Clave ProdServ | Descripción | Cant | Clave Unidad | Unidad |
+                   Peso Kg | Val.Merc. | Obj.Imp.
+         + Pedimento inline (sin precio unitario, sin subtotal, sin cargo tasación)
+    ═══════════════════════════════════════════════════════════════════ -->
+    <template id="cfdi_traslado_conceptos">
+        <div class="cp-section-title" style="margin-bottom:2px;">CONCEPTOS</div>
+        <table class="cp-table">
+            <thead>
+                <tr>
+                    <th style="width:9%;">Clave Prod/Serv</th>
+                    <th style="width:30%;">Descripción</th>
+                    <th style="width:7%;" class="text-center">Cantidad</th>
+                    <th style="width:7%;" class="text-center">Clave Unidad</th>
+                    <th style="width:8%;">Unidad</th>
+                    <th style="width:7%;" class="text-right">Peso Kg</th>
+                    <th style="width:12%;" class="text-right">Valor Mercancía</th>
+                    <th style="width:7%;" class="text-center">Material Peligroso</th>
+                    <th style="width:13%;" class="text-center">Obj. Impuesto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <t t-foreach="o.factura_line_ids" t-as="l">
+                    <!-- Línea del producto -->
+                    <tr>
+                        <td><span t-field="l.product_id.unspsc_code_id.code"/></td>
+                        <td>
+                            <span t-field="l.name"/>
+                            <t t-if="l.product_id.default_code">
+                                <br/><span style="color:#555;" t-field="l.product_id.default_code"/>
+                            </t>
+                        </td>
+                        <td class="text-center"><span t-field="l.quantity"/></td>
+                        <td class="text-center"><span t-field="l.product_id.uom_id.unspsc_code_id.code"/></td>
+                        <td><span t-field="l.product_id.uom_id.name"/></td>
+                        <td class="text-right"><span t-field="l.pesoenkg"/></td>
+                        <td class="text-right">
+                            <span t-esc="'${:,.2f}'.format(l.price_subtotal)"/>
+                        </td>
+                        <td class="text-center">
+                            <t t-if="l.product_id.materialpeligroso">
+                                <span t-field="l.product_id.materialpeligroso"/>
+                            </t>
+                            <t t-if="not l.product_id.materialpeligroso">No</t>
+                        </td>
+                        <td class="text-center">01 No objeto de impuesto.</td>
+                    </tr>
+
+                    <!-- Pedimento(s) de la línea (campo directo) -->
+                    <!-- <t t-if="l.pedimento">
+                        <tr>
+                            <td colspan="9" class="cp-pedimento">
+                                <strong>PEDIMENTO:</strong>&#160;<span t-field="l.pedimento"/>
+                                <t t-if="l.fecha_pedimento">
+                                    &#160;<strong>FECHA:</strong>&#160;<span t-field="l.fecha_pedimento"/>
+                                </t>
+                                <t t-if="l.aduana_pedimento">
+                                    &#160;<strong>ADUANA:</strong>&#160;<span t-field="l.aduana_pedimento"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </t> -->
+
+                    <!-- Pedimentos en sub-líneas (Inf. Aduanera) -->
+                    <t t-foreach="l.aduanera_line_ids" t-as="aduana">
+                        <tr>
+                            <td colspan="9" class="cp-pedimento">
+                                <strong>PEDIMENTO:</strong>&#160;<span t-field="aduana.pedimento"/>
+                                <t t-if="l.fecha_pedimento">
+                                    &#160;<strong>FECHA:</strong>&#160;<span t-field="aduana.fecha_pedimento"/>
+                                </t>
+                                <t t-if="l.aduana_pedimento">
+                                    &#160;<strong>ADUANA:</strong>&#160;<span t-field="aduana.aduana_pedimento"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+            </tbody>
+        </table>
+    </template>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SECCIÓN 3 – MERCANCÍAS (CantidadTransporta / resumen)
+    ═══════════════════════════════════════════════════════════════════ -->
+    <template id="cfdi_traslado_mercancias">
+        <div class="cp-section-title" style="margin-bottom:2px;">MERCANCÍAS</div>
+
+        <!-- Detalle de CantidadTransporta por línea -->
+        <t t-set="has_transporta" t-value="any(l.transporta_line_ids for l in o.factura_line_ids)"/>
+        <t t-if="has_transporta">
+            <table class="cp-table" style="margin-bottom:3px;">
+                <thead>
+                    <tr>
+                        <th style="width:7%;">Cantidad</th>
+                        <th style="width:8%;">Unidad</th>
+                        <th style="width:30%;">Descripción</th>
+                        <th style="width:8%;" class="text-right">Peso Kg</th>
+                        <th style="width:12%;">ID Origen</th>
+                        <th style="width:12%;">ID Destino</th>
+                        <th style="width:12%;">Cve Transporte</th>
+                        <th style="width:11%;">Pedimento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="o.factura_line_ids" t-as="l">
+                        <t t-foreach="l.transporta_line_ids" t-as="tr_line">
+                            <tr>
+                                <td><span t-field="tr_line.cantidad"/></td>
+                                <td><span t-field="l.product_id.uom_id.name"/></td>
+                                <td><span t-field="l.name"/></td>
+                                <td class="text-right"><span t-field="l.pesoenkg"/></td>
+                                <td><span t-field="tr_line.idorigen"/></td>
+                                <td><span t-field="tr_line.iddestino"/></td>
+                                <td><span t-field="tr_line.cves_transporte"/></td>
+                                <td>
+                                    <t t-if="l.pedimento"><span t-field="l.pedimento"/></t>
+                                    <t t-if="l.aduanera_line_ids">
+                                        <span t-field="l.aduanera_line_ids[0].pedimento"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                </tbody>
+            </table>
+        </t>
+
+        <!-- Resumen de totales -->
+        <table class="cp-table cp-total-row" style="margin-bottom:3px;">
+            <tr>
+                <td class="lbl" style="width:25%;">No. Total de Mercancías</td>
+                <td style="width:15%;"><span t-field="o.numerototalmercancias"/></td>
+                <td class="lbl" style="width:20%;">Total Peso Bruto</td>
+                <td style="width:15%;">
+                    <span t-field="o.pesobrutototal"/>&#160;<span t-field="o.unidadpeso"/>
+                </td>
+                <td class="lbl" style="width:15%;">Total Unidades</td>
+                <td style="width:10%;"><span t-field="o.numerototalmercancias"/></td>
+            </tr>
+            <tr>
+                <td class="lbl">Total Distancia Recorrida</td>
+                <td><span t-field="o.totaldistrec"/>&#160;km</td>
+                <td class="lbl">Transporte Internacional</td>
+                <td><span t-field="o.transpinternac"/></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </template>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SECCIÓN 4 – REMITENTES Y DESTINATARIOS (Ubicaciones)
+    ═══════════════════════════════════════════════════════════════════ -->
+    <template id="cfdi_traslado_ubicaciones">
+        <div class="cp-section-title" style="margin-bottom:2px;">REMITENTES Y DESTINATARIOS</div>
+        <table class="cp-table">
+            <thead>
+                <tr>
+                    <th style="width:10%;">Tipo Ubicación</th>
+                    <th style="width:10%;">ID</th>
+                    <th style="width:14%;">R.F.C.</th>
+                    <th style="width:16%;">Nombre</th>
+                    <th style="width:8%;">País</th>
+                    <th style="width:12%;" class="text-right">Distancia Recorrida</th>
+                    <th style="width:20%;">Fecha salida / llegada</th>
+                </tr>
+            </thead>
+            <tbody>
+                <t t-foreach="o.ubicaciones_line_ids" t-as="u">
+                    <tr>
+                        <td><span t-field="u.tipoubicacion"/></td>
+                        <td><span t-field="u.idubicacion"/></td>
+                        <td><span t-field="u.contacto.vat"/></td>
+                        <td><span t-field="u.contacto.name"/></td>
+                        <td><span t-field="u.contacto.country_id.name"/></td>
+                        <td class="text-right">
+                            <t t-if="u.distanciarecorrida">
+                                <span t-field="u.distanciarecorrida"/>
+                            </t>
+                        </td>
+                        <td><span t-field="u.fecha"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" style="font-size:6.5pt;padding-left:12px;color:#333;">
+                            Dirección:&#160;
+                            <span t-field="u.contacto.street"/>
+                            <t t-if="u.contacto.street2">&#160;<span t-field="u.contacto.street2"/></t>
+                            <t t-if="u.contacto.l10n_mx_edi_colony">&#160;Col.&#160;<span t-field="u.contacto.l10n_mx_edi_colony"/></t>
+                            <t t-if="u.contacto.city">&#160;<span t-field="u.contacto.city"/></t>
+                            <t t-if="u.contacto.state_id">&#160;<span t-field="u.contacto.state_id.name"/></t>
+                            &#160;C.P.<span t-field="u.contacto.zip"/>
+                        </td>
+                    </tr>
+                </t>
+            </tbody>
+        </table>
+    </template>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SECCIÓN SELLOS DIGITALES Y QR
+    ═══════════════════════════════════════════════════════════════════ -->
+    <template id="cfdi_traslado_sellos">
+        <t t-if="o.factura_cfdi">
+            <hr class="thin"/>
+            <table class="no-border w100" style="margin-top:4px;">
+                <tr>
+                    <!-- QR CFDI -->
+                    <td style="width:13%;vertical-align:middle;text-align:center;">
+                        <img t-if="o.qrcode_image" t-att-src="image_data_uri(o.qrcode_image)"
+                             style="height:90px;width:90px;"/>
+                    </td>
+                    <!-- QR CCP -->
+                    <td style="width:13%;vertical-align:middle;text-align:center;">
+                        <img t-if="o.qrcode_ccp_image" t-att-src="image_data_uri(o.qrcode_ccp_image)"
+                             style="height:90px;width:90px;"/>
+                    </td>
+                    <!-- Datos de certificación -->
+                    <td style="width:74%;vertical-align:top;">
+                        <table class="no-border w100" style="font-size:6pt;">
+                            <tr>
+                                <td class="lbl" style="width:22%;white-space:nowrap;">Folio Fiscal (UUID)</td>
+                                <td><span t-field="o.folio_fiscal"/></td>
+                            </tr>
+                            <tr>
+                                <td class="lbl">Fecha y hora de certificación</td>
+                                <td><span t-field="o.fecha_certificacion"/></td>
+                            </tr>
+                            <tr>
+                                <td class="lbl">No. Serie Certificado SAT</td>
+                                <td><span t-field="o.cetificaso_sat"/></td>
+                            </tr>
+                            <tr>
+                                <td class="lbl">No. Serie CSD Emisor</td>
+                                <td><span t-field="o.numero_cetificado"/></td>
+                            </tr>
+                            <tr>
+                                <td class="lbl">IdCCP</td>
+                                <td><span t-field="o.IdCCP"/></td>
+                            </tr>
+                        </table>
+                        <div style="margin-top:3px;">
+                            <span class="lbl" style="font-size:5.5pt;">Sello Digital del CFDI</span><br/>
+                            <span class="cp-seal"><span t-field="o.selo_digital_cdfi"/></span>
+                        </div>
+                        <div style="margin-top:2px;">
+                            <span class="lbl" style="font-size:5.5pt;">Sello del SAT</span><br/>
+                            <span class="cp-seal"><span t-field="o.selo_sat"/></span>
+                        </div>
+                        <div style="margin-top:2px;">
+                            <span class="lbl" style="font-size:5.5pt;">Cadena Original del Complemento de Certificación Digital del SAT</span><br/>
+                            <span class="cp-seal"><span t-field="o.cadena_origenal"/></span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <p style="text-align:center;font-size:7pt;margin-top:4px;">
+                <strong>ESTE DOCUMENTO ES UNA REPRESENTACIÓN IMPRESA DE UN CFDI</strong>
+            </p>
+        </t>
+    </template>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         DOCUMENTO PRINCIPAL – une todas las secciones
+    ═══════════════════════════════════════════════════════════════════ -->
+    <template id="report_facturatraslado_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+            	<t t-call="web.basic_layout">
+	                <div class="page" style="padding:4px;">
+	                    <!-- Estilos -->
+	                    <t t-call="l10n_mx_traslado.cfdi_traslado_styles"/>
+
+	                    <!-- ── SECCIÓN 1: Encabezado ── -->
+	                    <t t-call="l10n_mx_traslado.cfdi_traslado_header"/>
+
+	                    <!-- ── SECCIÓN 2: Conceptos ── -->
+	                    <t t-call="l10n_mx_traslado.cfdi_traslado_conceptos"/>
+
+	                    <!-- ── SECCIÓN 3: Mercancías ── -->
+	                    <t t-if="o.carta_porte">
+	                        <t t-call="l10n_mx_traslado.cfdi_traslado_mercancias"/>
+
+	                        <!-- ── SECCIÓN 4: Ubicaciones ── -->
+	                        <t t-call="l10n_mx_traslado.cfdi_traslado_ubicaciones"/>
+	                    </t>
+
+	                    <!-- ── Comentario ── -->
+	                    <t t-if="o.comment">
+	                        <div class="cp-box" style="margin-top:3px;">
+	                            <span class="lbl">Observaciones: </span><span t-field="o.comment"/>
+	                        </div>
+	                    </t>
+
+	                    <!-- ── Total (traslado = 0) ── -->
+	                    <table class="no-border" style="width:30%;float:right;margin-top:3px;">
+	                        <tr>
+	                            <td class="lbl">Sub-Total</td>
+	                            <td class="text-right"><span t-field="o.amount_untaxed" t-options="{'widget': 'monetary'}"/></td>
+	                        </tr>
+	                        <tr style="border-top:1px solid #333;">
+	                            <td class="lbl">Total</td>
+	                            <td class="text-right"><span t-field="o.amount_total" t-options="{'widget': 'monetary'}"/></td>
+	                        </tr>
+	                    </table>
+	                    <div style="clear:both;"/>
+
+	                    <!-- ── Sellos y QR ── -->
+	                    <t t-call="l10n_mx_traslado.cfdi_traslado_sellos"/>
+	                </div>
+	            </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Acción de reporte (actualizada) -->
+    <record id="report_facturatraslado" model="ir.actions.report">
+        <field name="name">Factura Traslado</field>
+        <field name="model">cfdi.traslado</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_mx_traslado.report_facturatraslado_document</field>
+        <field name="report_file">l10n_mx_traslado.report_facturatraslado_document</field>
+        <field name="paperformat_id" ref="l10n_mx_traslado.paperformat_a4_landscape"/>
+        <field name="binding_model_id" ref="model_cfdi_traslado"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">(object.number)</field>
+    </record>
+
+</odoo>

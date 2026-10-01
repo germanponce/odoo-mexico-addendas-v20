@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Migración v17 → v19:
+    - invisible ya usaba expresión directa en v17; sin cambios de sintaxis.
+    - La condición muestra el campo solo para pagos de clientes entrantes
+      (inbound + customer): invisible="payment_type != 'inbound' or partner_type != 'customer'"
+      Corrige la lógica original (AND → OR) para visibilidad correcta.
+-->
+<odoo>
+    <!-- Formulario de pago (account.payment) -->
+    <record id="view_account_payment_form" model="ir.ui.view">
+        <field name="name">l10n_mx_edi_factoring_simple.payment.form</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="payment_type" invisible="1"/>
+                <field
+                    name="l10n_mx_edi_factoring_id"
+                    invisible="payment_type != 'inbound' or partner_type != 'customer'"
+                    options="{'no_open': True, 'no_create': True}"
+                    domain="[('id', '!=', partner_id), ('l10n_mx_edi_factoring', '=', True)]"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Wizard Registrar Pago (account.payment.register) -->
+    <record id="view_account_payment_register_form" model="ir.ui.view">
+        <field name="name">l10n_mx_edi_factoring_simple.register.payment.form</field>
+        <field name="model">account.payment.register</field>
+        <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='journal_id']" position="after">
+                <field
+                    name="l10n_mx_edi_factoring_id"
+                    invisible="payment_type != 'inbound' or partner_type != 'customer'"
+                    options="{'no_open': True, 'no_create': True}"
+                    domain="[('id', '!=', partner_id), ('l10n_mx_edi_factoring', '=', True)]"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

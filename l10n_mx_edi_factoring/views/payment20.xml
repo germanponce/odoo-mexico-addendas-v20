@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo xmlns:pago20="http://www.sat.gob.mx/Pagos20">
+
+    <template id="payment20_factoring" inherit_id="l10n_mx_edi.payment20">
+
+        <xpath expr="//*[local-name()='Pago']" position="after">
+            <t t-if="documento_factoraje">
+                <pago20:Pago
+                    t-att-FechaPago="documento_factoraje['fecha_pago']"
+                    t-att-FormaDePagoP="documento_factoraje['forma_de_pago']"
+                    t-att-MonedaP="documento_factoraje['moneda']"
+                    t-att-TipoCambioP="documento_factoraje['tipo_cambio'] and format_float(documento_factoraje['tipo_cambio'], precision=tipo_cambio_dp) or '1'"
+                    t-att-Monto="format_float(documento_factoraje['monto'])"
+                    t-att-NumOperacion="format_string(documento_factoraje['num_operacion'], 100)">
+
+                    <!-- DoctoRelacionado por cada factura compensada por factoraje -->
+                    <t t-foreach="documento_factoraje['docto_relationado_list']"
+                       t-as="invoice_values">
+                        <pago20:DoctoRelacionado
+                            t-att-IdDocumento="invoice_values['id_documento']"
+                            t-att-Folio="invoice_values['format_string'](invoice_values['folio'], 40)"
+                            t-att-Serie="invoice_values['format_string'](invoice_values['serie'], 25)"
+                            t-att-MonedaDR="invoice_values['moneda']"
+                            t-att-EquivalenciaDR="invoice_values['format_float'](invoice_values['equivalencia'], precision=10) or '1'"
+                            t-att-NumParcialidad="invoice_values['num_parcialidad']"
+                            t-att-ImpSaldoAnt="invoice_values['format_float'](invoice_values['imp_saldo_ant'])"
+                            t-att-ImpPagado="invoice_values['format_float'](invoice_values['imp_pagado'])"
+                            t-att-ObjetoImpDR="invoice_values['objeto_imp']"
+                            t-att-ImpSaldoInsoluto="invoice_values['format_float'](invoice_values['imp_saldo_insoluto'])">
+
+                            <pago20:ImpuestosDR
+                                t-if="invoice_values['retenciones_list'] or invoice_values['traslados_list']">
+
+                                <pago20:RetencionesDR t-if="invoice_values['retenciones_list']">
+                                    <t t-foreach="invoice_values['retenciones_list']"
+                                       t-as="tax_values">
+                                        <pago20:RetencionDR
+                                            t-att-BaseDR="invoice_values['format_float'](tax_values['base'])"
+                                            t-att-ImporteDR="invoice_values['format_float'](tax_values['importe'])"
+                                            t-att-ImpuestoDR="tax_values['impuesto']"
+                                            t-att-TipoFactorDR="tax_values['tipo_factor']"
+                                            t-att-TasaOCuotaDR="invoice_values['format_float'](tax_values['tasa_o_cuota'], precision=6)"
+                                        />
+                                    </t>
+                                </pago20:RetencionesDR>
+
+                                <pago20:TrasladosDR t-if="invoice_values['traslados_list']">
+                                    <t t-foreach="invoice_values['traslados_list']"
+                                       t-as="tax_values">
+                                        <pago20:TrasladoDR
+                                            t-att-BaseDR="invoice_values['format_float'](tax_values['base'])"
+                                            t-att-ImporteDR="invoice_values['format_float'](tax_values['importe'])"
+                                            t-att-ImpuestoDR="tax_values['impuesto']"
+                                            t-att-TipoFactorDR="tax_values['tipo_factor']"
+                                            t-att-TasaOCuotaDR="invoice_values['format_float'](tax_values['tasa_o_cuota'], precision=6)"
+                                        />
+                                    </t>
+                                </pago20:TrasladosDR>
+
+                            </pago20:ImpuestosDR>
+                        </pago20:DoctoRelacionado>
+                    </t>
+
+                    <!-- ImpuestosP globales del segundo Pago (factoraje) -->
+                    <pago20:ImpuestosP
+                        t-if="documento_factoraje['retenciones_list'] or documento_factoraje['traslados_list']">
+
+                        <pago20:RetencionesP t-if="documento_factoraje['retenciones_list']">
+                            <t t-foreach="documento_factoraje['retenciones_list']"
+                               t-as="tax_values">
+                                <pago20:RetencionP
+                                    t-att-ImporteP="format_float(tax_values['importe'])"
+                                    t-att-ImpuestoP="tax_values['impuesto']"
+                                />
+                            </t>
+                        </pago20:RetencionesP>
+
+                        <pago20:TrasladosP t-if="documento_factoraje['traslados_list']">
+                            <t t-foreach="documento_factoraje['traslados_list']"
+                               t-as="tax_values">
+                                <pago20:TrasladoP
+                                    t-att-BaseP="format_float(tax_values['base'], precision=6)"
+                                    t-att-ImporteP="format_float(tax_values['importe'], precision=6)"
+                                    t-att-ImpuestoP="tax_values['impuesto']"
+                                    t-att-TipoFactorP="tax_values['tipo_factor']"
+                                    t-att-TasaOCuotaP="format_float(tax_values['tasa_o_cuota'], precision=6)"
+                                />
+                            </t>
+                        </pago20:TrasladosP>
+
+                    </pago20:ImpuestosP>
+                </pago20:Pago>
+            </t>
+        </xpath>
+
+    </template>
+</odoo>

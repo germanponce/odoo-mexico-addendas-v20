@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Factura -->
+
+        <!-- Herencia Configuracion -->
+
+        <record model="ir.ui.view" id="res_config_settings_global_address_view_form">
+            <field name="name">res.config.settings.global.address</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+                <block id="pos_interface_section" position="after">
+                    <block title="Facturación Global" id="global_address_and_invoicing">
+                        <setting>
+                            <field name="contact_global_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                        </setting>
+                        <setting>
+                            <field name="emission_zip" />
+                        </setting>
+                        <setting>
+                            <field name="global_sequence_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                        </setting>
+                    </block>
+                </block>
+            </field>
+        </record>
+
+        <!-- Herencia de Objetos y Formularios -->
+
+        <record id="view_wizard_global_40_invoice_form" model="ir.ui.view">
+            <field name="name">l10n_mx_edi.global_invoice.create.form.inherit</field>
+            <field name="model">l10n_mx_edi.global_invoice.create</field>
+            <field name="inherit_id" ref="l10n_mx_edi.l10n_mx_edi_global_invoice_create_form"/>
+            <field name="arch" type="xml">
+                <field name="periodicity" position="before" >
+                    <field name="custom_edi_date" />
+                </field>
+                <field name="periodicity" position="after" >
+                    <field name="payment_tpv_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                    <field name="contact_global_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                    <field name="emission_zip" />
+                    <field name="global_sequence_id" invisible="1" />
+                    
+                </field>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

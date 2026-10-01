@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>l10n_mx_edi_factoring_simple — EDI Factoraje Financiero</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; background-color: #f8f9fa;">
+
+    <!-- ══ CABECERA ══ -->
+    <div style="text-align: center; background: linear-gradient(135deg, #1a3a5c 0%, #2e86c1 100%); color: white; padding: 40px 20px; border-radius: 10px; margin-bottom: 30px;">
+        <div style="width: 70px; height: 70px; background: rgba(255,255,255,0.15); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 15px;">🏦</div>
+        <h1 style="margin: 0 0 10px 0; font-size: 2.2rem; font-weight: 700;">EDI Factoraje Financiero</h1>
+        <p style="margin: 0 0 15px 0; font-size: 1.1rem; opacity: 0.9;">Módulo Odoo 19.0 — German Ponce</p>
+        <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">Versión 19.0.1.0.0</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">l10n_mx_edi_factoring_simple</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">Migrado de v17 → v19</span>
+        </div>
+    </div>
+
+    <!-- ══ DESCRIPCIÓN ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 15px 0; color: #1a3a5c; font-size: 1.5rem; text-align: center;">¿Qué hace este módulo?</h2>
+        <p style="color: #5d6d7e; text-align: center; max-width: 800px; margin: 0 auto 15px auto;">
+            Versión simplificada del complemento de <strong>Factoraje Financiero</strong> para la localización mexicana.
+            Permite que el <strong>CFDI de Complemento de Pago</strong> se emita a nombre del
+            <em>Factorante Financiero</em> en lugar del cliente original, cumpliendo con la
+            <em>Guía de llenado SAT</em> (pág. 67) cuando los derechos de cobro son cedidos.
+        </p>
+        <div style="background: #eaf4fb; border-left: 4px solid #2e86c1; padding: 15px 20px; border-radius: 4px; max-width: 800px; margin: 0 auto;">
+            <strong style="color: #1a3a5c;">Diferencia con el módulo completo:</strong>
+            <span style="color: #5d6d7e;"> Este módulo <em>solo</em> redirige el Receptor del CFDI de Pago al factorante.
+            No genera asientos de compensación adicionales ni un segundo <code>pago20:Pago</code>.
+            Es el módulo correcto cuando el flujo contable del factoraje se maneja fuera de Odoo
+            o por otro complemento.</span>
+        </div>
+    </div>
+
+    <!-- ══ FLUJO PRINCIPAL ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 25px 0; color: #1a3a5c; font-size: 1.5rem; text-align: center;">Flujo de Trabajo</h2>
+        <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 10px;">
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #2e86c1, #1a3a5c); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">👤</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">1. Configurar Partner</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">Marcar al factorante con "Es Empresa Factorante" y asignarlo al cliente</p>
+            </div>
+
+            <div style="font-size: 2rem; color: #1a3a5c; flex: 0;">→</div>
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #3498db, #2e86c1); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">🧾</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">2. Factura Cliente</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">En la factura confirmada aparece el campo "Empresa Factorante" (prellenado)</p>
+            </div>
+
+            <div style="font-size: 2rem; color: #1a3a5c; flex: 0;">→</div>
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #1abc9c, #16a085); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">💳</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">3. Registrar Pago</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">Wizard de pago con el factorante prellenado automáticamente</p>
+            </div>
+
+            <div style="font-size: 2rem; color: #1a3a5c; flex: 0;">→</div>
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #e67e22, #d35400); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">📄</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">4. CFDI de Pago</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">RFC y nombre del Receptor = Factorante, no el cliente original</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ MODELOS ══ -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 20px; margin-bottom: 30px;">
+
+        <!-- account.move -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; border-top: 4px solid #1a3a5c;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #1a3a5c, #2e86c1); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8rem; margin-bottom: 15px;">AM</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">account.move (ext.)</h3>
+            <p style="color: #7f8c8d; margin: 0 0 12px 0; font-size: 0.85rem;">Campo factorante + hook CFDI de Pago.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.85rem;">
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>l10n_mx_edi_factoring_id</strong> → res.partner</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>_l10n_mx_edi_add_payment_cfdi_values()</strong></li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ Sobreescribe <code>receptor.rfc</code></li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ Sobreescribe <code>receptor.nombre</code></li>
+                <li style="padding: 3px 0;">✓ Ajusta <code>residencia_fiscal</code> si es extranjero</li>
+            </ul>
+        </div>
+
+        <!-- account.payment -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; border-top: 4px solid #2e86c1;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #2e86c1, #3498db); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8rem; margin-bottom: 15px;">AP</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">account.payment (ext.)</h3>
+            <p style="color: #7f8c8d; margin: 0 0 12px 0; font-size: 0.85rem;">Almacena el factorante en el pago confirmado.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.85rem;">
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>l10n_mx_edi_factoring_id</strong> → res.partner</li>
+                <li style="padding: 3px 0;">✓ <strong>default_get()</strong> — prellenado desde factura o partner</li>
+            </ul>
+        </div>
+
+        <!-- account.payment.register -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; border-top: 4px solid #1abc9c;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #16a085, #1abc9c); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem; margin-bottom: 15px;">APR</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">account.payment.register (ext.)</h3>
+            <p style="color: #7f8c8d; margin: 0 0 12px 0; font-size: 0.85rem;">Wizard de registro de pago con factorante.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.85rem;">
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>l10n_mx_edi_factoring_id</strong> — computed + editable</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>_compute_factoring_id()</strong> — depende de partner_id</li>
+                <li style="padding: 3px 0;">✓ <strong>_create_payment_vals_from_wizard()</strong> — propaga al pago</li>
+            </ul>
+        </div>
+
+        <!-- res.partner -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; border-top: 4px solid #8e44ad;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #8e44ad, #9b59b6); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 22px; margin-bottom: 15px;">👤</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">res.partner (ext.)</h3>
+            <p style="color: #7f8c8d; margin: 0 0 12px 0; font-size: 0.85rem;">Configuración del factorante en el contacto.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.85rem;">
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>l10n_mx_edi_factoring</strong> — Boolean: "Es factorante"</li>
+                <li style="padding: 3px 0;">✓ <strong>l10n_mx_edi_factoring_id</strong> — Factorante predeterminado</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ══ CAMBIOS DE MIGRACIÓN v17 → v19 ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #1a3a5c; font-size: 1.5rem; text-align: center;">Cambios de Migración v17 → v19</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+
+            <div style="padding: 20px; background: #fef9e7; border-radius: 8px; border-left: 4px solid #f39c12;">
+                <h4 style="margin: 0 0 10px 0; color: #d68910;">❌ states={} en campos: eliminado</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    <code>states={"posted": [("readonly", False)]}</code> fue deprecated en v16
+                    y removido en v19. El campo <code>l10n_mx_edi_factoring_id</code> en
+                    <code>account.move</code> ya no lo lleva. El control de readonly se hace
+                    en la vista XML con <code>readonly="payment_state == 'paid'"</code>.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #fef9e7; border-radius: 8px; border-left: 4px solid #f39c12;">
+                <h4 style="margin: 0 0 10px 0; color: #d68910;">❌ l10n_mx_edi_cfdi_request eliminado</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    El campo <code>l10n_mx_edi_cfdi_request == "on_invoice"</code> no existe en v19.
+                    Se reemplazó por <code>l10n_mx_edi_is_cfdi_needed</code> (Boolean) en el
+                    <code>default_get</code> de <code>account.payment</code>.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #fef9e7; border-radius: 8px; border-left: 4px solid #f39c12;">
+                <h4 style="margin: 0 0 10px 0; color: #d68910;">❌ Xpath del botón de pago: eliminado</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    Se eliminó el xpath que sobreescribía el context del botón
+                    <code>account_invoice_payment_btn</code>. En v19 el wizard recibe las
+                    facturas activas automáticamente; el override ya no era necesario y
+                    podía causar conflictos.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #fef9e7; border-radius: 8px; border-left: 4px solid #f39c12;">
+                <h4 style="margin: 0 0 10px 0; color: #d68910;">❌ l10n_mx_edi_addendas_base: eliminado de depends</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    La dependencia de <code>l10n_mx_edi_addendas_base</code> estaba en el manifest
+                    pero no se usaba en ningún modelo ni vista del módulo. Se eliminó para evitar
+                    dependencias innecesarias de módulos de terceros.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #145a32;">✅ invisible corregido (AND → OR)</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    La condición original <code>invisible="payment_type != 'inbound' and partner_type == 'customer'"</code>
+                    tenía lógica incorrecta (ocultaba más de lo esperado). Corregida a
+                    <code>invisible="payment_type != 'inbound' or partner_type != 'customer'"</code>
+                    para mostrar el campo <em>solo</em> en pagos entrantes de clientes.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #145a32;">✅ t-if/t-if → t-if/t-else en reporte</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    El reporte usaba dos <code>t-if</code> consecutivos (uno positivo, uno negativo)
+                    para mostrar factorante o cliente. Reemplazado por <code>t-if</code> + <code>t-else</code>
+                    que es la forma semánticamente correcta y evita advertencias en el motor QWeb v19.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #145a32;">✅ _compute_factoring_id: factor[:1]</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    En el caso de pagos en lote con múltiples facturas, la expresión
+                    <code>invoices.l10n_mx_edi_factoring_id</code> puede devolver un recordset.
+                    Se añadió <code>[:1]</code> para garantizar que siempre se asigne un único
+                    registro al campo Many2one.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #145a32;">✅ invisible en res_partner_view</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    El campo <code>l10n_mx_edi_factoring_id</code> en el partner ahora tiene
+                    <code>invisible="not l10n_mx_edi_factoring"</code>: solo aparece si el
+                    partner fue marcado como factorante, mejorando la UX.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ ARCHIVOS DEL MÓDULO ══ -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+            <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #2e86c1, #1a3a5c); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-bottom: 12px;">PY</div>
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">models/ (3 archivos)</h3>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0;">✓ <code>account_move.py</code> — Campo + hook CFDI Receptor</li>
+                <li style="padding: 2px 0;">✓ <code>account_payment.py</code> — Payment + Register wizard</li>
+                <li style="padding: 2px 0;">✓ <code>res_partner.py</code> — Campos factorante/factoring_id</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+            <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #9b59b6, #8e44ad); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-bottom: 12px;">XML</div>
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">views/ (4 archivos)</h3>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0;">✓ <code>account_move_view.xml</code> — Campo en factura</li>
+                <li style="padding: 2px 0;">✓ <code>account_payment_view.xml</code> — Campo en pago + wizard</li>
+                <li style="padding: 2px 0;">✓ <code>res_partner_view.xml</code> — Campos en contacto</li>
+                <li style="padding: 2px 0;">✓ <code>l10n_mx_edi_report_payment.xml</code> — Reporte recibo</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+            <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #27ae60, #145a32); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 20px; margin-bottom: 12px;">📋</div>
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">Sin modelos nuevos</h3>
+            <p style="color: #5d6d7e; font-size: 0.85rem; margin: 0;">
+                Este módulo <strong>no crea nuevas tablas</strong> en la BD. Solo extiende
+                modelos existentes con campos nuevos. No requiere <code>ir.model.access.csv</code>.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- ══ NOTA SOBRE inherit_id DEL PARTNER ══ -->
+    <div style="background: #fff8f0; padding: 25px; border-radius: 10px; margin-bottom: 30px; border-left: 5px solid #e67e22; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <h3 style="margin: 0 0 15px 0; color: #d35400; font-size: 1.2rem;">⚠️ Notas de instalación</h3>
+
+        <p style="color: #5d6d7e; margin: 0 0 12px 0;">
+            <strong>1. Vista del partner (res_partner_view.xml):</strong>
+            La herencia usa <code>ref="l10n_mx_edi.l10n_mx_edi_res_partner_form"</code>.
+            Si al instalar aparece <em>"External ID not found"</em>, localiza el ID correcto de la
+            vista partner de <code>l10n_mx_edi</code> con: <code>ir.ui.view</code> →
+            buscar modelo <code>res.partner</code> con módulo <code>l10n_mx_edi</code>.
+            Como alternativa segura usa <code>ref="account.view_partner_property_form"</code>
+            y cambia el xpath a <code>//group[@name='fiscal_information']</code>.
+        </p>
+
+        <p style="color: #5d6d7e; margin: 0 0 12px 0;">
+            <strong>2. Reporte de pago (l10n_mx_edi_report_payment.xml):</strong>
+            Si el xpath <code>//div[@t-if='o.partner_type']</code> no encuentra el nodo en v19,
+            revisa la plantilla base <code>account.report_payment_receipt_document</code> en tu
+            instalación con: Depuración → Plantillas QWeb → buscar <code>report_payment_receipt_document</code>.
+        </p>
+
+        <p style="color: #5d6d7e; margin: 0;">
+            <strong>3. Pagos en lote:</strong>
+            En pagos masivos con múltiples facturas de distintos clientes, el campo
+            <code>l10n_mx_edi_factoring_id</code> toma el factorante de la <em>primera</em>
+            factura encontrada. Asegúrate de que todas las facturas del lote tengan
+            el mismo factorante antes de registrar el pago.
+        </p>
+    </div>
+
+    <!-- ══ RESUMEN ══ -->
+    <div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #1a3a5c; font-size: 1.4rem;">Resumen del Módulo</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
+            <div><div style="font-size: 2rem; font-weight: 700; color: #1a3a5c;">3</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Modelos extendidos</p></div>
+            <div><div style="font-size: 2rem; font-weight: 700; color: #2e86c1;">4</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Archivos de vistas</p></div>
+            <div><div style="font-size: 2rem;">🎯</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Solo redirige el Receptor del CFDI</p></div>
+            <div><div style="font-size: 2rem;">🚫</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Sin tablas nuevas ni lógica contable extra</p></div>
+            <div><div style="font-size: 2rem;">⚡</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Prellenado automático del factorante</p></div>
+            <div><div style="font-size: 2rem;">📜</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Reporte recibo muestra nombre del factorante</p></div>
+        </div>
+    </div>
+
+    <!-- ══ FOOTER ══ -->
+    <div style="text-align: center; padding: 25px; background: #1a3a5c; color: white; border-radius: 10px; margin-top: 10px;">
+        <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 8px;">l10n_mx_edi_factoring_simple — EDI Factoraje Financiero</div>
+        <div style="font-size: 0.9rem; opacity: 0.85;">
+            Versión 19.0.1.0.0 | German Ponce | Migración v17 → v19<br>
+            Compatible con Odoo 19 Community / Enterprise | Depende de: l10n_mx_edi
+        </div>
+    </div>
+
+</body>
+</html>

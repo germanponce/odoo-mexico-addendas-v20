@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <record id="view_l10n_mx_edi_retailer_partner_form_inherit" model="ir.ui.view">
+            <field name="name">l10n_mx_edi.retailer.partner.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <group name="sale" position="after">
+                    <group name="l10n_mx_edi_retailer" string="Complemento Detallista">
+                        <field name="l10n_mx_edi_retailer_gln" placeholder="GLN de 13 dígitos"/>
+                        <field name="l10n_mx_edi_retailer_alternate_id_type"/>
+                        <field name="l10n_mx_edi_retailer_alternate_id"/>
+                    </group>
+                </group>
+            </field>
+        </record>
+
+    </data>
+</odoo>

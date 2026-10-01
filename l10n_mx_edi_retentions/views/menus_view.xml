@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Menu Principal de Configuración -->
+        <menuitem id="catalogos_sat_retenciones_menu" name="Catálogos SAT Retenciones" 
+                  parent="account.menu_finance_configuration" sequence="99" 
+                  groups="account.group_account_manager" />
+    
+
+        <!-- Todos los demas submenus y catalogos -->
+        <menuitem id="retention_types_pago_menu" 
+                  name="Tipos de Retencion" 
+                  parent="catalogos_sat_retenciones_menu" 
+                  action="action_retention_types_pago"
+                  sequence="1" 
+                  groups="account.group_account_manager" />
+
+        <menuitem id="retention_type_taxpayer_pago_menu" 
+                  name="Tipos de Contribuyentes Sujetos a Retencion" 
+                  parent="catalogos_sat_retenciones_menu" 
+                  action="action_retention_type_taxpayer_pago"
+                  sequence="2" 
+                  groups="account.group_account_manager" />
+
+    </data>
+</odoo>

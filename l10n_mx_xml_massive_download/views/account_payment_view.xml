@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- ================================================================
+         ANFEPI v.24: Complementos de pago proveedor (REP recibidos)
+         - Filtros PPD sin complemento
+         - Columnas en lista
+         - Seccion CFDI Recibido en form (UUID, estado)
+         ================================================================ -->
+
+    <!-- ====== Search filters ====== -->
+    <record id="view_account_payment_anfepi_search" model="ir.ui.view">
+        <field name="name">account.payment.search.anfepi.ppd.complement</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter name="anfepi_filter_ppd_sin_complemento" string="Facturas PPD sin Complemento Pago" domain="[('partner_type', '=', 'supplier'), ('needs_payment_complement', '=', True)]" help="Pagos a proveedores de facturas PPD pagadas o en proceso de pago donde no se ha adjuntado el XML del complemento de pago recibido."/>
+                <filter name="anfepi_filter_has_complement" string="Pagos con Complemento XML" domain="[('partner_type', '=', 'supplier'), ('has_payment_complement_xml', '=', True)]"/>
+                <filter name="anfepi_filter_for_ppd" string="Pagos de Facturas PPD" domain="[('partner_type', '=', 'supplier'), ('is_for_ppd_invoice', '=', True)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ====== Tree columns ====== -->
+    <record id="view_account_payment_anfepi_tree" model="ir.ui.view">
+        <field name="name">account.payment.tree.anfepi.ppd.complement</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_tree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="before">
+                <field name="is_for_ppd_invoice" optional="hide" string="PPD"/>
+                <field name="has_payment_complement_xml" optional="hide" string="REP XML"/>
+                <field name="needs_payment_complement" optional="show" string="Falta REP" decoration-danger="needs_payment_complement"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- ====== Form: seccion CFDI para complementos RECIBIDOS ======
+         Muestra info del REP del proveedor: UUID, estado, estado SAT.
+         Sin botones de envio/cancelacion (no lo emitimos nosotros).
+         Actualizar SAT pendiente para v.25 (requiere ConsultaCFDIService). -->
+    <record id="view_account_payment_anfepi_form_rep" model="ir.ui.view">
+        <field name="name">account.payment.form.anfepi.rep.received</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="priority" eval="50"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='main_group']" position="after">
+                <field name="has_payment_complement_xml" invisible="1"/>
+                <field name="partner_type" invisible="1"/>
+                <group name="anfepi_rep_group" string="CFDI Complemento de Pago (Recibido)" invisible="partner_type != 'supplier' or not has_payment_complement_xml">
+                    <group name="anfepi_rep_left">
+                        <field name="stored_sat_uuid" string="Folio Fiscal REP" readonly="1"/>
+                        <field name="rep_cfdi_status" string="Estado REP" readonly="1"/>
+                    </group>
+                    <group name="anfepi_rep_right">
+                        <field name="l10n_mx_edi_cfdi_sat_state" string="Estado en el SAT" readonly="1"/>
+                    </group>
+                    <button string="Actualizar SAT" name="action_check_sat_received" type="object" class="btn-secondary" icon="fa-refresh"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ====== Boton "Adjuntar XML" en el pago (REP recibido del proveedor) ====== -->
+    <record id="view_account_payment_form_adjuntar_xml" model="ir.ui.view">
+        <field name="name">account.payment.form.adjuntar.xml</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="wizard_imported" invisible="1"/>
+                <button name="action_open_upload_wizard"
+                        string="Adjuntar XML"
+                        type="object"
+                        class="btn-success"
+                        invisible="wizard_imported or partner_type != 'supplier'"/>
+                <button name="action_erase_fields"
+                        string="Volver a subir XML"
+                        type="object"
+                        invisible="not wizard_imported"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

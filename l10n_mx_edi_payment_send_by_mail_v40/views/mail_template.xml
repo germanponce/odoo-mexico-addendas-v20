@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<odoo>
+
+    <data noupdate="1">
+        <!--Email template -->
+        <record id="email_template_stamement_line_from_invoice_cfdi" model="mail.template">
+            <field name="name">Envío de CFDI Recepción de Pagos - Estado de Cuenta</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="email_from">{{ user.email_formatted }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="subject">{{object.company_id.name}} CFDI Recepción de Pagos (Ref {{ object.name or 'n/a'}})</field>
+            <field name="auto_delete" eval="True"/>
+            <!-- <field name="report_template" ref="account_payments"/> -->
+            <field name="report_name"></field>
+            <field name="lang">{{object.partner_id.lang}}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Estimado <t t-out="object.partner_id.name"></t><br/><br/>
+                        Gracias por su pago.
+                        Aqui esta su comprobante Electronico CFDI <strong t-out="(object.name or '').replace('/','-') or ''">BNK1-2021-05-0002</strong> por la cantidad  <strong t-out="format_amount(object.amount_total, object.currency_id) or ''">$ 10.00</strong> de <t t-out="object.company_id.name or ''">Anfepi</t>.
+                        <br /><br />
+                        No dude en contactarnos si tiene alguna pregunta.
+                        <br/><br/>
+                        Atentamente,
+                        <t t-if="user.signature">
+                            <br/>
+                            <t t-out="user.signature or ''">--<br/>German Ponce Dominguez</t>
+                        </t>
+                    </p>
+                </div>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

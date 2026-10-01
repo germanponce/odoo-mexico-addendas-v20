@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============ Wizard de entrada: empresa + periodo ============ -->
+    <record id="view_retencion_conciliacion_wizard_form" model="ir.ui.view">
+        <field name="name">l10n_mx.retencion.conciliacion.wizard.form</field>
+        <field name="model">l10n_mx.retencion.conciliacion.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Impuestos Retenidos — SAT vs Odoo">
+                <group>
+                    <group>
+                        <field name="company_id" options="{'no_create': True, 'no_open': True}"/>
+                    </group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generar" string="Generar reporte" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============ Lista del resultado (drill-down por régimen) ============ -->
+    <record id="view_retencion_conciliacion_line_list" model="ir.ui.view">
+        <field name="name">l10n_mx.retencion.conciliacion.line.list</field>
+        <field name="model">l10n_mx.retencion.conciliacion.line</field>
+        <field name="arch" type="xml">
+            <list string="Impuestos Retenidos" create="false" edit="false" delete="false"
+                  default_order="document_date">
+                <field name="currency_id" column_invisible="1"/>
+                <field name="uuid" optional="show"/>
+                <field name="partner_id"/>
+                <field name="tax_regime" string="Régimen" optional="show"/>
+                <field name="document_date" string="Fecha Doc"/>
+                <field name="payment_method" string="Mét."/>
+                <field name="payment_date" string="F. Pago" optional="hide"/>
+                <field name="proporcion" widget="percentage" string="% Pag." optional="show"/>
+                <field name="subtotal" string="Subtotal (gasto)" sum="Subtotal"/>
+                <field name="isr_ret_sat" sum="ISR SAT"/>
+                <field name="iva_ret_sat" sum="IVA SAT"/>
+                <field name="isr_ret_odoo" sum="ISR Odoo" optional="show"/>
+                <field name="iva_ret_odoo" sum="IVA Odoo" optional="show"/>
+                <field name="diff_isr" sum="Dif ISR"/>
+                <field name="diff_iva" sum="Dif IVA"/>
+                <field name="move_id" string="Póliza"/>
+                <field name="estado" widget="badge"
+                       decoration-success="estado == 'cuadra'"
+                       decoration-danger="estado == 'difiere'"
+                       decoration-warning="estado == 'no_odoo'"/>
+                <button name="action_open_xml" type="object" icon="fa-file-code-o"
+                        title="Ver XML SAT importado"/>
+                <button name="action_open_move" type="object" icon="fa-book"
+                        title="Ver póliza en Odoo" invisible="not move_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============ Search: agrupar por régimen (default) / método / estado ============ -->
+    <record id="view_retencion_conciliacion_line_search" model="ir.ui.view">
+        <field name="name">l10n_mx.retencion.conciliacion.line.search</field>
+        <field name="model">l10n_mx.retencion.conciliacion.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="uuid"/>
+                <field name="partner_id"/>
+                <field name="move_id"/>
+                <filter name="solo_difiere" string="Solo diferencias" domain="[('estado', '=', 'difiere')]"/>
+                <filter name="solo_no_odoo" string="No en Odoo" domain="[('estado', '=', 'no_odoo')]"/>
+                <separator/>
+                <filter name="pue" string="PUE" domain="[('payment_method', '=', 'PUE')]"/>
+                <filter name="ppd" string="PPD" domain="[('payment_method', '=', 'PPD')]"/>
+                <!-- ====== Agrupar por (filtros directos en search, patron v19) ====== -->
+                <separator/>
+                <filter name="group_regimen" string="Régimen" context="{'group_by': 'tax_regime'}"/>
+                <filter name="group_metodo" string="Método (PUE/PPD)" context="{'group_by': 'payment_method'}"/>
+                <filter name="group_estado" string="Estado" context="{'group_by': 'estado'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============ Exportar a Excel (menú Acción de la lista) ============ -->
+    <record id="action_server_export_retencion_excel" model="ir.actions.server">
+        <field name="name">Exportar a Excel</field>
+        <field name="model_id" ref="model_l10n_mx_retencion_conciliacion_line"/>
+        <field name="binding_model_id" ref="model_l10n_mx_retencion_conciliacion_line"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    action = records[0].wizard_id.action_export_excel()
+        </field>
+    </record>
+
+    <!-- ============ Acción + Menú ============ -->
+    <record id="action_retencion_conciliacion_wizard" model="ir.actions.act_window">
+        <field name="name">Impuestos Retenidos</field>
+        <field name="res_model">l10n_mx.retencion.conciliacion.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_retencion_conciliacion"
+              parent="menu_l10n_mx_xml_sat"
+              action="action_retencion_conciliacion_wizard"
+              sequence="6"
+              name="Impuestos Retenidos"
+              groups="group_l10n_mx_xml_sat_user"/>
+
+</odoo>

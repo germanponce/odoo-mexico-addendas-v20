@@ -1,0 +1,870 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+<!-- ── HEADER ──────────────────────────────────────────────────────────── -->
+<template id="external_layout_header_transporte">
+    <div class="header">
+        <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;font-size:10px;">
+            <tr>
+                <!-- Logo -->
+                <td width="18%" style="vertical-align:middle;text-align:center;padding:4px;border-right:1px solid #aba5a4;">
+                    <img t-if="o.company_id.logo"
+                         t-att-src="image_data_uri(o.company_id.logo)"
+                         alt="Logo"
+                         style="max-height:72px;height:auto;"/>
+                </td>
+
+                <!-- Datos Empresa centrados -->
+                <td width="52%" style="vertical-align:middle;text-align:center;padding:4px;border-right:1px solid #aba5a4;">
+                    <strong style="font-size:13px;">
+                        <span t-field="o.company_id.partner_id.name"/>
+                    </strong><br/>
+                    <span t-field="o.company_id.partner_id.vat"/><br/>
+                    <span t-field="o.company_id.partner_id.street"/>
+                    <span t-if="o.company_id.partner_id.street_number">
+                        <span t-field="o.company_id.partner_id.street_number"/>
+                    </span>
+                    <span t-field="o.company_id.partner_id.city"/>
+                    <span t-field="o.company_id.partner_id.state_id.name"/>
+                    <span t-field="o.company_id.partner_id.country_id.name"/><br/>
+                    <strong>LUGAR EXPEDICION: </strong>
+                    <span t-out="cfdi_values.get('expedition')">94680</span>
+                </td>
+
+                <!-- Bloque Fecha/Folio con filas de fondo gris alternadas -->
+                <td width="30%" style="vertical-align:top;padding:0;">
+                    <table width="100%" style="border-collapse:collapse;">
+                        <tr style="background-color:#aba5a4;">
+                            <td style="padding:2px 5px;text-align:center;font-weight:bold;font-size:10px;border-bottom:1px solid #aba5a4;">
+                                Fecha
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:2px 5px;text-align:center;font-size:9px;border-bottom:1px solid #aba5a4;">
+                                <span t-out="cfdi_values.get('emission_date_str')">2026-01-01T00:00:00</span>
+                            </td>
+                        </tr>
+                        <tr style="background-color:#aba5a4;">
+                            <td style="padding:2px 5px;text-align:center;font-weight:bold;font-size:10px;border-bottom:1px solid #aba5a4;">
+                                CFDI 4.0/ Carta Porte 3.1
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:3px 5px;text-align:center;font-weight:bold;font-size:12px;">
+                                <span t-field="o.name"/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</template>
+
+
+<!-- ── CUERPO PRINCIPAL ──────────────────────────────────────────────── -->
+<template id="report_transporte_cfdi_document">
+    <t t-call="web.basic_layout">
+        <!-- Variables globales -->
+        <t t-set="cfdi_values" t-value="o._l10n_mx_edi_get_extra_invoice_report_values()"/>
+        <t t-set="cp_node"     t-value="cfdi_values.get('cfdi_node')"/>
+        <t t-set="ubicaciones" t-value="cp_node.findall('.//{http://www.sat.gob.mx/CartaPorte31}Ubicacion') if cp_node is not None else []"/>
+        <t t-set="autotransporte" t-value="cp_node.find('.//{http://www.sat.gob.mx/CartaPorte31}AutotransporteFederal') if cp_node is not None else None"/>
+        <t t-set="seguros"     t-value="autotransporte.find('{http://www.sat.gob.mx/CartaPorte31}Seguros') if autotransporte is not None else None"/>
+
+        <!-- Header -->
+        <t t-call="l10n_mx_edi_account_move_report_dynamic.external_layout_header_transporte"/>
+
+        <!-- Contexto de idioma -->
+        <t t-set="o" t-value="o.with_context({'lang': o.partner_id.lang}).sudo()"/>
+
+        <div class="page" style="font-size:10px;">
+
+            <!-- ── ORIGEN / CLIENTE ──────────────────────────────────── -->
+            <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;font-size:10px;margin-top:3px;">
+                <thead>
+                    <tr style="background-color:#aba5a4;color:#000;">
+                        <td width="50%" style="padding:2px 5px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">ORIGEN</td>
+                        <td width="50%" style="padding:2px 5px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">CLIENTE</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <!-- Origen -->
+                        <td style="padding:3px 6px;border:1px solid #aba5a4;vertical-align:top;">
+                            <t t-if="cp_node is not None">
+                                <t t-foreach="ubicaciones" t-as="ubic">
+                                    <t t-if="ubic.get('TipoUbicacion') == 'Origen'">
+                                        <strong>Origen: </strong>
+                                        <span t-out="ubic.get('IDUbicacion', '')"/><br/>
+                                        <strong>Remitente: </strong>
+                                        <span t-out="ubic.get('NombreRemitenteDestinatario', '')"/><br/>
+                                        <strong>RFC: </strong>
+                                        <span t-out="ubic.get('RFCRemitenteDestinatario', '')"/><br/>
+                                        <t t-set="dom" t-value="ubic.find('{http://www.sat.gob.mx/CartaPorte31}Domicilio')"/>
+                                        <t t-if="dom is not None">
+                                            <strong>Domicilio: </strong>
+                                            <span t-out="dom.get('Calle', '')"/>
+                                            <span t-out="dom.get('NumeroExterior', '')"/>
+                                            <span t-out="dom.get('Colonia', '')"/>
+                                            <span t-out="dom.get('Municipio', '')"/>
+                                            <span t-out="dom.get('Estado', '')"/>
+                                            <span t-out="dom.get('CodigoPostal', '')"/><br/>
+                                        </t>
+                                        <strong>FechaHoraSalida: </strong>
+                                        <span t-out="ubic.get('FechaHoraSalidaLlegada', '')"/>
+                                    </t>
+                                </t>
+                            </t>
+                            <t t-if="cp_node is None">
+                                <strong>Remitente: </strong><span t-field="o.company_id.partner_id.name"/><br/>
+                                <span t-field="o.company_id.partner_id.street"/><br/>
+                                <strong>RFC: </strong><span t-field="o.company_id.partner_id.vat"/>
+                            </t>
+                        </td>
+
+                        <!-- Cliente — con bloque SEGURO VEHICULAR al final -->
+                        <td style="padding:3px 6px;border:1px solid #aba5a4;vertical-align:top;">
+                            <strong><span t-field="o.partner_id.name"/></strong><br/>
+                            <strong>RFC: </strong><span t-field="o.partner_id.vat"/><br/>
+                            <strong>REGIMEN FISCAL: </strong>
+                            <span t-esc="o.partner_id.l10n_mx_edi_fiscal_regime"/> -
+                            <span t-field="o.partner_id.l10n_mx_edi_fiscal_regime"/><br/>
+                            <strong>CP: </strong><span t-if="o.partner_id.zip" t-field="o.partner_id.zip"/><br/>
+                            <span t-field="o.partner_id.street"/>
+                            <span t-if="o.partner_id.street_number">
+                                <span t-field="o.partner_id.street_number"/>
+                            </span>
+                            <span t-field="o.partner_id.street2"/><br/>
+                            <span t-field="o.partner_id.city"/>
+                            <span t-field="o.partner_id.state_id.name"/>
+                            <span t-field="o.partner_id.country_id.name"/><br/>
+                            <!-- SEGURO VEHICULAR -->
+                            <table width="100%" style="border-collapse:collapse;margin-top:4px;border-top:1px solid #aba5a4;">
+                                <tr style="background-color:#aba5a4;color:#000;">
+                                    <td colspan="2" style="padding:1px 4px;text-align:center;font-weight:bold;font-size:9px;">SEGURO VEHICULAR</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:1px 4px;font-size:9px;">
+                                        <strong>RespCivil: </strong>
+                                        <span t-out="o.get_aseguradora()"/>
+                                    </td>
+                                    <td style="padding:1px 4px;font-size:9px;">
+                                        <strong>Poliza: </strong>
+                                        <span t-out="o.get_aseguradora_poliza()"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ── DESTINO / OPERADOR + VEHICULO ────────────────────── -->
+            <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;font-size:10px;margin-top:3px;">
+                <thead>
+                    <tr style="background-color:#aba5a4;color:#000;">
+                        <td width="50%" style="padding:2px 5px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">DESTINO</td>
+                        <td width="50%" style="padding:2px 5px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">DATOS DE OPERADOR &amp; VEHICULO</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <!-- Destino -->
+                        <td style="padding:3px 6px;border:1px solid #aba5a4;vertical-align:top;">
+                            <t t-if="cp_node is not None">
+                                <t t-foreach="ubicaciones" t-as="ubic">
+                                    <t t-if="ubic.get('TipoUbicacion') == 'Destino'">
+                                        <strong>Destino: </strong>
+                                        <span t-out="ubic.get('IDUbicacion', '')"/><br/>
+                                        <strong>Destinatario: </strong>
+                                        <span t-out="ubic.get('NombreRemitenteDestinatario', '')"/><br/>
+                                        <strong>RFC: </strong>
+                                        <span t-out="ubic.get('RFCRemitenteDestinatario', '')"/><br/>
+                                        <t t-set="dom" t-value="ubic.find('{http://www.sat.gob.mx/CartaPorte31}Domicilio')"/>
+                                        <t t-if="dom is not None">
+                                            <strong>Domicilio: </strong>
+                                            <span t-out="dom.get('Calle', '')"/>
+                                            <span t-out="dom.get('NumeroExterior', '')"/>
+                                            <span t-out="dom.get('Colonia', '')"/>
+                                            <span t-out="dom.get('Municipio', '')"/>
+                                            <span t-out="dom.get('Estado', '')"/>
+                                            <span t-out="dom.get('CodigoPostal', '')"/><br/>
+                                        </t>
+                                        <strong>FechaHoraLlegada: </strong>
+                                        <span t-out="ubic.get('FechaHoraSalidaLlegada', '')"/><br/>
+                                        <t t-set="cp_root" t-value="cp_node.find('{http://www.sat.gob.mx/CartaPorte31}CartaPorte')"/>
+                                        <t t-if="cp_root is not None">
+                                            <strong>Total Distancia recorrida: </strong>
+                                            <span t-out="cp_root.get('TotalDistRec', '')"/>
+                                        </t>
+                                    </t>
+                                </t>
+                            </t>
+                            <t t-if="cp_node is None">
+                                <strong>Destinatario: </strong><span t-field="o.partner_id.name"/><br/>
+                                <strong>RFC: </strong><span t-field="o.partner_id.vat"/>
+                            </t>
+                        </td>
+
+                        <!-- Operador y Vehiculo — 100% campos ORM de l10n_mx_einvoice_waybill_complemento_ee -->
+                        <td style="padding:3px 6px;border:1px solid #aba5a4;vertical-align:top;">
+
+                            <!-- Viaje (ref de la factura) -->
+                            <t t-if="o.ref">
+                                <strong>Viaje: </strong>
+                                <span t-field="o.ref"/><br/>
+                            </t>
+
+                            <!-- Operadores: driver_figure_ids
+                                 Campos: partner_id.name, driver_cp_vat (RFC), cp_driver_license -->
+                            <t t-foreach="o.driver_figure_ids" t-as="op">
+                                <strong>Operador: </strong>
+                                <span t-field="op.partner_id.name"/><br/>
+                                <strong>RFC: </strong>
+                                <span t-field="op.driver_cp_vat"/>
+                                <![CDATA[&nbsp;&nbsp;]]>
+                                <strong>Licencia: </strong>
+                                <span t-field="op.cp_driver_license"/><br/>
+                            </t>
+
+                            <!-- PermSCT: type_stc_permit_id.code / type_stc_permit_number -->
+                            <t t-if="o.type_stc_permit_id or o.type_stc_permit_number">
+                                <strong>PermSCT: </strong>
+                                <span t-field="o.type_stc_permit_id.code"/>
+                                <![CDATA[&nbsp;&nbsp;]]>
+                                <strong>NumPermSCT: </strong>
+                                <span t-field="o.type_stc_permit_number"/><br/>
+                            </t>
+
+                            <!-- Tractor: vehicle_plate_cp, vehicle_year_model_cp,
+                                 configuracion_federal_id.code / .name, vehicle_gross_weight -->
+                            <t t-if="o.vehicle_plate_cp or o.configuracion_federal_id">
+                                <strong>Tractor: </strong>
+                                <span t-field="o.vehicle_plate_cp"/>
+                                <![CDATA[&nbsp;]]>
+                                <strong>PLACAS: </strong>
+                                <span t-field="o.vehicle_plate_cp"/>
+                                <![CDATA[&nbsp;]]>
+                                <strong>MOD: </strong>
+                                <span t-field="o.vehicle_year_model_cp"/>
+                                <![CDATA[&nbsp;]]>
+                                <strong>CONFIG: </strong>
+                                <span t-field="o.configuracion_federal_id.code"/><br/>
+                                <strong>PESO BRUTO V: </strong>
+                                <span t-field="o.vehicle_gross_weight"/><br/>
+                            </t>
+
+                            <!-- Remolques: trailer_line_ids
+                                 Campos: trailer.subtype_trailer_id (Many2one), trailer.trailer_plate_cp -->
+                            <t t-foreach="o.trailer_line_ids" t-as="trailer">
+                                <strong>Remolque: </strong>
+                                <span t-field="trailer.trailer_plate_cp"/>
+                                <![CDATA[&nbsp;]]>
+                                <strong>TIPO: </strong>
+                                <span t-field="trailer.subtype_trailer_id.name"/>
+                                <![CDATA[&nbsp;]]>
+                                <strong>PLACAS: </strong>
+                                <span t-field="trailer.trailer_plate_cp"/><br/>
+                            </t>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <!-- ── TIPO DOC / CONDICIONES / LUGAR / CERTIFICADO ─────── -->
+            <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;font-size:10px;margin-top:3px;">
+                <thead>
+                    <tr style="background-color:#aba5a4;color:#000;">
+                        <td width="20%" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">TIPO DOCUMENTO</td>
+                        <td width="25%" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">CONDICIONES DE PAGO</td>
+                        <td width="20%" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">LUGAR EXPEDICION</td>
+                        <td width="35%" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">NO. CERTIFICADO</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                            <t t-if="o.move_type == 'out_invoice'">I Ingreso</t>
+                            <t t-elif="o.move_type == 'out_refund'">E Egreso</t>
+                        </td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                            <span t-if="o.invoice_payment_term_id" t-field="o.invoice_payment_term_id"/>
+                        </td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                            <span t-out="cfdi_values.get('expedition')">94680</span>
+                        </td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-size:9px;">
+                            <span t-out="cfdi_values.get('certificate_sat_number')">00001000000707531913</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ── VALOR DECLARADO / CUOTA POR TONELADA / PROVEEDOR ─── -->
+            <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;font-size:10px;margin-top:0px;">
+                <thead>
+                    <tr style="background-color:#aba5a4;color:#000;">
+                        <td width="33%" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">VALOR DECLARADO</td>
+                        <td width="34%" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">CUOTA POR TONELADA</td>
+                        <td width="33%" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">PROVEEDOR</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;height:16px;">NO APLICA</td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;"></td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ── BULTOS ────────────────────────────────────────────── -->
+            <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;font-size:10px;margin-top:0px;">
+                <thead>
+                    <tr style="background-color:#aba5a4;color:#000;">
+                        <!-- <td colspan="2" style="padding:2px 4px;border:1px solid #aba5a4;font-weight:bold;">BULTOS</td> -->
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;font-weight:bold;">CANTIDAD</td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">QUE SE DICE QUE CONTIENE</td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">UNIDAD DE MEDIDA</td>
+                        <!-- <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">VOLUMEN MTS 3</td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">PESO EST</td> -->
+                    </tr>
+                    <!-- <tr style="background-color:#aba5a4;color:#000;">
+                        <td width="7%"  style="padding:1px 4px;border:1px solid #aba5a4;font-weight:bold;">NUM</td>
+                        <td width="10%" style="padding:1px 4px;border:1px solid #aba5a4;font-weight:bold;">CLASE</td>
+                        <td width="40%" style="padding:1px 4px;border:1px solid #aba5a4;"></td>
+                        <td width="18%" style="padding:1px 4px;border:1px solid #aba5a4;"></td>
+                        <td width="13%" style="padding:1px 4px;border:1px solid #aba5a4;"></td>
+                        <td width="12%" style="padding:1px 4px;border:1px solid #aba5a4;"></td>
+                    </tr> -->
+                </thead>
+                <tbody>
+                    <t t-set="lines_shipped" t-value="o.waybill_shipped_ids"/>
+                    <t t-foreach="lines_shipped" t-as="shipped_product">
+                        <tr>
+                            <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                                <span t-out="'%.2f' % (shipped_product.quantity or 0.0)"/>
+                            </td>
+                            <td style="padding:2px 4px;border:1px solid #aba5a4;">
+                                <span t-field="shipped_product.product_id"/>
+                            </td>
+                            <td style="padding:2px 4px;border:1px solid #aba5a4;">
+                                <span t-field="shipped_product.product_uom"/>
+                            </td>
+
+                            <!-- <td style="padding:2px 4px;border:1px solid #aba5a4;">
+                                <span t-field="line.name"/>
+                                <t t-if="o.ref">
+                                    <br/><span t-field="o.ref"/>
+                                </t>
+                                <t t-set="custom_numbers" t-value="line._l10n_mx_edi_get_custom_numbers()"/>
+                                <t t-if="custom_numbers">
+                                    <br/>Pedimentos:
+                                    <t t-foreach="custom_numbers" t-as="cn">
+                                        <span t-out="cn"/>
+                                        <t t-if="not cn_last">, </t>
+                                    </t>
+                                </t>
+                                <br/>
+                                <strong>FECHA FLETE: </strong>
+                                <span t-out="str(o.invoice_date) if o.invoice_date else ''"/>
+                                <br/>
+                                <strong>ID </strong>
+                                <span t-if="o.ref" t-field="o.ref"/>
+                            </td> -->
+                        </tr>
+                    </t>
+                    <t t-set="waybill_ids" t-value="o.waybill_ids"/>
+                    <t t-foreach="waybill_ids" t-as="waybill">
+                        <tr>
+                            <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:left;padding-left: 5px;" colspan="3">
+                                <strong>FECHA FLETE: </strong>
+                                <span t-out="str(waybill.date_order) if o.invoice_date else ''"/> 
+                                <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+                                <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+                                <strong>REFERENCIA: </strong>
+                                <span t-if="waybill.client_order_ref" t-field="waybill.client_order_ref"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+
+            <!-- ── CONCEPTOS CFDI ────────────────────────────────────── -->
+            <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;font-size:10px;margin-top:3px;">
+                <thead>
+                    <tr style="background-color:#aba5a4;color:#000;">
+                        <td width="10%" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Cantidad</td>
+                        <td width="12%" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">No. Identificacion</td>
+                        <td width="10%" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Unidad</td>
+                        <td width="8%"  style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Descripcion</td>
+                        <td width="35%" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Descripcion</td>
+                        <td width="12%" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Precio Unitario</td>
+                        <td width="13%" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Importe</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="o.invoice_line_ids" t-as="line">
+                        <t t-if="line.display_type == 'product'">
+                            <tr>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:right;">
+                                    <span t-out="'%.2f' % (line.quantity or 0.0)"/>
+                                </td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;">
+                                    <span t-field="line.product_id.default_code"/>
+                                    <br/>
+                                    <span t-field="line.product_uom_id"/>
+                                </td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;">
+                                    <span t-field="line.product_uom_id.unspsc_code_id.code"/>
+                                </td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;">
+                                    <span t-field="line.product_id.unspsc_code_id.code"/>
+                                </td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;">
+                                    <span t-field="line.name"/>
+                                </td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:right;">
+                                    <span t-out="'%.2f' % (line.price_unit or 0.0)"/>
+                                </td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:right;">
+                                    <span t-out="'%.2f' % (line.price_subtotal or 0.0)"/>
+                                </td>
+                            </tr>
+                            <!-- Observacion fiscal por impuestos -->
+                            <t t-if="line.get_taxes_line_details()">
+                                <tr>
+                                    <td colspan="7" style="padding:1px 4px;border-top:0;border-left:0;border-right:0;border-bottom:1px solid #aba5a4;font-size:9px;">
+                                        <t t-foreach="line.get_taxes_line_details()" t-as="txl">
+                                            <strong><span t-out="txl[0]"/>: </strong>
+                                            EFECTOS FISCALES AL PAGO
+                                            <![CDATA[&nbsp;&nbsp;]]>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </t>
+                </tbody>
+            </table>
+
+
+            <!-- ── TOTALES / INFORMACIÓN CFDI ──────────────────────────── -->
+            <table width="100%" style="border-collapse:collapse;border:0;font-size:11px;margin-top:4px;">
+                <tr>
+                    <!-- Información Fiscal izquierda -->
+                    <td width="45%" style="vertical-align:top;padding:4px;">
+                        <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;">
+                            <thead>
+                                <tr style="background-color:#aba5a4;color:#FFF;">
+                                    <td colspan="2" style="padding:3px 5px;text-align:center;border:1px solid #aba5a4;">
+                                        <strong>INFORMACIÓN DE TIMBRADO</strong>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding:2px 5px;border:1px solid #aba5a4;"><strong>NO. DE SERIE DEL CERTIFICADO DEL SAT</strong></td>
+                                    <td style="padding:2px 5px;border:1px solid #aba5a4;">
+                                        <span t-out="cfdi_values.get('certificate_sat_number')">30001000000500003442</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 5px;border:1px solid #aba5a4;"><strong>NO. DE SERIE DEL CERTIFICADO DEL EMISOR</strong></td>
+                                    <td style="padding:2px 5px;border:1px solid #aba5a4;">
+                                        <span t-out="cfdi_values.get('certificate_number')">30001000000500003416</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 5px;border:1px solid #aba5a4;"><strong>FECHA Y HORA DE CERTIFICACIÓN</strong></td>
+                                    <td style="padding:2px 5px;border:1px solid #aba5a4;">
+                                        <span t-out="cfdi_values.get('stamp_date')">2023-09-12</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 5px;border:1px solid #aba5a4;"><strong>RFC PROVEEDOR DE CERTIFICACIÓN</strong></td>
+                                    <td style="padding:2px 5px;border:1px solid #aba5a4;">
+                                        <span>LSO1306189R5</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 5px;border:1px solid #aba5a4;"><strong>FECHA Y HORA DE EMISIÓN DE CFDI</strong></td>
+                                    <td style="padding:2px 5px;border:1px solid #aba5a4;">
+                                        <span t-out="cfdi_values.get('emission_date_str')">2023-09-12</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:2px 5px;border:1px solid #aba5a4;"><strong>LUGAR DE EXPEDICIÓN</strong></td>
+                                    <td style="padding:2px 5px;border:1px solid #aba5a4;">
+                                        <span t-out="cfdi_values.get('expedition')">20928</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+
+                    <!-- Totales derecha -->
+                    <td width="55%" style="vertical-align:top;padding:4px;">
+                        <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;">
+                            <thead>
+                                <tr style="background-color:#aba5a4;color:#FFF;">
+                                    <td colspan="2" style="padding:3px 5px;text-align:center;border:1px solid #aba5a4;">
+                                        <strong>IMPORTES</strong>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                                                <!-- ── TOTALES — campos directos del modelo ── -->
+                                    <tr>
+                                        <td style="padding:3px 5px;border:1px solid #aba5a4;">Subtotal</td>
+                                        <td style="padding:3px 5px;border:1px solid #aba5a4;text-align:right;">
+                                            <span t-out="'%.2f' % (o.amount_untaxed or 0.0)"/>
+                                        </td>
+                                    </tr>
+                                    <t t-foreach="o.line_ids.filtered(lambda l: l.tax_line_id and not l.display_type)" t-as="tax_line">
+                                        <tr>
+                                            <td style="padding:3px 5px;border:1px solid #aba5a4;">
+                                                <span t-out="tax_line.tax_line_id.name"/>
+                                            </td>
+                                            <td style="padding:3px 5px;border:1px solid #aba5a4;text-align:right;">
+                                                <span t-out="'%.2f' % abs(tax_line.price_total or 0.0)"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr style="font-weight:bold;">
+                                        <td style="padding:3px 5px;border:1px solid #aba5a4;">Total</td>
+                                        <td style="padding:3px 5px;border:1px solid #aba5a4;text-align:right;">
+                                            <span t-out="'%.2f' % (o.amount_total or 0.0)"/>
+                                        </td>
+                                    </tr>
+
+                            </tbody>
+                        </table>
+
+                        <!-- Cantidad con letra -->
+                        <p style="margin-top:6px;font-size:11px;" t-if="o.company_id.display_invoice_amount_total_words">
+                            <strong>CANTIDAD CON LETRA: </strong>
+                            <span t-field="o.amount_total_words"/>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            
+            <!-- ── CANTIDAD CON LETRA ────────────────────────────────── -->
+            <!-- <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;font-size:10px;margin-top:3px;">
+                <tr>
+                    <td style="padding:3px 6px;border:1px solid #aba5a4;text-align:center;">
+                        <strong>CANTIDAD CON LETRA</strong><br/>
+                        <span t-if="o.company_id.display_invoice_amount_total_words" t-field="o.amount_total_words"/>
+                    </td>
+                </tr>
+            </table> -->
+
+            <!-- ── OBSERVACIONES ─────────────────────────────────────── -->
+            <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;font-size:10px;margin-top:3px;">
+                <tr style="background-color:#aba5a4;color:#000;">
+                    <td style="padding:3px 6px;border:1px solid #aba5a4;text-align:center;">
+                        <strong>OBSERVACIONES</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:3px 6px;border:1px solid #aba5a4;min-height:18px;">
+                        <span t-field="o.narration"/>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- ── CARTA PORTE 3.1 ───────────────────────────────────── -->
+            <t t-if="cp_node is not None">
+                <!-- Encabezado: CARTA PORTE 3.1 a la izquierda, UUID a la derecha (sin borde) -->
+                <table width="100%" style="border-collapse:collapse;font-size:10px;margin-top:6px;border:1px solid #aba5a4;">
+                    <tr style="background-color:#aba5a4;color:#000;">
+                        <td width="40%" style="padding:3px 5px;font-weight:bold;font-size:14px;border:0;">
+                            <strong>CARTA PORTE 3.1</strong>
+                        </td>
+                        <td width="60%" style="padding:3px 5px;text-align:right;font-size:14px;border:0;font-weight:bold">
+                            <span t-out="cfdi_values.get('uuid')"/>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- MERCANCIAS -->
+                <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;font-size:10px;">
+                    <thead>
+                        <tr style="background-color:#aba5a4;color:#000;">
+                            <td colspan="6" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">MERCANCIAS</td>
+                        </tr>
+                        <tr style="background-color:#aba5a4;color:#000;">
+                            <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">PESO BRUTO</td>
+                            <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">UNIDAD PESO</td>
+                            <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">NUM TOTAL</td>
+                            <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">CARGO TASACION</td>
+                            <td colspan="2" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">LOG INVERSA</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="mercancias_node" t-value="cp_node.find('.//{http://www.sat.gob.mx/CartaPorte31}Mercancias')"/>
+                        <t t-if="mercancias_node is not None">
+                            <tr>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                                    <span t-out="mercancias_node.get('PesoBrutoTotal', '')"/>
+                                </td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                                    <span t-out="mercancias_node.get('UnidadPeso', '')"/>
+                                </td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                                    <span t-out="mercancias_node.get('NumTotalMercancias', '')"/>
+                                </td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;"></td>
+                                <td colspan="2" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;"></td>
+                            </tr>
+
+                            <!-- Detalle mercancia -->
+                            <tr style="background-color:#aba5a4;color:#000;">
+                                <td colspan="6" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Mercancia</td>
+                            </tr>
+                            <tr style="background-color:#aba5a4;color:#000;">
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Cantidad</td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Unidad</td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Que se dice que contiene</td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Mat Peligroso</td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Embalaje</td>
+                                <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Peso</td>
+                            </tr>
+                            <t t-foreach="mercancias_node.findall('{http://www.sat.gob.mx/CartaPorte31}Mercancia')" t-as="merc">
+                                <tr>
+                                    <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                                        <span t-out="merc.get('Cantidad', '')"/>
+                                    </td>
+                                    <td style="padding:2px 4px;border:1px solid #aba5a4;">
+                                        <span t-out="merc.get('ClaveUnidad', '')"/><br/>
+                                        <span t-out="merc.get('Descripcion', '')[:10]"/>
+                                    </td>
+                                    <td style="padding:2px 4px;border:1px solid #aba5a4;">
+                                        <span t-out="merc.get('BienesTransp', '')"/><br/>
+                                        <span t-out="merc.get('Descripcion', '')"/>
+                                    </td>
+                                    <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                                        <span t-out="'Si' if merc.get('MaterialPeligroso') == 'Si' else 'No'"/>
+                                    </td>
+                                    <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                                        <span t-out="merc.get('Embalaje', '')"/>
+                                    </td>
+                                    <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:right;">
+                                        <span t-out="merc.get('PesoEnKg', '')"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+
+
+            <!-- ── LEYENDA PAGARE ────────────────────────────────────── -->
+            <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;font-size:12px;margin-top:3px;">
+                <tr>
+                    <td style="padding:3px 6px;border:1px solid #aba5a4;min-height:18px;">
+                        <p style="font-size:12px;margin-top:5px;text-align:justify;padding:3px 0;">
+                            DEBO Y PAGARE A LA VISTA EN PLAZA A LA ORDEN DE
+                            <span t-field="o.company_id.partner_id.name"/>
+                            EL VALOR DE ESTA CARTA PORTE ESTE ES UN PAGARE MERCANTIL Y
+                            SE RIGE POR LA PARTE FINAL DEL ART. 173 Y ARTS. CORRELATIVOS DE LA LEY DE TITULOS Y OPERACIONES DE CREDITO
+                        </p>
+                        <div style="width:100%;text-align:center;margin-top:10px;">
+                            Recibimos de conformidad
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+
+            <!-- ── INFO CFDI / INFORMACION DEL CFDI ─────────────────── -->
+            <table width="100%" style="border-collapse:collapse;border:1px solid #aba5a4;font-size:9px;margin-top:3px;">
+                <thead>
+                    <tr style="background-color:#aba5a4;color:#000;">
+                        <td colspan="6" style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">INFORMACION DEL CFDI</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Forma de pago</td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Metodo de pago</td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Moneda</td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Tipo cambio</td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Uso CFDI</td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;font-weight:bold;">Regimen Fiscal</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                            <span t-out="cfdi_values.get('payment_way', '')"/>
+                        </td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                            <span t-out="cfdi_values.get('payment_method', '')"/>
+                        </td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                            <span t-field="o.currency_id.name"/>
+                        </td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                            <span t-esc="o.get_tipo_cambio()"/>
+                        </td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                            <span t-out="cfdi_values.get('usage', '')"/>
+                        </td>
+                        <td style="padding:2px 4px;border:1px solid #aba5a4;text-align:center;">
+                            <span t-esc="o.company_id.partner_id.l10n_mx_edi_fiscal_regime"/> -
+                            <span t-field="o.company_id.partner_id.l10n_mx_edi_fiscal_regime"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ── QR + SELLOS ───────────────────────────────────────── -->
+            <div class="row col-12" id="complement" style="margin-top:6px;">
+                <div class="barcode col-3">
+                    <img alt="Barcode" t-att-src="cfdi_values.get('barcode_src')"/>
+                </div>
+                <div class="complement-details col-9" style="font-size:8px;">
+                    <div style="background-color:#eee;padding:1px 4px;font-weight:bold;">Sello digital del emisor</div>
+                    <div style="word-break:break-all;margin-bottom:3px;">
+                        <span t-out="cfdi_values.get('sello_emisor', cfdi_values.get('sello_sat', ''))">No identificado</span>
+                    </div>
+                    <div style="background-color:#eee;padding:1px 4px;font-weight:bold;">Sello digital del SAT</div>
+                    <div style="word-break:break-all;margin-bottom:3px;">
+                        <span t-out="cfdi_values.get('sello_sat', '')">No identificado</span>
+                    </div>
+                    <div style="background-color:#eee;padding:1px 4px;font-weight:bold;">Cadena original del complemento del certificado digital del SAT</div>
+                    <div style="word-break:break-all;">
+                        <span t-out="cfdi_values.get('cadena', '')">No identificado</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══════════════════════════════════════════════════════
+                 ANEXO: CONDICIONES (pagina nueva, sin borde, texto compacto)
+                 ══════════════════════════════════════════════════════ -->
+            <div style="font-size:14px;page-break-before:always;margin-top:0;padding:0;">
+                <p style="text-align:center;font-weight:bold;font-size:14px;margin:0 0 4px 0;">
+                    Condiciones de prestacion de servicios que ampara la <strong>CARTA DE PORTE O COMPROBANTE PARA EL TRANSPORTE DE MERCANCIAS</strong>
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>PRIMERA.-</strong> Para los efectos del presente contrato de transporte se denomina "Transportista" al que realiza el servicio de transportacion y "Expedidor", "Remitente" o "Usuario" al usuario que contrate el servicio o remite la mercancia.
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>.SEGUNDA.-</strong> El "Expedidor", "Remitente" o "Usuario" es responsable de que la informacion proporcionada al "Transportista" sea veraz y que la documentacion que entregue para efectos del transporte sea la correcta.
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>TERCERA.-</strong> El "Expedidor", "Remitente" o "Usuario" debe declarar al "Transportista" el tipo de mercancia o efectos de que se trate, peso, medidas y/o numero de la carga que entrega para su transporte y, en su caso, el valor de la misma. La carga que se entregue a granel podra ser aforada en metros cubicos con la conformidad del "Expedidor", "Remitente" o "Usuario".
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>CUARTA.-</strong> Para efectos del transporte, el "Expedidor", "Remitente" o "Usuario" debera entregar al "Transportista" los documentos que las leyes y reglamentos exijan para llevar a cabo el servicio, en caso de no cumplirse con estos requisitos el "Transportista" esta obligado a rehusar el transporte de las mercancias.
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>QUINTA.-</strong> Si por sospecha de falsedad en la declaracion del contenido de un bulto el "Transportista" deseare proceder a su reconocimiento, podra hacerlo ante testigos y con asistencia del "Expedidor", "Remitente" o "Usuario" o del consignatario. Si este ultimo no concurriere, se solicitara la presencia de un inspector de la Secretaria de Comunicaciones y Transportes, y se levantara el acta correspondiente. El "Transportista" tendra en todo caso, la obligacion de dejar los bultos en el estado en que se encontraban antes del reconocimiento.
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>SEXTA.-</strong> El "Transportista" debera recoger y entregar la carga precisamente en los domicilios que senale el "Expedidor", "Remitente" o "Usuario", ajustandose a los terminos y condiciones convenidos. El "Transportista" solo esta obligado a llevar la carga al domicilio del consignatario para su entrega una sola vez. Si esta no fuera recibida, se dejara aviso de que la mercancia queda a disposicion del interesado en las bodegas que indique el "Transportista".
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>SEPTIMA.-</strong> Si la carga no fuere retirada dentro de los 30 dias habiles siguientes a aquel en que hubiere sido puesta a disposicion del consignatario, el "Transportista" podra solicitar la venta en subasta publica con arreglo a lo que dispone el Codigo de Comercio.
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>OCTAVA.-</strong> El "Transportista" y el "Expedidor", "Remitente" o "Usuario" negociaran libremente el precio del servicio, tomando en cuenta su tipo, caracteristica de los embarques, volumen, regularidad, clase de carga y sistema de pago.
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>NOVENA.-</strong> Si el "Expedidor", "Remitente" o "Usuario" desea que el "Transportista" asuma la responsabilidad por el valor de las mercancias o efectos que el declare y que cubra toda clase de riesgos, inclusive los derivados de caso fortuito o de fuerza mayor, las partes deberan convenir un cargo adicional, equivalente al valor de la prima del seguro que se contrate, el cual se debera expresar en un CFDI con Complemento Carta Porte.
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>DECIMA.-</strong> Cuando el importe del flete no incluya el cargo adicional, la responsabilidad del "Transportista" queda expresamente limitada a la cantidad equivalente a 15 Unidades de Medida y Actualizacion (UMAS) por tonelada o cuando se trate de embarques cuyo peso sea mayor de 200 kg., pero menor de 1000 kg; y 4 UMAS por remesa cuando se trate de embarques con peso hasta de 200 kg.
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>DECIMA PRIMERA.-</strong> El precio del transporte debera pagarse en origen, salvo convenio entre las partes de pago en destino. Cuando el transporte se hubiere concertado "Flete por Cobrar", la entrega de las mercancias o efectos se hara contra el pago del flete y el "Transportista" tendra derecho a retenerlos mientras no se le cubra el precio convenido.
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>DECIMA SEGUNDA.-</strong> Si al momento de la entrega resultare algun faltante o averia, el consignatario podra formular su reclamacion por escrito al "Transportista", dentro de las 24 horas siguientes.
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>DECIMA TERCERA.-</strong> El "Transportista" queda eximido de la obligacion de recibir mercancias o efectos para su transporte, en los siguientes casos:<br/>
+                    a) Cuando se trate de carga que por su naturaleza, peso, volumen, embalaje defectuoso o cualquier otra circunstancia no pueda transportarse sin destruirse o sin causar dano a los demas articulos o al material rodante, salvo que la empresa de que se trate tenga el equipo adecuado.<br/>
+                    b) Las mercancias cuyo transporte haya sido prohibido por disposiciones legales o reglamentarias. Cuando tales disposiciones no prohiban precisamente el transporte de determinadas mercancias, pero si ordenen la presentacion de ciertos documentos para que puedan ser transportadas, el "Expedidor", "Remitente" o "Usuario" estara obligado a entregar al "Transportista" los documentos correspondientes.
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>DECIMA CUARTA.-</strong> Los casos no previstos en las presentes condiciones y las quejas derivadas de su aplicacion se sometera por la via administrativa a la Secretaria de Comunicaciones y Transportes.
+                </p>
+                <p style="margin:2px 0;text-align:justify;">
+                    <strong>DECIMA QUINTA.-</strong> Para el caso de que el "Expedidor", "Remitente" o "Usuario" contrate carro por entero, este aceptara la responsabilidad solidaria para con el "Transportista" mediante la figura de la corresponsabilidad que contempla el articulo 10 del Reglamento Sobre el Peso, Dimensiones y Capacidad de los Vehiculos de Autotransporte que Transitan en los Caminos y Puentes de Jurisdiccion Federal, por lo que el "Expedidor", "Remitente" o "Usuario" queda obligado a verificar que la carga y el vehiculo que la transporta, cumplan con el peso y dimensiones maximas establecidos en la NOM-012-SCT-2-2017, o la que la sustituya.<br/>
+                    Para el caso de incumplimiento e inobservancia a las disposiciones que regulan el peso y dimensiones, por parte del "Expedidor", "Remitente" o "Usuario", este sera corresponsable de las infracciones y multas que la Secretaria de Infraestructura, Comunicaciones y Transportes o la Guardia Nacional impongan al "Transportista", por cargar las unidades con exceso de peso.
+                </p>
+            </div>
+            <!-- FIN ANEXO -->
+
+        </div>
+
+        <!-- PIE DE PAGINA -->
+        <div class="footer">
+            <table style="width:100%;">
+                <tr>
+                    <td style="font-size:9px;width:65%;text-align:center;border:1px solid transparent;">
+                        Este documento es una representacion impresa de un CFDI.
+                    </td>
+                    <td style="width:35%;text-align:right;border:1px solid transparent;">
+                        <strong style="font-size:9px;">
+                            Pagina <span class="page"/> de <span class="topage"/>
+                        </strong>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </t>
+</template>
+
+
+<!-- ── CONTENEDOR PRINCIPAL ─────────────────────────────────────────── -->
+<template id="report_transporte_cfdi">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="l10n_mx_edi_account_move_report_dynamic.report_transporte_cfdi_document"
+               t-lang="o.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+
+
+<!-- ── PAPER FORMAT ─────────────────────────────────────────────────── -->
+<record id="report_transporte_paper" model="report.paperformat">
+    <field name="page_height">0</field>
+    <field name="page_width">0</field>
+    <field name="margin_top">22</field>
+    <field name="header_spacing">18</field>
+    <field name="margin_right">7</field>
+    <field name="margin_bottom">10</field>
+    <field name="margin_left">7</field>
+    <field name="header_line" eval="False"/>
+    <field name="name">Transporte - Carta Porte 3.1</field>
+    <field name="orientation">Portrait</field>
+    <field name="dpi">110</field>
+    <field name="default" eval="False"/>
+    <field name="format">Letter</field>
+</record>
+
+
+<!-- ── ACCION DE REPORTE ────────────────────────────────────────────── -->
+<record id="report_transporte_cfdi_act" model="ir.actions.report">
+    <field name="name">Factura Transporte CFDI (Carta Porte 3.1)</field>
+    <field name="model">account.move</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">l10n_mx_edi_account_move_report_dynamic.report_transporte_cfdi</field>
+    <field name="report_file">l10n_mx_edi_account_move_report_dynamic.report_transporte_cfdi</field>
+    <field name="print_report_name">
+        (object.company_id.vat + '_' + (object.name or '').replace('/','_').replace(' ','_') + '_CP31.pdf')
+    </field>
+    <field name="binding_model_id" ref="account.model_account_move"/>
+    <field name="paperformat_id" ref="l10n_mx_edi_account_move_report_dynamic.report_transporte_paper"/>
+</record>
+
+  </data>
+</odoo>

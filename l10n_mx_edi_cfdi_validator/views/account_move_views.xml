@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_move_form_mx_cfdi_validator" model="ir.ui.view">
+        <field name="name">account.move.form.mx.cfdi.validator</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Insertar pestaña CFDI dentro del notebook, solo visible para proveedor -->
+            <xpath expr="//notebook" position="inside">
+
+                <page string="Validaciones XML"
+                      name="mx_cfdi_data"
+                      invisible="move_type not in ['in_invoice', 'in_refund']">
+
+                    <!-- ── Botón Releer XML ─────────────────────────────────── -->
+                    <div style="margin-bottom: 16px;">
+                        <button name="action_mx_cfdi_reread_xml"
+                                type="object"
+                                string="Releer XML"
+                                icon="fa-refresh"
+                                class="btn btn-secondary"
+                                invisible="not l10n_mx_edi_cfdi_attachment_id"/>
+                        <span invisible="l10n_mx_edi_cfdi_attachment_id"
+                              class="text-muted"
+                              style="font-style: italic;">
+                            Sin CFDI adjunto. Cargue el XML desde la pestaña CFDI estándar.
+                        </span>
+                        <!-- Alerta si hay errores de validación -->
+                        <span invisible="l10n_mx_cfdi_error_count == 0 or not l10n_mx_edi_cfdi_attachment_id"
+                              class="badge bg-danger"
+                              style="margin-left: 12px; font-size: 13px; padding: 5px 10px;">
+                            <field name="l10n_mx_cfdi_error_count" nolabel="1"/>
+                            error(s) de validación
+                        </span>
+                    </div>
+
+                    <!-- ── UUID ────────────────────────────────────────────────── -->
+                    <group>
+                        <group>
+                            <field name="l10n_mx_edi_cfdi_uuid"
+                                   string="UUID / Folio Fiscal"
+                                   readonly="1"/>
+
+                            <field name="l10n_mx_cfdi_sat_result"
+                                   string="Status SAT"
+                                   readonly="1"
+                                   force_save="1" 
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_sat_result == 'valid'"
+                                   decoration-danger="l10n_mx_cfdi_sat_result in ('cancelled','not_found')"
+                                   decoration-muted="l10n_mx_cfdi_sat_result in ('error','omitido')"
+                                   />
+                            <field name="l10n_mx_cfdi_sat_message" readonly="1" force_save="1" />
+                        </group>
+                        <group>
+                            <field name="l10n_mx_cfdi_version" readonly="1"/>
+                            <field name="l10n_mx_cfdi_tipo_comprobante" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- ── Emisor / Receptor ───────────────────────────────────── -->
+                    <group>
+                        <group string="Emisor">
+                            <field name="l10n_mx_cfdi_emisor_rfc"    readonly="1"/>
+                            <field name="l10n_mx_cfdi_emisor_nombre"  readonly="1"/>
+                            <field name="l10n_mx_cfdi_emisor_regimen" readonly="1"/>
+                        </group>
+                        <group string="Receptor">
+                            <field name="l10n_mx_cfdi_receptor_rfc"       readonly="1"/>
+                            <field name="l10n_mx_cfdi_receptor_nombre"    readonly="1"/>
+                            <field name="l10n_mx_cfdi_receptor_domicilio" readonly="1"/>
+                            <field name="l10n_mx_cfdi_receptor_regimen"   readonly="1"/>
+                            <field name="l10n_mx_cfdi_uso"                readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- ── Información Adicional ───────────────────────────────── -->
+                    <group string="Información Adicional">
+                        <group>
+                            <field name="l10n_mx_cfdi_metodo_pago"      readonly="1"/>
+                            <field name="l10n_mx_cfdi_forma_pago"       readonly="1"/>
+                            <field name="l10n_mx_cfdi_lugar_expedicion" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="l10n_mx_cfdi_moneda_xml"   readonly="1"/>
+                            <field name="l10n_mx_cfdi_subtotal_xml"
+                                   string="Subtotal" readonly="1"/>
+                            <field name="l10n_mx_cfdi_total_xml"
+                                   string="Total" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- ── Impuestos ───────────────────────────────────────────── -->
+                    <group string="Impuestos">
+                        <field name="l10n_mx_cfdi_tax_line_ids"
+                               readonly="1"
+                               nolabel="1" create="false" delete="false">
+                            <list string="Impuestos CFDI"
+                                  decoration-success="tipo == 'traslado'"
+                                  decoration-warning="tipo == 'retencion'">
+                                <field name="tipo"          string="Tipo"/>
+                                <field name="codigo"        string="Código"/>
+                                <field name="tipo_factor"   string="Tipo Factor"/>
+                                <field name="tasa_o_cuota"  string="Tasa o Cuota"/>
+                                <field name="importe"       string="Importe"/>
+                            </list>
+                        </field>
+                    </group>
+
+                    <!-- ── Validaciones SAT ────────────────────────────────────── -->
+                    <group string="Validaciones SAT"
+                           invisible="not l10n_mx_edi_cfdi_attachment_id">
+
+                        <!-- Ayuda -->
+                        <div class="alert alert-info" role="alert"
+                             style="margin-bottom: 12px; font-size: 13px;">
+                            Las validaciones activas se configuran en
+                            <b>Contabilidad → Configuración → Ajustes</b>.
+                            Solo las validaciones activas pueden bloquear la confirmación.
+                            <br/>
+                            Leyenda:
+                            <span style="color: #198754; font-weight: 600;">● Correcto</span> ·
+                            <span style="color: #dc3545; font-weight: 600;">● Error</span> ·
+                            <span style="color: #6c757d;">● No configurado</span>
+                        </div>
+
+                        <!-- Receptor -->
+                        <group string="Receptor" col="4">
+                            <field name="l10n_mx_cfdi_res_version"
+                                   string="Versión 4.0"
+                                   readonly="1"
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_res_version == 'ok'"
+                                   decoration-danger="l10n_mx_cfdi_res_version == 'error'"
+                                   decoration-muted="l10n_mx_cfdi_res_version == 'omitido'"/>
+                            <field name="l10n_mx_cfdi_res_rfc_receptor"
+                                   string="RFC Receptor"
+                                   readonly="1"
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_res_rfc_receptor == 'ok'"
+                                   decoration-danger="l10n_mx_cfdi_res_rfc_receptor == 'error'"
+                                   decoration-muted="l10n_mx_cfdi_res_rfc_receptor == 'omitido'"/>
+                            <field name="l10n_mx_cfdi_res_rs_receptor"
+                                   string="Razón Social Receptor"
+                                   readonly="1"
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_res_rs_receptor == 'ok'"
+                                   decoration-danger="l10n_mx_cfdi_res_rs_receptor == 'error'"
+                                   decoration-muted="l10n_mx_cfdi_res_rs_receptor == 'omitido'"/>
+                            <field name="l10n_mx_cfdi_res_cp_receptor"
+                                   string="CP Receptor"
+                                   readonly="1"
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_res_cp_receptor == 'ok'"
+                                   decoration-danger="l10n_mx_cfdi_res_cp_receptor == 'error'"
+                                   decoration-muted="l10n_mx_cfdi_res_cp_receptor == 'omitido'"/>
+                        </group>
+
+                        <!-- Comprobante -->
+                        <group string="Comprobante" col="4">
+                            <field name="l10n_mx_cfdi_res_tipo_comprobante"
+                                   string="Tipo Comprobante"
+                                   readonly="1"
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_res_tipo_comprobante == 'ok'"
+                                   decoration-danger="l10n_mx_cfdi_res_tipo_comprobante == 'error'"
+                                   decoration-muted="l10n_mx_cfdi_res_tipo_comprobante == 'omitido'"/>
+                            <field name="l10n_mx_cfdi_res_moneda"
+                                   string="Moneda"
+                                   readonly="1"
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_res_moneda == 'ok'"
+                                   decoration-danger="l10n_mx_cfdi_res_moneda == 'error'"
+                                   decoration-muted="l10n_mx_cfdi_res_moneda == 'omitido'"/>
+                            <field name="l10n_mx_cfdi_res_uuid_duplicado"
+                                   string="UUID Duplicado"
+                                   readonly="1"
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_res_uuid_duplicado == 'ok'"
+                                   decoration-danger="l10n_mx_cfdi_res_uuid_duplicado == 'error'"
+                                   decoration-muted="l10n_mx_cfdi_res_uuid_duplicado == 'omitido'"/>
+                            <field name="l10n_mx_cfdi_res_sat_status"
+                                   string="Estatus SAT"
+                                   readonly="1"
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_res_sat_status == 'ok'"
+                                   decoration-danger="l10n_mx_cfdi_res_sat_status == 'error'"
+                                   decoration-muted="l10n_mx_cfdi_res_sat_status == 'omitido'"/>
+                            <field name="l10n_mx_cfdi_res_total"
+                                   string="Monto XML"
+                                   readonly="1"
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_res_total == 'ok'"
+                                   decoration-danger="l10n_mx_cfdi_res_total == 'error'"
+                                   decoration-muted="l10n_mx_cfdi_res_total == 'omitido'"/>                       
+                        </group>
+
+                        <!-- Emisor -->
+                        <group string="Emisor" col="4">
+                            <field name="l10n_mx_cfdi_res_rfc_emisor"
+                                   string="RFC Emisor"
+                                   readonly="1"
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_res_rfc_emisor == 'ok'"
+                                   decoration-danger="l10n_mx_cfdi_res_rfc_emisor == 'error'"
+                                   decoration-muted="l10n_mx_cfdi_res_rfc_emisor == 'omitido'"/>
+                            <field name="l10n_mx_cfdi_res_rs_emisor"
+                                   string="Razón Social Emisor"
+                                   readonly="1"
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_res_rs_emisor == 'ok'"
+                                   decoration-danger="l10n_mx_cfdi_res_rs_emisor == 'error'"
+                                   decoration-muted="l10n_mx_cfdi_res_rs_emisor == 'omitido'"/>
+                            <field name="l10n_mx_cfdi_res_regimen_emisor"
+                                   string="Régimen Fiscal Emisor"
+                                   readonly="1"
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_res_regimen_emisor == 'ok'"
+                                   decoration-danger="l10n_mx_cfdi_res_regimen_emisor == 'error'"
+                                   decoration-muted="l10n_mx_cfdi_res_regimen_emisor == 'omitido'"/>
+                            <field name="l10n_mx_cfdi_res_cp_emisor"
+                                   string="CP Emisor"
+                                   readonly="1"
+                                   widget="badge"
+                                   decoration-success="l10n_mx_cfdi_res_cp_emisor == 'ok'"
+                                   decoration-danger="l10n_mx_cfdi_res_cp_emisor == 'error'"
+                                   decoration-muted="l10n_mx_cfdi_res_cp_emisor == 'omitido'"/>
+                        </group>
+
+                    </group><!-- /Validaciones SAT -->
+
+                </page><!-- /page CFDI -->
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

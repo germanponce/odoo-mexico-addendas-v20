@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+product_supplierinfo_sale,product.supplierinfo.sale,model_product_supplierinfo_sale,,1,1,1,1
+res_partner_supplierinfo,res.partner.supplierinfo,model_res_partner_supplierinfo,,1,1,1,1
+soriana_cedis_code,soriana.cedis.code,model_soriana_cedis_code,,1,1,1,1

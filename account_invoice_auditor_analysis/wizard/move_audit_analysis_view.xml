@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+    <!-- ════════════════════════════════════════════════════════
+         ASISTENTE: wizard.audit.analysis
+         ════════════════════════════════════════════════════════ -->
+    <record id="wizard_audit_analysis_view_form" model="ir.ui.view">
+        <field name="name">wizard.audit.analysis.form</field>
+        <field name="model">wizard.audit.analysis</field>
+        <field name="priority">2</field>
+        <field name="arch" type="xml">
+            <form string="Análisis Auditoría de Facturas">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Auditoría SAT vs Odoo – Metadatos</h2>
+                    </div>
+                    <separator string="Parámetros del Análisis"/>
+                    <group>
+                        <group>
+                            <field name="start_date" required="1"/>
+                            <field name="end_date"   required="1"/>
+                            <field name="report_type" required="1"/>
+                        </group>
+                        <group>
+                            <field name="company_ids"
+                                   options="{'no_create': True, 'no_create_edit': True}"
+                                   required="1"
+                                   widget="many2many_tags"/>
+                            <field name="zip_datas_fname" invisible="1"/>
+                            <field name="zip_file"
+                                   filename="zip_datas_fname"
+                                   required="1"
+                                   string="Archivo ZIP Metadatos SAT"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="execute_report"
+                            string="Generar Análisis"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancelar"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para abrir el wizard -->
+    <record id="action_wizard_audit_analysis" model="ir.actions.act_window">
+        <field name="name">Análisis de Facturas vs SAT</field>
+        <field name="res_model">wizard.audit.analysis</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wizard_audit_analysis_view_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menú padre -->
+    <menuitem name="Auditoría SAT vs Odoo"
+              action="action_wizard_audit_analysis"
+              id="menu_action_wizard_audit_analysis_parent"
+              parent="account.menu_finance_entries"
+              sequence="200"/>
+
+    <menuitem name="Asistente Reporte"
+              action="action_wizard_audit_analysis"
+              id="menu_action_wizard_audit_analysis"
+              parent="menu_action_wizard_audit_analysis_parent"
+              sequence="1"/>
+
+
+    <!-- ════════════════════════════════════════════════════════
+         VISTA LISTA: move.audit.analysis
+         ════════════════════════════════════════════════════════ -->
+    <record id="move_audit_analysis_tree_view" model="ir.ui.view">
+        <field name="name">move.audit.analysis.list</field>
+        <field name="model">move.audit.analysis</field>
+        <field name="arch" type="xml">
+            <list string="Análisis Auditoría de Facturas"
+                  create="false" edit="false" delete="false">
+                <field name="start_date"   optional="hide"/>
+                <field name="end_date"     optional="show"/>
+                <field name="report_type"  optional="show"/>
+                <field name="company_ids"  optional="show" widget="many2many_tags"/>
+            </list>
+        </field>
+    </record>
+
+
+    <!-- ════════════════════════════════════════════════════════
+         VISTA FORMULARIO: move.audit.analysis
+         ════════════════════════════════════════════════════════ -->
+    <record id="move_audit_analysis_form_view" model="ir.ui.view">
+        <field name="name">move.audit.analysis.form</field>
+        <field name="model">move.audit.analysis</field>
+        <field name="arch" type="xml">
+            <form string="Análisis Auditoría de Facturas" create="false" delete="false">
+                <header>
+                    <!-- Odoo 18: invisible como expresión Python directa -->
+                    <field name="hide_resumen" invisible="1"/>
+                    <button name="show_resumen"
+                            string="Mostrar Resumen"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="not hide_resumen"/>
+                    <button name="show_resumen"
+                            string="Ocultar Resumen"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="hide_resumen"/>
+                    <button name="action_view_metadata_line_ids"
+                            string="Metadatos SAT"
+                            type="object"
+                            class="btn-secondary"/>
+                    <button name="action_view_invoices"
+                            string="Facturas Odoo"
+                            type="object"
+                            class="btn-secondary"/>
+                </header>
+
+                <div class="alert alert-info" role="alert">
+                    Solo los metadatos de tipo <strong>Ingreso (I)</strong> participan
+                    en el resumen de auditoría.
+                </div>
+
+                <group>
+                    <group>
+                        <field name="start_date"   readonly="1"/>
+                        <field name="report_type"  readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="end_date"     readonly="1"/>
+                        <field name="company_ids"  widget="many2many_tags" readonly="1"/>
+                        <field name="company_id"   invisible="1"/>
+                    </group>
+                </group>
+
+                <notebook>
+                    <!-- ── Tab 1: Resumen ── -->
+                    <page string="Resumen Auditoría">
+                        <field name="line_ids" nolabel="1">
+                            <list string="Resumen Auditoría"
+                                  create="false" delete="false" limit="10">
+                                <field name="sequence" widget="handle"/>
+                                <field name="id"                 optional="hide"/>
+                                <field name="name"               readonly="1"/>
+                                <field name="total_facturas"     readonly="1"/>
+                                <field name="importe_sin_iva"    readonly="1"/>
+                                <field name="facturas_vigentes"  readonly="1"/>
+                                <field name="importe_vigente"    readonly="1"/>
+                                <field name="facturas_canceladas" readonly="1"/>
+                                <field name="importe_cancelado"  readonly="1"/>
+                            </list>
+                        </field>
+                    </page>
+
+                    <!-- ── Tab 2: Facturas Relacionadas ── -->
+                    <page string="Facturas Relacionadas">
+                        <field name="account_invoice_ids" nolabel="1" readonly="1">
+                            <list string="Facturas" create="false" delete="false"
+                                  decoration-danger="state == 'cancel'" limit="10">
+                                <field name="id"           optional="hide"/>
+                                <field name="invoice_date"/>
+                                <field name="partner_id"/>
+                                <!-- sat_uuid es el alias stored de l10n_mx_edi_cfdi_uuid -->
+                                <field name="l10n_mx_edi_cfdi_uuid" string="UUID CFDI"/>
+                                <field name="amount_total"/>
+                                <field name="move_type"/>
+                                <field name="company_id"/>
+                                <field name="state"/>
+                                <!-- Estado SAT nativo de Odoo 18 -->
+                                <field name="l10n_mx_edi_cfdi_sat_state" string="Estado SAT"
+                                       optional="show"/>
+                            </list>
+                        </field>
+                    </page>
+
+                    <!-- ── Tab 3: Metadatos ZIP ── -->
+                    <page string="Metadatos SAT">
+                        <group>
+                            <field name="zip_datas_fname" invisible="1"/>
+                            <field name="zip_file" readonly="1" filename="zip_datas_fname"/>
+                            <button string="Borrar registros que no son Ingreso"
+                                    name="clean_metadatos"
+                                    type="object"
+                                    class="btn-warning"
+                                    confirm="Esta acción no se puede revertir. ¿Deseas continuar?"/>
+                        </group>
+                        <field name="metadata_line_ids" nolabel="1">
+                            <list string="Metadatos del Archivo TXT"
+                                  create="false" delete="false"
+                                  decoration-danger="estatus in ('0','2')"
+                                  decoration-warning="efecto_comprobante != 'I'"
+                                  limit="10">
+                                <field name="id"                    optional="hide"/>
+                                <field name="uuid"/>
+                                <field name="rfc_emisor"/>
+                                <field name="nombre_emisor"/>
+                                <field name="rfc_receptor"/>
+                                <field name="nombre_receptor"/>
+                                <field name="rfc_pac"/>
+                                <field name="fecha_emision"/>
+                                <field name="fecha_certificacion_sat"/>
+                                <field name="monto"                 sum="Total"/>
+                                <field name="efecto_comprobante"/>
+                                <field name="estatus"/>
+                                <field name="fecha_cancelacion"/>
+                            </list>
+                        </field>
+                    </page>
+
+                    <!-- ── Tabs de discrepancias (ocultas si hide_resumen) ── -->
+                    <page string="Canceladas Odoo – no SAT" invisible="hide_resumen">
+                        <field name="records_cancel_odoo_no_sat_ids" nolabel="1">
+                            <list string="Canceladas en Odoo pero no en SAT"
+                                  create="false" delete="false">
+                                <field name="id"            optional="hide" readonly="1"/>
+                                <field name="uuid"          readonly="1"/>
+                                <field name="rfc_emisor"    readonly="1"/>
+                                <field name="nombre_emisor" readonly="1"/>
+                                <field name="rfc_receptor"  readonly="1"/>
+                                <field name="nombre_receptor" readonly="1"/>
+                                <field name="monto"         sum="Total" readonly="1"/>
+                                <field name="fecha_emision" readonly="1"/>
+                                <field name="fecha_cancelacion" readonly="1"/>
+                            </list>
+                        </field>
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="records_cancel_odoo_no_sat"/>
+                            <field name="amount_cancel_odoo_no_sat"/>
+                        </group>
+                    </page>
+
+                    <page string="Canceladas SAT – no Odoo" invisible="hide_resumen">
+                        <field name="records_cancel_sat_no_odoo_ids" nolabel="1">
+                            <list string="Canceladas en SAT pero no en Odoo"
+                                  create="false" delete="false">
+                                <field name="id"            optional="hide" readonly="1"/>
+                                <field name="uuid"          readonly="1"/>
+                                <field name="rfc_emisor"    readonly="1"/>
+                                <field name="nombre_emisor" readonly="1"/>
+                                <field name="rfc_receptor"  readonly="1"/>
+                                <field name="nombre_receptor" readonly="1"/>
+                                <field name="monto"         sum="Total" readonly="1"/>
+                                <field name="fecha_emision" readonly="1"/>
+                            </list>
+                        </field>
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="records_cancel_sat_no_odoo"/>
+                            <field name="amount_cancel_sat_no_odoo"/>
+                        </group>
+                    </page>
+
+                    <page string="Vigentes Odoo – no SAT" invisible="hide_resumen">
+                        <field name="records_posted_odoo_no_sat_ids" nolabel="1">
+                            <list string="Vigentes en Odoo pero no en SAT"
+                                  create="false" delete="false">
+                                <field name="id"            optional="hide" readonly="1"/>
+                                <field name="uuid"          readonly="1"/>
+                                <field name="rfc_emisor"    readonly="1"/>
+                                <field name="nombre_emisor" readonly="1"/>
+                                <field name="rfc_receptor"  readonly="1"/>
+                                <field name="nombre_receptor" readonly="1"/>
+                                <field name="monto"         sum="Total" readonly="1"/>
+                                <field name="fecha_emision" readonly="1"/>
+                                <field name="fecha_cancelacion" readonly="1"/>
+                            </list>
+                        </field>
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="records_posted_odoo_no_sat"/>
+                            <field name="amount_posted_odoo_no_sat"/>
+                        </group>
+                    </page>
+
+                    <page string="Vigentes SAT – no Odoo" invisible="hide_resumen">
+                        <field name="records_posted_sat_no_odoo_ids" nolabel="1">
+                            <list string="Vigentes en SAT pero no en Odoo"
+                                  create="false" delete="false">
+                                <field name="id"            optional="hide" readonly="1"/>
+                                <field name="uuid"          readonly="1"/>
+                                <field name="rfc_emisor"    readonly="1"/>
+                                <field name="nombre_emisor" readonly="1"/>
+                                <field name="rfc_receptor"  readonly="1"/>
+                                <field name="nombre_receptor" readonly="1"/>
+                                <field name="monto"         sum="Total" readonly="1"/>
+                                <field name="fecha_emision" readonly="1"/>
+                            </list>
+                        </field>
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="records_posted_sat_no_odoo"/>
+                            <field name="amount_posted_sat_no_odoo"/>
+                        </group>
+                    </page>
+
+                </notebook>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción del historial -->
+    <record id="move_audit_analysis_act" model="ir.actions.act_window">
+        <field name="name">Historial de Consultas</field>
+        <field name="res_model">move.audit.analysis</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="move_audit_analysis_menu_item"
+              action="move_audit_analysis_act"
+              parent="menu_action_wizard_audit_analysis_parent"
+              sequence="2"/>
+
+
+    <!-- ════════════════════════════════════════════════════════
+         VISTAS: cfdi.txt.metadata
+         ════════════════════════════════════════════════════════ -->
+    <record id="cfdi_txt_metadata_tree_view" model="ir.ui.view">
+        <field name="name">cfdi.txt.metadata.list</field>
+        <field name="model">cfdi.txt.metadata</field>
+        <field name="arch" type="xml">
+            <list string="Metadatos SAT"
+                  create="false" edit="false" delete="false">
+                <field name="analysis_id"            optional="hide"/>
+                <field name="uuid"                   optional="show"/>
+                <field name="rfc_emisor"             optional="show"/>
+                <field name="nombre_emisor"          optional="show"/>
+                <field name="rfc_receptor"           optional="show"/>
+                <field name="nombre_receptor"        optional="show"/>
+                <field name="rfc_pac"                optional="show"/>
+                <field name="fecha_emision"          optional="show"/>
+                <field name="fecha_certificacion_sat" optional="show"/>
+                <field name="monto"                  optional="show"/>
+                <field name="efecto_comprobante"     optional="show"/>
+                <field name="estatus"                optional="show"/>
+                <field name="fecha_cancelacion"      optional="show"/>
+                <field name="company_id"             optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="cfdi_txt_metadata_search_view" model="ir.ui.view">
+        <field name="name">cfdi.txt.metadata.search</field>
+        <field name="model">cfdi.txt.metadata</field>
+        <field name="arch" type="xml">
+            <search string="Metadatos SAT">
+                <field name="analysis_id"/>
+                <field name="uuid"/>
+                <field name="rfc_emisor"/>
+                <field name="nombre_emisor"/>
+                <field name="rfc_receptor"/>
+                <field name="nombre_receptor"/>
+                <field name="rfc_pac"/>
+                <field name="efecto_comprobante"/>
+                <field name="estatus"/>
+                <field name="company_id"/>
+                <field name="fecha_cancelacion" optional="show" />
+                <filter string="Ingresos"       name="filter_ingreso"
+                        domain="[('efecto_comprobante','=','I')]"/>
+                <filter string="Vigentes"       name="filter_vigente"
+                        domain="[('estatus','=','1')]"/>
+                <filter string="Cancelados"     name="filter_cancelado"
+                        domain="[('estatus','in',['0','2'])]"/>
+                <group>
+                    <filter string="Estatus"    name="group_estatus"
+                            context="{'group_by': 'estatus'}"/>
+                    <filter string="RFC Emisor" name="group_rfc_emisor"
+                            context="{'group_by': 'rfc_emisor'}"/>
+                    <filter string="Empresa"    name="group_company"
+                            context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="cfdi_txt_metadata_act" model="ir.actions.act_window">
+        <field name="name">Metadatos SAT</field>
+        <field name="res_model">cfdi.txt.metadata</field>
+        <field name="view_mode">list</field>
+    </record>
+
+</data>
+</odoo>

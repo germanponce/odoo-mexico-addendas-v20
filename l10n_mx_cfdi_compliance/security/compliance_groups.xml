@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2026 ANFEPI - Roberto Requejo Jimenez | License OPL-1 -->
+<odoo>
+    <data noupdate="1">
+
+        <record id="module_category_cfdi_compliance" model="ir.module.category">
+            <field name="name">CFDI Compliance MX</field>
+            <field name="description">Motor de Compliance Fiscal Preventivo CFDI</field>
+            <field name="sequence">25</field>
+        </record>
+
+        <record id="group_cfdi_compliance_user" model="res.groups">
+            <field name="name">CFDI Compliance / User</field>
+            <field name="comment">Operativo: ve y procesa CFDIs en su compania.</field>
+        </record>
+
+        <record id="group_cfdi_compliance_authorizer" model="res.groups">
+            <field name="name">CFDI Compliance / Authorizer (Override)</field>
+            <field name="implied_ids" eval="[(4, ref('group_cfdi_compliance_user'))]"/>
+            <field name="comment">Puede autorizar overrides en reglas marcadas como AUTHORIZATION.</field>
+        </record>
+
+        <record id="group_cfdi_compliance_manager" model="res.groups">
+            <field name="name">CFDI Compliance / Manager</field>
+            <field name="implied_ids" eval="[(4, ref('group_cfdi_compliance_authorizer'))]"/>
+            <field name="comment">Configura perfiles, reglas y relaciones de coordinados.</field>
+        </record>
+
+        <record id="group_cfdi_compliance_auditor" model="res.groups">
+            <field name="name">CFDI Compliance / Auditor (read-only)</field>
+            <field name="comment">Acceso solo lectura a documentos y bitacora multi-compania.</field>
+        </record>
+
+        <!-- ════════════════════════════════════════════════════════════════
+             NOTA: la visibilidad por TIPO de comprobante y por DIRECCION ya NO
+             se maneja con grupos sueltos (eliminados los antiguos
+             group_cfdi_type_* / group_cfdi_dir_*). Ahora se maneja con campos
+             por usuario en res.users (can_see_compliance_*) configurables en la
+             pestania "Permisos CFDI Compliance" de la ficha de usuario.
+             Ver models/res_users.py, views/res_users_view.xml e ir_rule.xml.
+        ═════════════════════════════════════════════════════════════════ -->
+
+    </data>
+</odoo>

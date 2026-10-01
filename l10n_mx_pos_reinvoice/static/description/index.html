@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<section>
+    <div class="bg-white" style="margin-top:30px; border-radius:20px">
+
+        <!-- ============ ENCABEZADO ============ -->
+        <div class="position-relative overflow-hidden" style="border-radius:20px; background-color:#EDEBE9">
+            <img src="assets/background.jpg?v=1" alt="" class="h-100 w-100 position-absolute img-fluid" loading="lazy">
+            <div class="position-relative d-flex justify-content-between align-items-center pt-4">
+                <img src="assets/anfepi_logo.png?v=1" alt="ANFEPI" style="width:12%; margin-left:40px;"/>
+                <img src="assets/odoo_gold.png?v=1" alt="Odoo Gold Partner" style="width:20%; margin-right:40px;"/>
+            </div>
+
+            <div class="row position-relative pt-lg-3 px-lg-5 pb-lg-3 p-md-4 p-3 mx-auto align-items-center"
+                 style="color:#333333; font-weight:500; font-size:16px; width:95%">
+                <div class="container" style="max-width:1320px">
+                    <div class="shadow" style="border-radius:35px;">
+                        <div style="border-radius:20px; padding:2%; background-color:#fff;">
+                            <img src="assets/web_icon.png?v=1" alt="" class="float-start mt-3" style="width:40px; margin-left:1%;">
+                            <div class="px-5 mt-4">
+                                <h1 style="font-size:38px; color:#5082c4; font-weight:bold; text-align:left; margin-bottom:20px;">
+                                    Refacturación de tickets incluidos en Factura Global
+                                </h1>
+                                <p style="font-size:18px; line-height:1.6; text-align:left; color:#000; margin-bottom:20px;">
+                                    Cuando un ticket del punto de venta ya salió en una Factura Global y el cliente
+                                    pide después su factura nominativa, la operación correcta ante el SAT requiere
+                                    dos comprobantes: una nota de crédito relacionada a la Factura Global y una
+                                    factura a nombre del cliente. Hacerlo a mano es lento y se presta a errores que
+                                    duplican ingresos. Este módulo lo resuelve con un solo botón dentro de la propia
+                                    orden del punto de venta.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ QUÉ HACE ============ -->
+        <div class="container my-5" style="max-width:1320px">
+            <h2 style="color:#5082c4; font-weight:bold;">Qué hace el botón <em>Refacturar</em></h2>
+            <hr/>
+            <div class="row g-4 mt-2">
+                <div class="col-md-6">
+                    <div class="p-4 h-100 shadow-sm" style="border-radius:15px; background:#f7f9fc;">
+                        <h4 style="color:#05518e;">1. Encuentra sola la Factura Global</h4>
+                        <p>El usuario no captura ningún folio fiscal. El módulo lee el UUID del propio
+                           CFDI de la Factura Global que incluyó el ticket.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-4 h-100 shadow-sm" style="border-radius:15px; background:#f7f9fc;">
+                        <h4 style="color:#05518e;">2. Factura al cliente</h4>
+                        <p>Emite y timbra la factura nominativa con exactamente las mismas líneas,
+                           cantidades y precios del ticket original.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-4 h-100 shadow-sm" style="border-radius:15px; background:#f7f9fc;">
+                        <h4 style="color:#05518e;">3. Nota de crédito a la Global</h4>
+                        <p>Emite y timbra la nota de crédito a Público en General, relacionada
+                           <strong>01|</strong> a la Factura Global, heredando su forma de pago del XML original.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-4 h-100 shadow-sm" style="border-radius:15px; background:#f7f9fc;">
+                        <h4 style="color:#05518e;">4. Deja el saldo en su lugar</h4>
+                        <p>Aplica la nota a la factura y reasigna el saldo al cliente real, aunque el
+                           XML de la nota siga siendo a Público en General.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ GARANTÍAS CONTABLES ============ -->
+        <div class="container my-5" style="max-width:1320px">
+            <h2 style="color:#5082c4; font-weight:bold;">Garantías contables y fiscales</h2>
+            <hr/>
+            <table class="table table-striped align-middle mt-3">
+                <thead style="background:#05518e; color:#fff;">
+                    <tr><th style="width:32%">Riesgo</th><th>Cómo lo evita el módulo</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Duplicar el ingreso en Odoo</strong></td>
+                        <td>La pareja factura + nota de crédito netea a <strong>cero en todas las cuentas</strong>:
+                            ingresos, IVA, clientes, inventario y costo de ventas. El ingreso original del
+                            ticket, registrado en el asiento de cierre de la sesión, queda intacto.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Duplicar el ingreso ante el SAT</strong></td>
+                        <td>La nota de crédito lleva <code>TipoRelacion="01"</code> al UUID de la Factura Global,
+                            cancelando el importe que ya iba dentro de ella. El ticket queda declarado una sola vez.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Perder el costo de ventas</strong></td>
+                        <td>No se generan movimientos de inventario nuevos ni capas de valuación nuevas.
+                            El costo permanece donde Odoo lo registró al cerrar la sesión.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Que la nota no sea espejo de la factura</strong></td>
+                        <td>Antes de timbrar se verifica línea por línea (producto, cantidad, precio,
+                            cuenta e impuestos) y el total al centavo. Si algo no coincide, aborta.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Refacturar con la sesión abierta</strong></td>
+                        <td>Odoo omite del asiento de cierre las órdenes ya facturadas. El módulo exige que
+                            la sesión esté cerrada, de modo que el ingreso y el costo nunca desaparezcan.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rechazo del PAC a medias</strong></td>
+                        <td>Si la factura no se timbra, la nota de crédito no se emite. Nunca queda una
+                            nota huérfana sin su factura.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ============ SEGURIDAD ============ -->
+        <div class="container my-5" style="max-width:1320px">
+            <h2 style="color:#5082c4; font-weight:bold;">Control de acceso</h2>
+            <hr/>
+            <p style="font-size:17px;">
+                El botón sólo lo ven los usuarios del grupo
+                <strong>«Refacturar tickets incluidos en Factura Global»</strong>. La operación timbra dos
+                CFDI ante el SAT y deshacerlos exige un trámite de cancelación, por lo que conviene
+                otorgar el permiso únicamente a quien deba realizarla.
+            </p>
+        </div>
+
+        <!-- ============ COMPATIBILIDAD ============ -->
+        <div class="container my-5" style="max-width:1320px">
+            <h2 style="color:#5082c4; font-weight:bold;">Compatibilidad</h2>
+            <hr/>
+            <p style="font-size:17px;">
+                Odoo 19 con la localización mexicana. Depende únicamente de
+                <code>point_of_sale</code>, <code>l10n_mx_edi</code> y <code>l10n_mx_edi_pos</code>.
+                <strong>No requiere módulos de terceros</strong> y no altera el comportamiento nativo del
+                punto de venta ni de la facturación global.
+            </p>
+        </div>
+
+        <!-- ============ LICENCIA Y CONTACTO ============ -->
+        <div class="container my-5 pb-5" style="max-width:1320px">
+            <div class="p-4 shadow-sm" style="border-radius:15px; background:#f7f9fc;">
+                <h2 style="color:#5082c4; font-weight:bold;">Licencia</h2>
+                <hr/>
+                <p style="font-size:16px;">
+                    Este módulo se distribuye bajo la <strong>Odoo Proprietary License v1.0 (OPL-1)</strong>.
+                    Copyright &copy; 2026 <strong>Asesores y Soluciones ANFEPI</strong>. Todos los derechos reservados.
+                </p>
+                <p style="font-size:16px;">
+                    Requiere suscripción vigente. Queda prohibida su redistribución, sublicencia, publicación
+                    en repositorios públicos y su descompilación. Consulte el archivo <code>LICENSE</code>
+                    incluido en el módulo para conocer los términos completos.
+                </p>
+                <hr/>
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <img src="assets/mail.png?v=1" alt="" style="width:26px;"/>
+                        <span style="margin-left:8px;">soporte@anfepi.com</span>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="assets/call.png?v=1" alt="" style="width:26px;"/>
+                        <span style="margin-left:8px;">+52 999 520 0611</span>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="assets/web_icon.png?v=1" alt="" style="width:26px;"/>
+                        <a href="https://www.anfepi.com" style="margin-left:8px;">www.anfepi.com</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+</body>
+</html>

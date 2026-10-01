@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <template id="l10n_mx_edi_addenda_insabi" name="Addenda INSABI">
+            <t t-set="sale_model" t-value="'sale_line_ids' in record.invoice_line_ids._fields"/>
+            <t t-set="sale_id" t-value="record.mapped('invoice_line_ids.sale_line_ids.order_id') if sale_model else False"/>
+            <t t-set="pickings" t-value="sale_id.picking_ids.filtered(lambda x: x.state == 'done' and x.date_done)" />
+            <Addenda>
+              <customized xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://repository.edicomnet.com/schemas/mx/cfd/addenda" xsi:schemaLocation="http://repository.edicomnet.com/schemas/mx/cfd/addenda http://repository.edicomnet.com/schemas/mx/cfd/addenda/customized.xsd">
+                <EDICOM_GENERICA>
+                  <elementos>
+                    <elemento>
+                      <etiqueta>NUMERO_CONTRATO</etiqueta>
+                      <descripcion>NÚMERO CONTRATO</descripcion>
+                      <valor><t t-esc="record.l10n_mx_edi_insabi_contract_name" /></valor>
+                    </elemento>
+                    <elemento>
+                      <etiqueta>NUMERO_DE_REPOSICION</etiqueta>
+                      <descripcion>NÚMERO DE REPOSICIÓN</descripcion>
+                      <valor><t t-esc="record.l10n_mx_edi_insabi_reposition_number" /></valor>
+                    </elemento>
+                    <elemento>
+                      <etiqueta>ENTREGA_DE_LOS_BIENES</etiqueta>
+                      <descripcion>.</descripcion>
+                      <valor><t t-esc="record.insabi_partner_send_address()" /></valor>
+                    </elemento>
+                    <elemento>
+                      <etiqueta>NOMBRER</etiqueta>
+                      <descripcion>.</descripcion>
+                      <valor><t t-esc="record.partner_id.name" /></valor>
+                    </elemento>
+                    <elemento>
+                      <etiqueta>DIRECCION</etiqueta>
+                      <descripcion>.</descripcion>
+                      <valor><t t-esc="record.insabi_partner_send_address()" /></valor>
+                    </elemento>
+                    <elemento>
+                      <etiqueta>PORDER</etiqueta>
+                      <descripcion>.</descripcion>
+                      <valor><t t-esc="record.l10n_mx_edi_insabi_purchase_order" /></valor>
+                    </elemento>
+                    <elemento t-if="record.l10n_mx_edi_insabi_uom_default">
+                      <etiqueta>OTRO</etiqueta>
+                      <descripcion>OTRO</descripcion>
+                      <valor>UNIDAD DE MEDIDA : <t t-esc="record.l10n_mx_edi_insabi_uom_default.code" /></valor>
+                    </elemento>
+                  </elementos>
+                </EDICOM_GENERICA>
+              </customized>
+              <ns1:MT_AddendaResponse xmlns:ns1="http://maypo.com.mx/pi/b2b/SAP_ECC/AddendadorSC">
+                <Header>
+                  <EnviarA> 
+                      <t t-esc="record.l10n_mx_edi_insabi_final_destiny_clues" /> - <t t-esc="record.l10n_mx_edi_insabi_clue" /> - <t t-esc="record.l10n_mx_edi_insabi_send_to_name" />
+                  </EnviarA>
+                  <EnviarADesc><t t-esc="record.l10n_mx_edi_insabi_send_to_name" /></EnviarADesc>
+                  <EnviarADireccion><t t-esc="record.l10n_mx_edi_insabi_send_to_address" /></EnviarADireccion>
+                  <Vencimiento><t t-esc="record.l10n_mx_edi_insabi_send_due_date" /></Vencimiento>
+                  <Observaciones><t t-esc="record.l10n_mx_edi_insabi_send_comments" /></Observaciones>
+                  <Pedido><t t-esc="record.l10n_mx_edi_insabi_purchase_order" /></Pedido>
+                  <NoContrato><t t-esc="record.l10n_mx_edi_insabi_contract_name" /></NoContrato>
+                  <LimiteEntrega><t t-esc="record.l10n_mx_edi_insabi_send_limit_send_date" /></LimiteEntrega>
+                  <Delivery><t t-esc="record.l10n_mx_edi_insabi_delyvery_reference" /></Delivery>
+                  <Canal><t t-esc="record.l10n_mx_edi_insabi_delyvery_channel" /></Canal>
+                  <TotalEnLetras><t t-esc="record._l10n_mx_edi_cfdi_amount_to_text()"/></TotalEnLetras>
+                  <DatosBancarios />
+                  <Agente />
+                  <Texto1Fact> FECHA DE EXPEDICIÓN: <t t-esc="record.invoice_date" />  FECHA DE ENTREGA: <t t-esc="pickings[0].date if pickings else ''" />   FECHA DE RECEPCION: <t t-esc="record.invoice_date" /></Texto1Fact>
+                  <Texto2Fact> Entidad destino final (CLUES): <t t-esc="record.l10n_mx_edi_insabi_final_destiny_clues" />          CLUES: <t t-esc="record.l10n_mx_edi_insabi_clue" /> - <t t-esc="record.l10n_mx_edi_insabi_send_to_name" /></Texto2Fact>
+                  <Texto3Fact> <t t-esc="record.l10n_mx_edi_insabi_response_comments" /></Texto3Fact>
+                  <ContratoMarco> <t t-esc="record.l10n_mx_edi_insabi_response_contrato_marco" /></ContratoMarco>
+                  <OrdenSiaf><t t-esc="record.l10n_mx_edi_insabi_response_orden_siaf" /></OrdenSiaf>
+                  <!-- <Textos>
+                    <Texto>
+                      <Codigo>Z036</Codigo>
+                      <Contenido />
+                    </Texto>
+                    <Texto>
+                      <Codigo>Z037</Codigo>
+                      <Contenido />
+                    </Texto>
+                    <Texto>
+                      <Codigo>Z038</Codigo>
+                      <Contenido />
+                    </Texto>
+                  </Textos> -->
+                  <CamposPersonalizados>
+                    <CampoPersonalizado Nombre="cllue" Valor="" />
+                    <CampoPersonalizado Nombre="DESTINATARIO_FACTURA_DIRECCION" t-att-Valor="record.insabi_partner_invoice_address_extend()" />
+                    <CampoPersonalizado Nombre="Insabi_Clue" t-att-Valor="record.get_insabi_clue()" />
+                    <CampoPersonalizado Nombre="Insabi_Fecha_exp_orden" t-att-Valor="record.invoice_date" />
+                    <CampoPersonalizado Nombre="Insabi_No_orden_remi" t-att-Valor="record.l10n_mx_edi_insabi_response_orden_remi" />
+                    <CampoPersonalizado Nombre="Insabi_Op_Log" Valor="PARA ENTREGA A CLUES O DESTINO FINAL" />
+                    <CampoPersonalizado Nombre="Insabi_Dirección_opLog" Valor="NO APLICA" />
+                    <CampoPersonalizado Nombre="Insabi_Proce" t-att-Valor="record.l10n_mx_edi_insabi_procedimiento" />
+                  </CamposPersonalizados>
+                </Header>
+                <Body>
+                  <Items>
+                      <t t-foreach="record.invoice_line_ids.filtered(lambda inv: not inv.display_type)" t-as="line">
+                        <Item>
+                          <Producto><t t-esc="line.name" /></Producto>
+                          <Cantidad><t t-esc="line.quantity" /></Cantidad>
+                          <ClaveUni><t t-esc="line.product_uom_id.unspsc_code_id.code" /></ClaveUni>
+                          <Unidad><t t-esc="line.product_uom_id.name" /></Unidad>
+                          <Punitario><t t-esc="line.price_unit" /></Punitario>
+                          <TipoImp>IVA</TipoImp>
+                          <Base><t t-esc="line.price_subtotal" /></Base>
+                          <Tasa>0.000000</Tasa>
+                          <MontoImp><t t-esc="line.price_subtotal" /></MontoImp>
+                          <ImporteBruto><t t-esc="line.price_subtotal" /></ImporteBruto>
+                          <Descuento>0</Descuento>
+                          <ImporteDescuento>0</ImporteDescuento>
+                          <ImporteNeto><t t-esc="line.price_subtotal" /></ImporteNeto>
+                          <ClaveSat><t t-esc="line.product_id.unspsc_code_id.code" /></ClaveSat>
+                          <ClaveProveedor><t t-esc="line.product_id.l10n_mx_edi_insabi_supplier_code" /></ClaveProveedor>
+                          <Posicion><t t-esc="line.product_id.l10n_mx_edi_insabi_position" /></Posicion>
+                          <Clave><t t-esc="line.product_id.l10n_mx_edi_insabi_code" /></Clave>
+                          <Articulo><t t-esc="line.name" /></Articulo>
+                          <Presentacion><t t-esc="line.product_id.l10n_mx_edi_insabi_presentation" /></Presentacion>
+                          <Lote><t t-esc="line.insabi_get_lot_name()" /></Lote>
+                          <CondicionesTrans><t t-esc="line.product_id.l10n_mx_edi_insabi_conditions" /></CondicionesTrans>
+                          <Caducidad><t t-esc="line.insabi_get_lot_expiration_date()" /></Caducidad>
+                          <FechaFab><t t-esc="line.insabi_get_lot_creation_date()" /></FechaFab>
+                          <Aduana><t t-esc="line.insabi_get_aduana()" /></Aduana>
+                          <Pedimento><t t-esc="line.insabi_get_pedimento()" /></Pedimento>
+                          <FechaPed><t t-esc="line.insabi_get_fecha_pedimento()" /></FechaPed>
+                          <ClaveAsociar><t t-esc="line.product_id.l10n_mx_edi_insabi_key_association" /></ClaveAsociar>
+                          <ClavePDF><t t-esc="line.product_id.l10n_mx_edi_insabi_key_association" /></ClavePDF>
+                        </Item>
+                    </t>
+                  </Items>
+                  <IMSS>
+                    <NoProveedor><t t-esc="record.l10n_mx_edi_insabi_imss_no_proveedor" /></NoProveedor>
+                    <NoContrato><t t-esc="record.l10n_mx_edi_insabi_imss_no_contrato" /></NoContrato>
+                    <NoSolicitud><t t-esc="record.l10n_mx_edi_insabi_imss_no_solicitud" /></NoSolicitud>
+                    <NoOrden><t t-esc="record.l10n_mx_edi_insabi_imss_no_orden" /></NoOrden>
+                    <NoFianza><t t-esc="record.l10n_mx_edi_insabi_imss_no_fianza" /></NoFianza>
+                    <Afianzadora><t t-esc="record.l10n_mx_edi_insabi_imss_afianzadora" /></Afianzadora>
+                    <CPresupuestal><t t-esc="record.l10n_mx_edi_insabi_imss_cp_presupuestal" /></CPresupuestal>
+                    <NoAlta><t t-esc="record.l10n_mx_edi_insabi_imss_no_alta" /></NoAlta>
+                  </IMSS>
+                </Body>
+                <Return>
+                  <Estatus>C</Estatus>
+                </Return>
+              </ns1:MT_AddendaResponse>
+              <REM>
+                <NOS><t t-esc="record.l10n_mx_edi_insabi_imss_no_orden" /></NOS>
+                <OR><t t-esc="record.l10n_mx_edi_insabi_response_orden_remi" /></OR>
+                <CLUES><t t-esc="record.l10n_mx_edi_insabi_final_destiny_clues" /> - <t t-esc="record.l10n_mx_edi_insabi_clue" /> - <t t-esc="record.l10n_mx_edi_insabi_send_to_name" /></CLUES>
+                <CONTRATO><t t-esc="record.l10n_mx_edi_insabi_contract_name" /></CONTRATO>
+                <FEEX><t t-esc="record.invoice_date" /></FEEX>
+                <FEEN><t t-esc="pickings[0].date if pickings else ''" /></FEEN>
+                <FERE><t t-esc="record.invoice_date" /></FERE>
+              </REM>
+            </Addenda>
+ 
+        </template>
+
+        <record id="l10n_mx_edi_addenda_insabi" model="ir.ui.view">
+            <field name="l10n_mx_edi_addenda_flag">True</field>
+        </record>
+
+    </data>
+</odoo>

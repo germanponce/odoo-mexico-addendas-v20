@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_retention_type_user,access.retention.type.user,model_retention_type,account.group_account_user,1,0,0,0
+access_retention_type_manager,access.retention.type.manager,model_retention_type,account.group_account_manager,1,1,1,1
+access_retention_impuesto_user,access.retention.impuesto.user,model_l10n_mx_edi_retention_impuesto,account.group_account_user,1,1,1,1
+access_retention_impuesto_manager,access.retention.impuesto.manager,model_l10n_mx_edi_retention_impuesto,account.group_account_manager,1,1,1,1
+access_retention_type_taxpayer_user,retention.type.taxpayer.user,model_retention_type_taxpayer,account.group_account_user,1,0,0,0
+access_retention_type_taxpayer_manager,retention.type.taxpayer.manager,model_retention_type_taxpayer,account.group_account_manager,1,1,1,1

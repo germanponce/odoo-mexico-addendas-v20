@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>CFDI Compliance Engine MX (ANFEPI)</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.1/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <section>
+            <div class="bg-white" style="margin-top:30px; border-radius:20px">
+                <div class="position-relative overflow-hidden" style="border-radius:20px; background-color:#EDEBE9">
+                    <img src="assets/background.jpg?v=2" alt="Background" class="h-100 w-100 position-absolute img-fluid" loading="lazy"><br><br>
+
+                    <!-- Header Logo -->
+                    <div style="text-align: center;">
+                        <div class="position-relative d-flex justify-content-between" style="align-items: center;">
+                            <img src="assets/anfepi_logo.png?v=2" alt="ANFEPI" style="width: 12%; margin-left: 40px;"/>
+                            <img src="assets/odoo_gold.png?v=2" alt="Odoo Gold Partner" style="width: 20%; margin-right: 40px;"/>
+                        </div>
+                    </div>
+
+                    <div class="row position-relative pt-lg-3 px-lg-5 pb-lg-3 p-md-4 p-3 mx-auto d-flex align-items-center" style="color:#333333; font-weight:500; font-size:16px; width:95%">
+                        <div class="container" style="max-width:1320px">
+                            <div class="row" style="display:flex;">
+                                <section style="background-color: transparent !important;">
+                                    <div class="container position-relative" style="text-align: center; color: white;">
+
+                                        <!-- Hero -->
+                                        <section class="bg-transparent">
+                                            <div class="container mt-3">
+                                                <div class="row shadow" style="opacity: 5; border-radius: 35px;">
+                                                    <div class="align-items-center" style="border-radius: 20px; padding: 1%; background-color:#fff;">
+                                                        <img src="assets/web_icon.png?v=2" alt="ANFEPI" class="float-start mt-3" style="text-align: left; width: 40px; margin-left: 1%;">
+
+                                                        <div class="row mt-5 text-center">
+                                                            <div class="themed-grid-col mt-3 px-5">
+                                                                <h1 style="font-size: 38px; color: #5082c4; margin-bottom: 20px; font-weight: bold; text-align: left;">
+                                                                    CFDI Compliance Engine — México
+                                                                </h1>
+                                                                <p style="font-family:Inter; font-style:normal; font-weight:normal; font-size:18px; line-height: 1.5; text-align:left; color:#000000; margin-bottom: 20px;">
+                                                                    Motor de <strong>Compliance Fiscal Preventivo</strong> para CFDIs de proveedores en Odoo.
+                                                                    Valida cada CFDI en el momento exacto en que el XML se adjunta a Odoo, <strong>antes</strong>
+                                                                    de cualquier registro contable o de compras. Detecta riesgos fiscales, EFOS (lista 69-B),
+                                                                    errores de cálculo de IVA, vencimiento PUE/PPD, materialidad y mucho más.
+                                                                    Diseñado para empresas que operan régimen de Coordinados, Multi-Compañía y necesitan
+                                                                    bitácora auditable con cadena hash SHA-256.
+                                                                </p>
+                                                                <br/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <!-- Features -->
+                                        <section class="mt-5 bg-transparent">
+                                            <div class="container">
+                                                <div class="row shadow mt-5 bg-white" style="border-radius: 20px; padding: 30px;">
+                                                    <div class="row mb-4">
+                                                        <div class="rectangle" style="text-align: right; height: 14px; width: 2px; background-color: #05518e; margin-top: 10px; margin-left: 21px;"></div>
+                                                        <div class="col-10 mb-3">
+                                                            <h2 class="text-left" style="text-align: left; font-size: 30px; color: #111827; margin-left: -6px;">Funcionalidades Clave</h2>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-sm-12" style="text-align: left;">
+                                                        <h3 style="font-size: 20px; color: #5082c4; margin-top: 10px;">Validación SAT en Tiempo Real</h3>
+                                                        <ul style="font-size: 16px; color: #111827;">
+                                                            <li>23 reglas SAT preconfiguradas (SAT, contabilidad, deducibilidad, específicas)</li>
+                                                            <li>Validación automática al adjuntar XML</li>
+                                                            <li>Detección de UUID duplicado, sello inválido, RFC EFOS (69-B)</li>
+                                                            <li>Verificación de vigencia CFDI vs SAT (con caché local)</li>
+                                                        </ul>
+                                                        <h3 style="font-size: 20px; color: #5082c4; margin-top: 20px;">Régimen de Coordinados</h3>
+                                                        <ul style="font-size: 16px; color: #111827;">
+                                                            <li>Aislamiento estricto por compañía coordinada</li>
+                                                            <li>Validación RFC receptor vs autorización</li>
+                                                            <li>Soporte Art. 72-73 LISR</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-lg-6 col-sm-12" style="text-align: left;">
+                                                        <h3 style="font-size: 20px; color: #5082c4; margin-top: 10px;">Reglas Específicas de Giro</h3>
+                                                        <ul style="font-size: 16px; color: #111827;">
+                                                            <li>Arrendamiento: retenciones IVA/ISR + Cuenta Predial</li>
+                                                            <li>Combustibles: forma de pago restringida</li>
+                                                            <li>Materialidad y deducibilidad por uso CFDI</li>
+                                                        </ul>
+                                                        <h3 style="font-size: 20px; color: #5082c4; margin-top: 20px;">Auditoría y Score</h3>
+                                                        <ul style="font-size: 16px; color: #111827;">
+                                                            <li>Score de compliance por CFDI (0-100)</li>
+                                                            <li>Bitácora inmutable con cadena hash SHA-256</li>
+                                                            <li>Panel OWL en tiempo real en facturas</li>
+                                                            <li>Gating de publicación: bloquea facturas con score bajo</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <!-- Integration -->
+                                        <section class="mt-5 bg-transparent">
+                                            <div class="container">
+                                                <div class="row shadow mt-5 bg-white" style="border-radius: 20px; padding: 30px;">
+                                                    <div class="row mb-4">
+                                                        <div class="rectangle" style="text-align: right; height: 14px; width: 2px; background-color: #05518e; margin-top: 10px; margin-left: 21px;"></div>
+                                                        <div class="col-10 mb-3">
+                                                            <h2 class="text-left" style="text-align: left; font-size: 30px; color: #111827; margin-left: -6px;">Integración Nativa con Odoo</h2>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12" style="text-align: left;">
+                                                        <p style="font-size: 16px; color: #111827; line-height: 1.6;">
+                                                            Se integra de forma transparente con <strong>account.move</strong>, <strong>purchase.order</strong>
+                                                            y el módulo hermano <strong>l10n_mx_xml_massive_download</strong>. Cada CFDI recibido
+                                                            queda enlazado a su <strong>cfdi_document</strong> con resultado de cada regla validada.
+                                                            Los perfiles de compliance son configurables por compañía: una controladora puede usar
+                                                            reglas estrictas, sus coordinadas reglas más permisivas, todo con segregación absoluta.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <!-- Support -->
+                                        <section class="mt-5 bg-transparent">
+                                            <div class="container">
+                                                <div class="row shadow mt-5 bg-white" style="border-radius: 20px;">
+                                                    <div class="col-lg-6 col-sm-12 ps-5" style="text-align: left;">
+                                                        <div class="row mt-5">
+                                                            <div class="rectangle" style="text-align: right; height: 14px; width: 2px; background-color: #05518e; margin-top: 10px; margin-left: 21px;"></div>
+                                                            <div class="col-10 mb-3">
+                                                                <h2 class="text-left" style="text-align: left; font-size: 30px; color: #111827; margin-left: -6px;">60 Días de Soporte Gratis!</h2>
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+                                                        <p class="detail-box lh-base" style="font-size: 20px; color: #111827;">En caso de cualquier error o falla inesperada</p>
+                                                        <p class="detail-box lh-base" style="font-size: 16px; color: #111827;">En ANFEPI ofrecemos soluciones completas de Odoo. Desde consultoría hasta implementaciones completas.</p>
+                                                        <div class="container mt-5 ps-0">
+                                                            <div class="row mb-4">
+                                                                <div class="col-2">
+                                                                    <img src="assets/call.png?v=2" width="50" height="50">
+                                                                </div>
+                                                                <div class="col-8" style="text-align: left;">
+                                                                    <h4 style="font-size: 18px;font-weight: 700;margin: 0 0 10px 0; color: #7D7D7D;">Teléfono / WhatsApp</h4>
+                                                                    <p style="color: black; margin: 0;">+52 999 520 0611</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mb-4">
+                                                                <div class="col-2">
+                                                                    <img src="assets/mail.png?v=2" width="50" height="50">
+                                                                </div>
+                                                                <div class="col-8" style="text-align: left;">
+                                                                    <h4 style="font-size: 18px;font-weight: 700;margin: 0 0 10px 0; color: #7D7D7D;">Correo Electrónico</h4>
+                                                                    <p style="color: black; margin: 0 0 4px 0;"><strong>Ventas:</strong> info@anfepi.com</p>
+                                                                    <p style="color: black; margin: 0;"><strong>Soporte:</strong> soporte@anfepi.com</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mb-5">
+                                                                <div class="col-2" style="text-align: center;">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#05518e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                                                        <circle cx="12" cy="10" r="3"/>
+                                                                    </svg>
+                                                                </div>
+                                                                <div class="col-8" style="text-align: left;">
+                                                                    <h4 style="font-size: 18px;font-weight: 700;margin: 0 0 10px 0; color: #7D7D7D;">Dirección</h4>
+                                                                    <p style="color: black; margin: 0;">Cacao 22, Fraccionamiento Las Fincas<br/>Mérida, Yucatán, México · CP 97302</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-lg-6 text-center pb-5">
+                                                        <img src="assets/support_image.gif?v=2" style="width: 75%;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <!-- Footer -->
+                                        <section class="mt-5 bg-transparent mb-5">
+                                            <div class="container">
+                                                <div class="row shadow bg-white" style="border-radius: 20px; padding: 20px;">
+                                                    <div class="col-12 text-center" style="color: #7D7D7D; font-size: 14px;">
+                                                        <strong style="color: #05518e;">Licencia OPL-1</strong> · Odoo Proprietary License v1.0 ·
+                                                        Software propietario · Requiere suscripción activa ·
+                                                        © 2026 ANFEPI - Roberto Requejo Jiménez ·
+                                                        <a href="https://www.anfepi.com" style="color: #05518e;">www.anfepi.com</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="l10n_mx_edi_addenda_amazon" model="l10n_mx_edi.addenda">
+            <field name="name">Amazon</field>
+            <field name="arch" type="xml">
+                <t t-xml-node="addenda">
+                    <amazon:ElementosAmazon
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xmlns:amazon="http://www.amazon.com.mx/AmazonAddenda"
+                        xsi:schemaLocation="http://www.amazon.com.mx/AmazonAddenda http://repository.edicomnet.com/schemas/mx/cfd/addenda/AmazonAddenda.xsd">
+                        <amazon:TextoLibre t-raw="record.notas_amazon"/>
+                        <t t-if="record.move_type == 'out_invoice'">
+                            <amazon:LosAtributos identificacionUnica="1" nombreDelAtributo="AmazonPO" t-att-valorDelAtributo="record.orden_compra_amazon if record.orden_compra_amazon else record.name"/>
+                        </t>
+                        <t t-if="record.move_type == 'out_refund'">
+                            <t t-set="folio_fiscal_origen" t-value="record.l10n_mx_edi_cfdi_origin.split('|')[1] if record.l10n_mx_edi_cfdi_origin else ''"/>
+                            <amazon:LosAtributos identificacionUnica="2" nombreDelAtributo="OriginalInvoiceID" t-att-valorDelAtributo="folio_fiscal_origen"/>
+                        </t>
+                    </amazon:ElementosAmazon>
+                </t>
+            </field>
+        </record>
+    </data>
+</odoo>

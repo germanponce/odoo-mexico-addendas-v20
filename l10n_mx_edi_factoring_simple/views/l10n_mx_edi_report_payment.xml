@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Migración v17 → v19:
+    - inherit_id 'account.report_payment_receipt_document' sigue disponible en v19.
+    - El xpath //div[@t-if='o.partner_type'] apunta a la sección del partner
+      en el recibo de pago. Si en tu v19 exacta el div tiene atributo diferente
+      (p.ej. id="partner_section"), ajusta el xpath.
+    - Se agrega t-else para el caso sin factorante, evitando depender de t-if/t-if
+      consecutivos que puede dar advertencias en v19.
+-->
+<odoo>
+    <template
+        id="report_payment_document_factoring_mx"
+        inherit_id="account.report_payment_receipt_document"
+        priority="100"
+    >
+        <xpath expr="//div[@t-if='o.partner_type']" position="replace">
+            <div class="col-6" t-if="o.partner_type">
+                <strong t-if="o.partner_type == 'customer'">Cliente: </strong>
+                <strong t-if="o.partner_type == 'supplier'">Proveedor: </strong>
+                <!-- Si hay factorante, el CFDI se emitió en su nombre -->
+                <span
+                    t-if="o.l10n_mx_edi_factoring_id"
+                    t-field="o.l10n_mx_edi_factoring_id"
+                />
+                <span
+                    t-else=""
+                    t-field="o.partner_id"
+                />
+            </div>
+        </xpath>
+    </template>
+</odoo>

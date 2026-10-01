@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Reporte Resumen de Pagos -->
+
+        <record id="account_move_bank_report_tree" model="ir.ui.view">
+            <field name="name">account.move.bank.report.data.tree</field>
+            <field name="model">account.move.bank.report.data</field>
+            <field name="arch" type="xml">
+                <list string="Reporte Resumen de Pagos" >
+                    <field name="payment_type" readonly="1"/>
+                    <field name="partner_id" readonly="1"/>
+                    <field name="entidad_federativa_id" readonly="1" optional="show"/>
+                    <field name="payment_id" readonly="1" optional="show"/>
+                    <field name="payment_date" readonly="1" optional="show"/>
+                    <field name="payment_uuid" string="Folio Fiscal" readonly="1" optional="show"/>
+                    <field name="payment_method_id" string="Forma de Pago" readonly="1" optional="show"/>
+                    <field name="payment_amount" readonly="1" />
+
+                    <field name="invoice_id" readonly="1" optional="show"/>
+                    <field name="invoice_date" readonly="1" optional="show"/>
+                    <field name="invoice_payment_method_id" readonly="1" optional="show"/>
+                    <field name="l10n_mx_edi_payment_policy" readonly="1" optional="show"/>
+                    <field name="invoice_amount_untaxed" readonly="1" optional="show"/>
+                    <field name="invoice_amount_tax" readonly="1" optional="show"/>
+                    <field name="invoice_amount_total" readonly="1" optional="show"/>
+                    <field name="invoice_uuid" string="Folio Fiscal" readonly="1" optional="show"/>
+
+                    <field name="parcialidad" readonly="1" optional="show"/>
+                    <field name="adeudo_anterior" readonly="1" optional="show"/>
+                    <field name="monto_pagado" readonly="1" optional="show"/>
+                    <field name="saldo" readonly="1" optional="show"/>
+
+                    <field name="journal_id" readonly="1" optional="hide"/>
+                    <field name="company_id" readonly="1" optional="hide"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="account_move_bank_report_form" model="ir.ui.view">
+            <field name="name">account.move.bank.report.data.form</field>
+            <field name="model">account.move.bank.report.data</field>
+            <field name="arch" type="xml">
+                <form string="Reporte Resumen de Pagos">
+                    <sheet>
+                        <group>
+                            <field name="payment_type" readonly="1"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="entidad_federativa_id" readonly="1" />
+                            <field name="payment_id" readonly="1" />
+                            <field name="payment_date" readonly="1" />
+                            <field name="payment_uuid" string="Folio Fiscal" readonly="1" />
+                            <field name="payment_method_id" string="Forma de Pago" readonly="1" />
+                            <field name="payment_amount" readonly="1" />
+
+                            <field name="invoice_id" readonly="1" />
+                            <field name="invoice_date" readonly="1" />
+                            <field name="invoice_payment_method_id" readonly="1" />
+                            <field name="l10n_mx_edi_payment_policy" readonly="1" />
+                            <field name="invoice_amount_untaxed" readonly="1" />
+                            <field name="invoice_amount_tax" readonly="1" />
+                            <field name="invoice_amount_total" readonly="1" />
+                            <field name="invoice_uuid" string="Folio Fiscal" readonly="1" />
+                            
+                            <field name="parcialidad" readonly="1" />
+                            <field name="adeudo_anterior" readonly="1" />
+                            <field name="monto_pagado" readonly="1" />
+                            <field name="saldo" readonly="1" optional="show"/>
+
+                            <field name="journal_id" readonly="1" />
+                            <field name="company_id" readonly="1" />
+                        </group>
+                        
+                    </sheet>
+                    
+                </form>
+            </field>
+        </record>
+
+
+        <record id="account_move_bank_report_search" model="ir.ui.view">
+            <field name="name">account.move.bank.report.data.serch</field>
+            <field name="model">account.move.bank.report.data</field>
+            <field name="arch" type="xml">
+                <search string="Reporte Resumen de Pagos">
+                    <field name="payment_type" />
+                    <field name="journal_id" />
+                    <field name="move_id" />
+                    <field name="payment_id" />
+                    <field name="payment_currency_id" />
+                    <field name="payment_date" />
+                    <field name="payment_reference"  />
+                    <field name="payment_amount" />
+                    <field name="iva_amount" />
+                    <field name="account_origin_id" />
+                    <field name="partner_id" />
+                    <field name="invoice_id" />
+                    <field name="invoice_currency_id" />
+                    <field name="invoice_date" />
+                    <field name="reference" />
+                    <field name="uuid" />
+                    <field name="company_id" readonly="1"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_formas_pago" model="ir.actions.act_window">
+            <field name="name">Reporte Resumen de Pagos</field>
+            <field name="res_model">account.move.bank.report.data</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="account_move_bank_report_tree"/>
+        </record>
+
+    <!-- Wizard -->
+
+    <record id="account_move_bank_report_wizard_form" model="ir.ui.view">
+      <field name="name">account.move.bank.report.wizard</field>
+      <field name="model">account.move.bank.report.wizard</field>
+      <field name="arch" type="xml">
+        <form string="Reporte Resumen de Pagos">
+            <sheet>
+                <header>
+                    <field name="datas_fname" invisible="1" />
+                    <field name="file_ready" invisible="1" />
+                </header>
+
+                <sheet invisible="file_ready" >
+                    <group string="Periodo">
+                        <group>
+                            <field name="date" />
+                        </group>
+                        <group>
+                            <field name="date_stop" />
+                        </group>
+                    </group>
+                    <group>
+                        <field name="company_ids" widget="many2many_tags" options="{'no_create': True,'no_create_edit':True}"/>
+                        <field name="journal_ids" widget="many2many_tags" domain="[('company_id','in',company_ids),('type','in',('cash','bank'))]" options="{'no_create': True,'no_create_edit':True}"/>
+                        <field name="report_type" />
+                        <field name="report_output"  required="1" />
+                    </group>
+                </sheet>
+                <sheet invisible="not file_ready">
+                    <div >
+                        <h2>Generacion Completa</h2>
+                        <p>Descarga el Documento: <field name="file" readonly="1" filename="datas_fname"/></p>
+                        <p>Documento Generado y Codificado<strong>Unicode/UTF-8</strong></p> 
+                    </div>
+                </sheet>
+
+                <footer invisible="file_ready">
+                    <button name="get_current_report" type="object" string="Generar Reporte" class="oe_highlight" icon="fa-file-pdf-o"/>
+                    <button special="cancel" string="Cancelar" type="object" class="oe_link oe_inline" icon="fa-window-close"/>
+                </footer>
+                <footer invisible="not file_ready">
+                    <button special="cancel" string="Cerrar" type="object" class="oe_link oe_inline" icon="fa-window-close"/>
+                </footer>
+            </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="account_move_bank_report_wizard_act" model="ir.actions.act_window">
+        <field name="name">Reporte Resumen de Pagos</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.move.bank.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context"></field>        
+    </record>
+      
+    <menuitem id="account_move_bank_report_wizard_menu_root"
+              name="Reportes Bancarios"
+              parent="account.menu_finance_reports"
+              sequence='0'/>
+
+    <menuitem id="account_move_bank_report_wizard_menu"
+              name="Resumen de Pagos"
+              parent="account_move_bank_report_wizard_menu_root"
+              action="account_move_bank_report_wizard_act" 
+              sequence='0'/>
+
+
+    </data>
+</odoo>

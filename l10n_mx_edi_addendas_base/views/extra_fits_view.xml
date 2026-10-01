@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="res_company_addendas_extra_base">
+            <field name="name">addenda_company_fields_form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Addendas" name="addendas_extra_fits">
+                        
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_template_only_form_addendas_extra_base">
+            <field name="name">addenda_product_fields_form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Addendas" name="addendas_extra_fits">
+                        
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_product_only_form_addendas_extra_base">
+            <field name="name">addenda_product_fields_form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Adendas" name="addendas_extra_fits">
+                        
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="sale_order_addendas_extra_base">
+            <field name="name">addenda_sale_fields_form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="payment_term_id" position="after">
+                    <field name="addenda_type"/>
+                </field>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Addendas" name="addendas_extra_fits" 
+                        invisible="addenda_type == 'na'">
+                        
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="stock_picking_addendas_extra_base">
+            <field name="name">addenda_picking_fields_form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="backorder_id" position="after">
+                    <field name="addenda_type" 
+                        invisible="picking_type_code != 'outgoing'" />
+                </field>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Addendas" name="addendas_extra_fits" 
+                        invisible="addenda_type == 'na'">
+                        
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="account_move_addendas_extra_base">
+            <field name="name">addenda_account_fields_form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <field name="payment_reference" position="after">
+                    <label for="addenda_type" 
+                        invisible="move_type not in ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt')" 
+                        readonly="state == 'done'" />
+                    <div>
+                        <field name="addenda_type" class="oe_inline" 
+                            invisible="move_type not in ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt')" 
+                            readonly="state == 'done'" />
+                        <button name="l10n_mx_regenerate_addenda" 
+                            invisible="addenda_type == 'na'" string="→ Re-generar Addenda" type="object" class="oe_edit_only oe_link oe_inline" />
+                    </div>
+                </field>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Addendas" name="addendas_extra_fits" 
+                        invisible="addenda_type == 'na'">
+                        
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

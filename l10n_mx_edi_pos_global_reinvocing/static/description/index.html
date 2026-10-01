@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Re-facturación Global (POS)</title>
+</head>
+<body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;margin:0;padding:20px;background:#f8f9fa;">
+
+<div style="text-align:center;background:linear-gradient(135deg,#004c97 0%,#1a6b3c 100%);color:white;padding:40px 20px;border-radius:10px;margin-bottom:30px;">
+    <div style="font-size:3rem;margin-bottom:12px;">🧾</div>
+    <h1 style="margin:0 0 10px 0;font-size:2.2rem;font-weight:700;">Re-facturación Global (POS)</h1>
+    <p style="margin:0 0 15px 0;font-size:1.1rem;opacity:0.9;">Módulo Odoo 19.0 · Consolidación de 3 módulos en uno</p>
+    <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+        <span style="background:rgba(255,255,255,0.2);padding:6px 15px;border-radius:15px;font-size:0.9rem;">Versión 19.0.1.0</span>
+        <span style="background:rgba(255,255,255,0.2);padding:6px 15px;border-radius:15px;font-size:0.9rem;">l10n_mx_edi_pos_global_reinvocing</span>
+        <span style="background:rgba(255,255,255,0.2);padding:6px 15px;border-radius:15px;font-size:0.9rem;">Dependencias: point_of_sale · l10n_mx_edi · l10n_mx_edi_pos</span>
+    </div>
+</div>
+
+<!-- CONTEXTO -->
+<div style="background:#fff8e7;padding:25px;border-radius:10px;margin-bottom:30px;border-left:5px solid #f39c12;box-shadow:0 4px 15px rgba(0,0,0,0.05);">
+    <h3 style="margin:0 0 12px 0;color:#d68910;font-size:1.2rem;">📌 Contexto y Propósito</h3>
+    <p style="margin:0 0 10px 0;color:#5d6d7e;font-size:0.92rem;">
+        Cuando un pedido de Punto de Venta ya quedó incluido en una <strong>Factura Global</strong> (CFDI a público
+        en general) y después el cliente pide su factura a su nombre, hay que <strong>separar ese ticket de la
+        Global</strong>: generar una Nota de Crédito que lo retire y re-emitir una factura individual con los
+        datos fiscales reales del cliente.
+    </p>
+    <p style="margin:0;color:#5d6d7e;font-size:0.92rem;">
+        Este módulo reemplaza a tres módulos independientes de Odoo 17/18
+        (<code>l10n_mx_edi_global_reinvocing</code>, <code>l10n_mx_edi_global_address</code> y
+        <code>l10n_mx_edi_40_generic_vat</code>) con <strong>uno solo, migrado a Odoo 19 y simplificado</strong>:
+        se conservó únicamente el código de los otros dos módulos que la re-facturación realmente usa, y se
+        separaron en dos asistentes independientes las dos operaciones que antes convivían en un mismo formulario,
+        para no confundir al usuario.
+    </p>
+</div>
+
+<!-- QUÉ SE CONSOLIDÓ -->
+<div style="background:white;padding:30px;border-radius:10px;margin-bottom:30px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:1px solid #e0e0e0;">
+    <h2 style="margin:0 0 20px 0;color:#004c97;font-size:1.4rem;text-align:center;">Qué se Consolidó</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+        <tr style="background:#d5eafc;">
+            <th style="padding:8px;text-align:left;border:1px solid #e0e0e0;">Módulo original</th>
+            <th style="padding:8px;text-align:left;border:1px solid #e0e0e0;">Qué se trajo</th>
+            <th style="padding:8px;text-align:left;border:1px solid #e0e0e0;">Qué se descartó (no usado por re-facturación)</th>
+        </tr>
+        <tr>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>l10n_mx_edi_global_reinvocing</code></td>
+            <td style="padding:8px;border:1px solid #e0e0e0;">Todo el flujo: NC + re-emisión, asistente, campos de <code>pos.order</code>/<code>pos.config</code> propios</td>
+            <td style="padding:8px;border:1px solid #e0e0e0;">—</td>
+        </tr>
+        <tr style="background:#f4f9fd;">
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>l10n_mx_edi_global_address</code></td>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>pos.config.contact_global_id</code>/<code>emission_zip</code>, <code>pos.order.emission_zip</code>/<code>payment_tpv_id</code></td>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>global_sequence_id</code>, extensión del wizard de Factura Global, helpers de zona horaria</td>
+        </tr>
+        <tr>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>l10n_mx_edi_40_generic_vat</code></td>
+            <td style="padding:8px;border:1px solid #e0e0e0;">Validación de que el uso CFDI <code>P01</code> ya no es vigente (2 líneas, ahora inline)</td>
+            <td style="padding:8px;border:1px solid #e0e0e0;"><code>fg_periodicity</code>/<code>fg_months</code>/<code>fg_year</code>, público en general (ya nativo en Odoo 19)</td>
+        </tr>
+    </table>
+    <p style="margin:14px 0 0 0;color:#5d6d7e;font-size:0.8rem;">
+        Verificado por <code>grep</code> sobre el código real del asistente: ningún otro campo o método de esos
+        dos módulos se llega a usar en el flujo de re-facturación.
+    </p>
+</div>
+
+<!-- LOS DOS ASISTENTES -->
+<div style="background:white;padding:30px;border-radius:10px;margin-bottom:30px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:1px solid #e0e0e0;">
+    <h2 style="margin:0 0 25px 0;color:#004c97;font-size:1.5rem;text-align:center;">Dos Asistentes Separados, Mismo Modelo</h2>
+
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;">
+        <div style="background:#eaf4fb;border-radius:10px;padding:18px;border-left:4px solid #0071ce;">
+            <div style="font-size:1.4rem;margin-bottom:6px;">🧾</div>
+            <h3 style="margin:0 0 8px 0;color:#004c97;font-size:0.95rem;">Refacturación</h3>
+            <ul style="color:#5d6d7e;padding-left:16px;font-size:0.8rem;margin:0;">
+                <li>Cliente, Uso CFDI, Forma de Pago SAT, Términos de Pago</li>
+                <li>Fecha, Diario, casilla <strong>Crear Nota de Crédito</strong></li>
+                <li>Botón <strong>Facturación</strong> → <code>create_re_invoice_from_sales</code></li>
+            </ul>
+        </div>
+        <div style="text-align:center;font-size:1.6rem;color:#0071ce;">|</div>
+        <div style="background:#fdf3e3;border-radius:10px;padding:18px;border-left:4px solid #f39c12;">
+            <div style="font-size:1.4rem;margin-bottom:6px;">⚙️</div>
+            <h3 style="margin:0 0 8px 0;color:#d68910;font-size:0.95rem;">Operaciones de Re-facturación</h3>
+            <ul style="color:#5d6d7e;padding-left:16px;font-size:0.8rem;margin:0;">
+                <li>Selecciona la <strong>Operación</strong> manual a ejecutar</li>
+                <li>Si es "Asociar NC a re-facturación": elige la <strong>factura</strong> a asociar</li>
+                <li>Botón <strong>Ejecutar Operación</strong> → <code>execute_operations_extra_type</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="background:#f4f9fd;border-radius:8px;padding:14px 18px;margin-top:16px;font-size:0.85rem;color:#5d6d7e;text-align:center;">
+        Ambos abren el <strong>mismo modelo</strong> (<code>pos.order.invoice_wizard</code>) desde el pedido de
+        POS (lista o formulario), pero cada uno con su propia vista: ya no aparecen mezclados el campo de
+        "Crear Nota de Crédito" y el selector de "Operación" en el mismo formulario.
+    </div>
+</div>
+
+<!-- ELIMINADO -->
+<div style="background:#fbe9e7;padding:20px 25px;border-radius:10px;margin-bottom:30px;border-left:5px solid #e74c3c;">
+    <h3 style="margin:0 0 10px 0;color:#c0392b;font-size:1.1rem;">🗑️ Funcionalidad Eliminada</h3>
+    <p style="margin:0;color:#5d6d7e;font-size:0.88rem;">
+        Se quitó por completo la casilla <strong>"Conciliar los Pagos"</strong> (<code>reconcile_automatic_payments</code>):
+        campo, validación de conflicto con "Crear NC", y el bloque que aplicaba pagos automáticamente al final del
+        proceso. Ya no existe en el modelo ni en ninguna vista.
+    </p>
+</div>
+
+<!-- DETALLES TÉCNICOS -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;margin-bottom:30px;">
+
+    <div style="background:white;padding:22px;border-radius:10px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:1px solid #e0e0e0;">
+        <div style="width:42px;height:42px;background:linear-gradient(45deg,#0071ce,#004c97);border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:bold;margin-bottom:10px;font-size:0.75rem;">PY</div>
+        <h3 style="margin:0 0 8px 0;color:#2c3e50;font-size:0.95rem;">models/pos_order.py</h3>
+        <ul style="color:#5d6d7e;padding-left:0;list-style:none;font-size:0.82rem;">
+            <li>✓ <code>pos.config</code> / <code>res.config.settings</code>: dirección de emisión de respaldo</li>
+            <li>✓ <code>pos.order</code>: <code>partner_global_id</code>, <code>emission_zip</code>, <code>payment_tpv_id</code>, folio fiscal combinado</li>
+            <li>✓ <code>pos.order.invoice_wizard</code>: un solo modelo, usado por las 2 acciones</li>
+            <li>✓ <code>account.move._l10n_mx_edi_add_invoice_cfdi_values</code> — receptor dinámico sin depender de otros módulos</li>
+            <li>✓ <code>l10n_mx_edi.document</code>: fix de Serie (quita el prefijo "REEMBOLSO DE " en devoluciones)</li>
+        </ul>
+    </div>
+
+    <div style="background:white;padding:22px;border-radius:10px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:1px solid #e0e0e0;">
+        <div style="width:42px;height:42px;background:linear-gradient(45deg,#e67e22,#d35400);border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:bold;margin-bottom:10px;font-size:0.75rem;">XML</div>
+        <h3 style="margin:0 0 8px 0;color:#2c3e50;font-size:0.95rem;">views/pos_order_view.xml</h3>
+        <ul style="color:#5d6d7e;padding-left:0;list-style:none;font-size:0.82rem;">
+            <li>✓ <code>action_pos_order_re_invoice_fx</code> — vinculada a <code>pos.order</code>, lista y formulario</li>
+            <li>✓ <code>action_pos_order_re_invoice_operations_fx</code> — vinculada igual, acción separada</li>
+            <li>✓ Ambas con <code>binding_model_id</code> a <code>point_of_sale.model_pos_order</code></li>
+        </ul>
+    </div>
+
+    <div style="background:white;padding:22px;border-radius:10px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:1px solid #e0e0e0;">
+        <div style="width:42px;height:42px;background:linear-gradient(45deg,#27ae60,#1a6b3c);border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:bold;margin-bottom:10px;font-size:0.75rem;">v19</div>
+        <h3 style="margin:0 0 8px 0;color:#2c3e50;font-size:0.95rem;">Correcciones de migración</h3>
+        <ul style="color:#5d6d7e;padding-left:0;list-style:none;font-size:0.82rem;">
+            <li>✓ <code>account.move.send</code> ya es <code>AbstractModel</code> → se timbra con <code>_l10n_mx_edi_cfdi_invoice_try_send()</code></li>
+            <li>✓ <code>conceptos_list</code> → <code>base_lines</code> / <code>l10n_mx_cfdi_values</code></li>
+            <li>✓ Sin dependencias de módulos con lógica ya nativa en Odoo 19</li>
+        </ul>
+    </div>
+
+</div>
+
+<!-- CONFIGURACIÓN -->
+<div style="background:#fff8e7;padding:25px;border-radius:10px;margin-bottom:30px;border-left:5px solid #f39c12;box-shadow:0 4px 15px rgba(0,0,0,0.05);">
+    <h3 style="margin:0 0 15px 0;color:#d68910;font-size:1.2rem;">⚙️ Configuración Inicial</h3>
+    <ol style="color:#5d6d7e;padding-left:20px;margin:0;font-size:0.9rem;">
+        <li style="margin-bottom:8px;">En <strong>Ajustes → Punto de Venta</strong>, configura opcionalmente la
+            <strong>Dirección de Emisión (Factura Global)</strong> y su <strong>Código Postal</strong> — se usan
+            como respaldo del domicilio fiscal cuando la Nota de Crédito se asocia a una Factura Global.</li>
+        <li style="margin-bottom:8px;">Activa/desactiva <strong>Timbrado Manual Devoluciones (Global)</strong>
+            según si quieres que las devoluciones de POS se timbren automáticamente o no.</li>
+        <li>Desde un pedido de POS ya facturado en una Global, usa <strong>Refacturación</strong> para el flujo
+            normal, o <strong>Operaciones de Re-facturación</strong> solo si necesitas asociar manualmente una
+            Nota de Crédito ya existente.</li>
+    </ol>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center;padding:25px;background:#004c97;color:white;border-radius:10px;">
+    <div style="font-size:1.2rem;font-weight:600;margin-bottom:8px;">Re-facturación Global (POS) — Odoo 19</div>
+    <div style="font-size:0.9rem;opacity:0.85;">
+        Consolidación y migración de 3 módulos a 1 · Localización México (<code>l10n_mx_edi</code>) · CFDI 4.0
+    </div>
+</div>
+</body>
+</html>

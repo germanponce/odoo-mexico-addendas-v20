@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>l10n_mx_edi_factoring — Factoraje Financiero MX</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; background-color: #f8f9fa;">
+
+    <!-- ══ CABECERA ══ -->
+    <div style="text-align: center; background: linear-gradient(135deg, #145a32 0%, #27ae60 100%); color: white; padding: 40px 20px; border-radius: 10px; margin-bottom: 30px;">
+        <div style="width: 70px; height: 70px; background: rgba(255,255,255,0.15); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 15px;">💱</div>
+        <h1 style="margin: 0 0 10px 0; font-size: 2.2rem; font-weight: 700;">Factoraje Financiero MX</h1>
+        <p style="margin: 0 0 15px 0; font-size: 1.1rem; opacity: 0.9;">Módulo Odoo 19.0 — LdM EE</p>
+        <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">Versión 19.0.1.0.0</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">l10n_mx_edi_factoring</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 15px; font-size: 0.9rem;">Migrado de v18 → v19</span>
+        </div>
+    </div>
+
+    <!-- ══ DESCRIPCIÓN ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 15px 0; color: #145a32; font-size: 1.5rem; text-align: center;">¿Qué hace este módulo?</h2>
+        <p style="color: #5d6d7e; text-align: center; max-width: 800px; margin: 0 auto 15px auto;">
+            Implementa <strong>Factoraje Financiero</strong> en el flujo de Cuentas por Cobrar de Odoo con timbrado CFDI completo.
+            Permite que un <em>factorante</em> liquide las facturas de los clientes, generando el asiento de compensación
+            y emitiendo el <strong>CFDI de Pago 2.0</strong> con dos nodos <code>pago20:Pago</code>: uno para el pago ordinario
+            (al factorante) y otro para el movimiento de factoraje (FormaDePago 17).
+        </p>
+        <div style="background: #eafaf1; border-left: 4px solid #27ae60; padding: 15px 20px; border-radius: 4px; max-width: 800px; margin: 0 auto;">
+            <strong style="color: #145a32;">Migración v18 → v19:</strong>
+            <span style="color: #5d6d7e;"> El template <code>payment20.xml</code> pasó de ser un override completo a una
+            <strong>herencia</strong> del template oficial <code>l10n_mx_edi.payment20</code> de v19 vía <code>xpath</code>.
+            Se eliminaron los <code>print()</code>, se renombró <code>tree</code> → <code>list</code> y se corrigieron los
+            <code>attrs</code> a <code>invisible</code> directo.</span>
+        </div>
+    </div>
+
+    <!-- ══ VIDEO DEMO ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #145a32; font-size: 1.5rem; text-align: center;">Video demostrativo</h2>
+        <div style="max-width: 860px; margin: 0 auto;">
+            <!-- Contenedor responsivo 16:9 -->
+            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+                <iframe
+                    src="https://www.youtube.com/embed/F17oNsxLPL0"
+                    title="Factoraje Financiero MX — Video demostrativo"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                ></iframe>
+            </div>
+            <!-- Enlace directo por si el iframe esta bloqueado -->
+            <div style="text-align: center; margin-top: 14px;">
+                <a
+                    href="https://www.youtube.com/watch?v=F17oNsxLPL0"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style="display: inline-flex; align-items: center; gap: 8px; color: #145a32; font-size: 0.88rem; text-decoration: none; opacity: 0.8;"
+                    onmouseover="this.style.opacity='1'"
+                    onmouseout="this.style.opacity='0.8'"
+                >
+                    &#9654; Ver en YouTube
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ FLUJO PRINCIPAL ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 25px 0; color: #145a32; font-size: 1.5rem; text-align: center;">Flujo de Trabajo</h2>
+        <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 10px;">
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #27ae60, #145a32); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">⚙️</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">1. Configurar</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">Marcar el partner como Factorante y asignarlo al cliente</p>
+            </div>
+
+            <div style="font-size: 2rem; color: #145a32; flex: 0;">→</div>
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #2ecc71, #27ae60); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">📋</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">2. Abrir Wizard</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">Seleccionar facturas → Acción → "Factoraje financiero"</p>
+            </div>
+
+            <div style="font-size: 2rem; color: #145a32; flex: 0;">→</div>
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #1abc9c, #16a085); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">🏦</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">3. Compensar</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">Asignar factura proveedor, diario, importes y presionar "Compensar"</p>
+            </div>
+
+            <div style="font-size: 2rem; color: #145a32; flex: 0;">→</div>
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #3498db, #2980b9); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">📄</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">4. Registrar Pago</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">Wizard de registro de pago con factorante prellenado</p>
+            </div>
+
+            <div style="font-size: 2rem; color: #145a32; flex: 0;">→</div>
+
+            <div style="text-align: center; flex: 1; min-width: 130px;">
+                <div style="width: 75px; height: 75px; background: linear-gradient(135deg, #e67e22, #d35400); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 10px;">🧾</div>
+                <p style="margin: 0; color: #2c3e50; font-weight: 600; font-size: 0.9rem;">5. CFDI Pago</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.8rem;">XML con dos pago20:Pago — ordinario + factoraje (FDP=17)</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ MODELOS ══ -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 20px; margin-bottom: 30px;">
+
+        <!-- account.factoring -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; border-top: 4px solid #145a32;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #145a32, #27ae60); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8rem; margin-bottom: 15px;">AF</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">account.factoring</h3>
+            <p style="color: #7f8c8d; margin: 0 0 12px 0; font-size: 0.85rem;">Wizard (TransientModel) principal del factoraje.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.85rem;">
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>partner_id</strong> — Factorante (res.partner)</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>bill_id</strong> — Factura de proveedor a saldar</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>line_ids</strong> → account.factoring.line</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>factoring_amount</strong> — Suma de importes de líneas</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>balance</strong> — Residual de la factura proveedor</li>
+                <li style="padding: 3px 0;">✓ <strong>create_factoring()</strong> — Asiento + reconcilia + lanza pago</li>
+            </ul>
+        </div>
+
+        <!-- account.factoring.line -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; border-top: 4px solid #27ae60;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #27ae60, #2ecc71); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem; margin-bottom: 15px;">AFL</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">account.factoring.line</h3>
+            <p style="color: #7f8c8d; margin: 0 0 12px 0; font-size: 0.85rem;">Líneas del wizard: facturas de cliente a compensar.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.85rem;">
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>invoice_id</strong> — Factura de cliente (out_invoice)</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>factoring_id</strong> — Referencia al wizard padre</li>
+                <li style="padding: 3px 0;">✓ <strong>amount</strong> — Importe a compensar (editable)</li>
+            </ul>
+        </div>
+
+        <!-- account.move (extensión) -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; border-top: 4px solid #2980b9;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #2980b9, #3498db); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8rem; margin-bottom: 15px;">AM</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">account.move (ext.)</h3>
+            <p style="color: #7f8c8d; margin: 0 0 12px 0; font-size: 0.85rem;">Campos y hooks CFDI de factoraje en facturas/pagos.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.85rem;">
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>x_factoring_invoice_ids</strong> — M2M asientos de factoraje</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>x_in_factoring</strong> — Factura proveedor en factoraje</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>open_factoring()</strong> — Abre el wizard</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>_l10n_mx_edi_add_payment_cfdi_values()</strong> — Hook CFDI</li>
+                <li style="padding: 3px 0;">✓ <strong>_add_factoring_cfdi_values()</strong> — Construye documento_factoraje</li>
+            </ul>
+        </div>
+
+        <!-- res.partner (extensión) -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; border-top: 4px solid #8e44ad;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #8e44ad, #9b59b6); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 22px; margin-bottom: 15px;">👤</div>
+            <h3 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem;">res.partner (ext.) + account.payment.register</h3>
+            <p style="color: #7f8c8d; margin: 0 0 12px 0; font-size: 0.85rem;">Configuración del factorante en el cliente y en el pago.</p>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.85rem;">
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>x_is_factoring_partner</strong> — Marcar como factorante</li>
+                <li style="padding: 3px 0; border-bottom: 1px dashed #eee;">✓ <strong>x_factoring_partner_id</strong> — Factorante del cliente</li>
+                <li style="padding: 3px 0;">✓ <strong>x_factoring_partner_id</strong> en account.payment.register</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ══ CAMBIOS DE MIGRACIÓN v18 → v19 ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #145a32; font-size: 1.5rem; text-align: center;">Cambios de Migración v18 → v19</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+
+            <div style="padding: 20px; background: #fef9e7; border-radius: 8px; border-left: 4px solid #f39c12;">
+                <h4 style="margin: 0 0 10px 0; color: #d68910;">❌ payment20.xml: override completo → herencia</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    En v18 el archivo era una copia completa del template de pagos con modificaciones.
+                    En v19 usa <code>&lt;template inherit_id="l10n_mx_edi.payment20"&gt;</code> con un
+                    <code>xpath</code> que añade el segundo <code>&lt;pago20:Pago&gt;</code> después del primero.
+                    Esto es correcto porque v19 utiliza su propio template oficial que puede cambiar entre versiones menores.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #fef9e7; border-radius: 8px; border-left: 4px solid #f39c12;">
+                <h4 style="margin: 0 0 10px 0; color: #d68910;">❌ print() eliminado</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    <code>action_register_payment</code> en v18 tenía un <code>print()</code> de depuración.
+                    Eliminado en v19. El contexto <code>default_x_factoring_partner_id</code>
+                    sigue propagándose al wizard correctamente.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #fef9e7; border-radius: 8px; border-left: 4px solid #f39c12;">
+                <h4 style="margin: 0 0 10px 0; color: #d68910;">❌ tree → list en vistas XML</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    El elemento <code>&lt;tree&gt;</code> en <code>account_factoring.xml</code> fue renombrado
+                    a <code>&lt;list&gt;</code>, que es la forma correcta en v17+.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #fef9e7; border-bottom: 1px dashed #eee; border-left: 4px solid #f39c12; border-radius: 8px;">
+                <h4 style="margin: 0 0 10px 0; color: #d68910;">❌ attrs → invisible directo</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    El campo <code>x_factoring_partner_id</code> en la vista del partner usaba
+                    <code>attrs="{'invisible': [...]}"</code>. En v19 se usa
+                    <code>invisible="not x_is_factoring_partner"</code> directamente.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #145a32;">✅ Renombrado add_factoring_invoices → _add_factoring_cfdi_values</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    El método fue renombrado con prefijo privado <code>_</code> y nombre más descriptivo
+                    siguiendo las convenciones de v19. La lógica interna no cambió.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #145a32;">✅ compute_ → _compute_ en wizard</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    Los métodos compute del wizard (<code>compute_bill_amount</code>, etc.) fueron
+                    renombrados con prefijo <code>_compute_</code> siguiendo la convención de Odoo v19.
+                    Los campos <code>compute=</code> se actualizaron acorde.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #145a32;">✅ XPath con *[name()='pago20:Pago']</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    En v19, para hacer XPath sobre elementos con namespace en templates QWeb se usa
+                    <code>*[name()='pago20:Pago']</code> en lugar de <code>//pago20:Pago</code>,
+                    lo que evita problemas con la resolución de namespaces en lxml.
+                </p>
+            </div>
+
+            <div style="padding: 20px; background: #eafaf1; border-radius: 8px; border-left: 4px solid #27ae60;">
+                <h4 style="margin: 0 0 10px 0; color: #145a32;">✅ js_assign_outstanding_line confirmado en v19</h4>
+                <p style="color: #5d6d7e; margin: 0; font-size: 0.88rem;">
+                    El método <code>js_assign_outstanding_line(line_id)</code> sigue disponible
+                    en v19 sobre <code>account.move</code>. Internamente llama a <code>.reconcile()</code>
+                    sobre las líneas correspondientes.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ ESTRUCTURA DEL CFDI DE PAGO CON FACTORAJE ══ -->
+    <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #145a32; font-size: 1.5rem; text-align: center;">Estructura del CFDI de Pago generado</h2>
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; font-family: monospace; font-size: 0.82rem; color: #2c3e50; border: 1px solid #dee2e6; overflow-x: auto;">
+<pre style="margin: 0;">cfdi:Comprobante TipoDeComprobante="P"
+  cfdi:Emisor  → La empresa (emisor del CFDI)
+  cfdi:Receptor → <strong style="color: #c0392b;">El Factorante Financiero</strong> (no el cliente original)
+  cfdi:Conceptos → Concepto genérico (84111506 / ACT / Pago)
+  cfdi:Complemento
+    pago20:Pagos Version="2.0"
+      pago20:Totales → Suma de <strong>ambos</strong> nodos Pago
+      
+      ┌─ pago20:Pago #1 ─────────────────────────── (pago ordinario) ─┐
+      │  FormaDePagoP = XX  (la forma seleccionada en el wizard)        │
+      │  pago20:DoctoRelacionado → Facturas del cliente                 │
+      └────────────────────────────────────────────────────────────────┘
+      
+      ┌─ pago20:Pago #2 ─────────────────────────── (factoraje FDP=17) ┐
+      │  FormaDePagoP = "17"  (Compensación de deudas)                  │
+      │  pago20:DoctoRelacionado → Mismas facturas con datos del         │
+      │                             asiento de compensación              │
+      └────────────────────────────────────────────────────────────────┘</pre>
+        </div>
+    </div>
+
+    <!-- ══ ARCHIVOS DEL MÓDULO ══ -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+            <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #27ae60, #145a32); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-bottom: 12px;">PY</div>
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">models/ (3 archivos)</h3>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0;">✓ <code>res_partner.py</code> — Campos factorante</li>
+                <li style="padding: 2px 0;">✓ <code>account_move.py</code> — Hook CFDI + campos</li>
+                <li style="padding: 2px 0;">✓ <code>account_payment_register.py</code> — Campo factorante en wizard pago</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+            <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #3498db, #2980b9); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-bottom: 12px;">WZ</div>
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">wizards/ (2 archivos)</h3>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0;">✓ <code>account_factoring.py</code> — Lógica principal del factoraje</li>
+                <li style="padding: 2px 0;">✓ <code>account_factoring_line.py</code> — Líneas del wizard</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+            <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #9b59b6, #8e44ad); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-bottom: 12px;">XML</div>
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">views/ + wizards/ + data/</h3>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0;">✓ <code>views/payment20.xml</code> — <strong>Herencia</strong> del template v19</li>
+                <li style="padding: 2px 0;">✓ <code>views/res_partner.xml</code> — Campos en formulario de contacto</li>
+                <li style="padding: 2px 0;">✓ <code>views/account_payment_register.xml</code></li>
+                <li style="padding: 2px 0;">✓ <code>wizards/account_factoring.xml</code> — Wizard form</li>
+                <li style="padding: 2px 0;">✓ <code>data/ir_actions_server.xml</code> — Acción menú facturas</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 22px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+            <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #7f8c8d, #555); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.7rem; margin-bottom: 12px;">SEC</div>
+            <h3 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 1rem;">Seguridad</h3>
+            <ul style="color: #5d6d7e; padding-left: 0; list-style: none; font-size: 0.82rem;">
+                <li style="padding: 2px 0;">✓ <code>security/ir.model.access.csv</code></li>
+                <li style="padding: 2px 0;">✓ Acceso CRUD: <code>account.group_account_user</code></li>
+                <li style="padding: 2px 0;">✓ Cubre: account.factoring y account.factoring.line</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ══ NOTAS DE IMPLEMENTACIÓN ══ -->
+    <div style="background: #fff8f0; padding: 25px; border-radius: 10px; margin-bottom: 30px; border-left: 5px solid #e67e22; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <h3 style="margin: 0 0 15px 0; color: #d35400; font-size: 1.2rem;">⚠️ Notas importantes de implementación</h3>
+
+        <p style="color: #5d6d7e; margin: 0 0 12px 0;">
+            <strong>1. Verificar _l10n_mx_edi_add_payment_cfdi_values en producción:</strong>
+            Si al timbrar el pago el XML no contiene el segundo <code>pago20:Pago</code>, verificar
+            que el método base sigue siendo llamado desde <code>l10n_mx_edi.document</code> con la misma
+            clave <code>pay_results['invoice_results']</code>. En caso de cambio, ajustar el acceso al dict.
+        </p>
+
+        <p style="color: #5d6d7e; margin: 0 0 12px 0;">
+            <strong>2. Relación Many2many x_factoring_invoice_ids:</strong>
+            La tabla <code>ir_acc_factoring_rel</code> solo tiene la columna <code>factoring_id</code>
+            definida. Si Odoo reporta un conflicto de columna al instalar, agrega también
+            <code>column2='move_id'</code> en la definición del campo.
+        </p>
+
+        <p style="color: #5d6d7e; margin: 0 0 12px 0;">
+            <strong>3. Método de pago SAT código 17:</strong>
+            El asiento de compensación usa <code>l10n_mx_edi.payment.method</code> con código
+            <code>'17'</code> (Compensación de deudas). Verificar que este registro exista en
+            la base de datos antes de ejecutar el factoraje.
+        </p>
+
+        <p style="color: #5d6d7e; margin: 0;">
+            <strong>4. XPath del payment20:</strong>
+            El xpath <code>//*[name()='pago20:Pago']</code> apunta al <em>primer</em> elemento
+            con ese nombre en el árbol. Si en el futuro el template oficial de v19 agrega más
+            nodos <code>pago20:Pago</code>, puede ser necesario ajustar el xpath para ser más específico.
+        </p>
+    </div>
+
+    <!-- ══ RESUMEN ══ -->
+    <div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;">
+        <h2 style="margin: 0 0 20px 0; color: #145a32; font-size: 1.4rem;">Resumen del Módulo</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
+            <div><div style="font-size: 2rem; font-weight: 700; color: #145a32;">5</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Modelos Python (3 definitivos + 2 transient)</p></div>
+            <div><div style="font-size: 2rem; font-weight: 700; color: #27ae60;">5</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Archivos XML (vistas + data)</p></div>
+            <div><div style="font-size: 2rem;">🔗</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Template v19 heredado con xpath de factoraje</p></div>
+            <div><div style="font-size: 2rem;">💹</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Soporte MXN y USD en pagos de factoraje</p></div>
+            <div><div style="font-size: 2rem;">📊</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">Cálculo prorrateo de impuestos (IVA/ISR/IEPS)</p></div>
+            <div><div style="font-size: 2rem;">🧾</div><p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.85rem;">CFDI P con 2 nodos pago20:Pago (FDP 17)</p></div>
+        </div>
+    </div>
+
+    <!-- ══ FOOTER ══ -->
+    <div style="text-align: center; padding: 25px; background: #145a32; color: white; border-radius: 10px; margin-top: 10px;">
+        <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 8px;">l10n_mx_edi_factoring — Factoraje Financiero MX</div>
+        <div style="font-size: 0.9rem; opacity: 0.85;">
+            Versión 19.0.1.0.0 | LdM EE | Migración v18 → v19<br>
+            Compatible con Odoo 19 Community / Enterprise | Complemento Pagos 2.0 SAT
+        </div>
+    </div>
+
+</body>
+</html>

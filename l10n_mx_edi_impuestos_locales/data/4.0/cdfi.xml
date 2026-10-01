@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="cfdiv40_complemento_impuestos_locales" inherit_id="l10n_mx_edi_40.cfdiv40">
+            <xpath expr="//*[name()='cfdi:Comprobante']" position="inside">
+                <t t-if="retenciones_locales or traslados_locales">
+                    <cfdi:Complemento xmlns:cfdi="http://www.sat.gob.mx/cfd/4" xmlns:implocal="http://www.sat.gob.mx/implocal">
+                        <implocal:ImpuestosLocales
+                            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                            xmlns="http://www.sat.gob.mx/implocal"
+                            t-att-TotaldeRetenciones="tax_local_ret_tot"
+                            t-att-TotaldeTraslados="tax_local_tras_tot"
+                            version="1.0">
+                            <t t-foreach="retenciones_locales" t-as="retencion_local">
+                                <implocal:RetencionesLocales
+                                    t-att-ImpLocRetenido="retencion_local['tax'].name.upper()"
+                                    t-att-TasadeRetencion="abs(retencion_local['tax_amount'])*100"
+                                    t-att-Importe="abs(retencion_local['total'])"/>
+                            </t>
+                            <t t-foreach="traslados_locales" t-as="traslado_local">
+                                <implocal:TrasladosLocales
+                                    t-att-ImpLocTrasladado="traslado_local['tax'].name.upper()"
+                                    t-att-TasadeTraslado="abs(traslado_local['tax_amount'])*100"
+                                    t-att-Importe="abs(traslado_local['total'])"/>
+                            </t>
+                        </implocal:ImpuestosLocales>
+                    </cfdi:Complemento>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <record id="view_l10n_mx_edi_retailer_wizard_form" model="ir.ui.view">
+            <field name="name">l10n_mx_edi.retailer.wizard.form</field>
+            <field name="model">l10n_mx_edi.retailer.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Complemento Detallista">
+                    <field name="invoice_id" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="status"/>
+                            <field name="purchase_order_date"/>
+                            <field name="purchase_order_name"/>
+                            <field name="purchase_contact_name"/>
+                            <field name="special_service_type"/>
+                        </group>
+                        <group string="Remisión">
+                            <field name="delivery"/>
+                            <field name="delivery_date"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Guardar" name="action_confirm" type="object" class="btn-primary"/>
+                        <button string="Cancelar" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_open_wizard_retailer" model="ir.actions.act_window">
+            <field name="name">Complemento Detallista</field>
+            <field name="res_model">l10n_mx_edi.retailer.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_l10n_mx_edi_retailer_wizard_form"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

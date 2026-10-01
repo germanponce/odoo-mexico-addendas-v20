@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="l10n_mx_edi_addenda_walmart" model="l10n_mx_edi.addenda">
+            <field name="name">Walmart</field>
+            <field name="arch" type="xml">
+                <t t-xml-node="addenda">
+                    <t t-set="sumary" t-value="record.getAddendaSumaryWalmart()" />
+                    <t t-set="sale_model" t-value="'sale_line_ids' in record.invoice_line_ids._fields"/>
+                    <t t-set="sale_id" t-value="record.mapped('invoice_line_ids.sale_line_ids.order_id') if sale_model else False"/>
+                    <t t-set="pickings" t-value="sale_id.picking_ids.filtered(lambda x: x.state == 'done' and x.date_done)" />
+                    <t t-set="num_seg" t-value="22"/>
+                    <t t-set="partner_shipping" t-value="record.partner_shipping_id if record.fields_get(['partner_shipping_id']) else record.partner_id.commercial_partner_id if record.partner_id.type != 'invoice' else record.partner_id"/>
+                    <t t-set="partner" t-value="record.partner_id.commercial_partner_id if record.partner_id.type != 'invoice' else record.partner_id"/>
+                    <t t-set="supplier_rfc" t-value="record.company_id.vat"/>
+                    <t t-set="invoice_date" t-value="record.invoice_date.strftime('%y%m%d')"/>
+                    <t t-set="stamp_time" t-value="(record.l10n_mx_edi_post_time.strftime('%H%M') or '0000').replace(':', '')[:4]"/>
+                    <t t-set="date_time" t-value="'{date}{time}'.format(date=record.invoice_date.strftime('%Y%m%d'), time=(record.l10n_mx_edi_post_time.strftime('%H%M%S') or '000000').replace(':', ''))"/>
+                    <t t-set="order_number" t-value="record.ref or '0'"/>
+                    <t t-set="po_date" t-value="record.l10n_mx_edi_walmart_date_order.strftime('%Y%m%d') or record.invoice_date.strftime('%Y%m%d')"/>
+                    <!-- TODO: definir folio_number y serie_number (usados más abajo dentro de <Documento>, no existían en el template original) -->
+                    <t t-set="folio_number" t-value="record.name"/>
+                    <t t-set="serie_number" t-value="record.journal_id.code or ''"/>
+                    <t t-set="cStreet" t-value="partner.street.lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n').strip()[:35].upper() if partner.street else ''"/>
+                    <t t-set="cColony" t-value="partner.l10n_mx_edi_colony.replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n').strip()[:35].upper() if partner.l10n_mx_edi_colony else ''"/>
+                    <t t-set="cLocality" t-value="partner.l10n_mx_edi_locality_id.name.lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n').upper() if partner.l10n_mx_edi_locality_id.name else ''"/>
+                    <t t-set="cCity" t-value="partner.city.lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n').upper() if partner.city else ''"/>
+                    <t t-set="cZip" t-value="partner.zip.upper() or '' "/>
+
+                    <t t-set="sStreet" t-value="record.company_id.partner_id.street.lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n').strip()[:35].upper() if record.company_id.partner_id.street else ''"/>
+                    <t t-set="sColony" t-value="record.company_id.partner_id.l10n_mx_edi_colony.replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n').strip()[:35].upper() if record.company_id.partner_id.l10n_mx_edi_colony else ''"/>
+                    <t t-set="sCity" t-value="record.company_id.partner_id.city.lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n').upper() if record.company_id.partner_id.city else ''"/>
+                    <t t-set="sZip" t-value="record.company_id.partner_id.zip.upper() or '' "/>
+
+                    <t t-set="dStreet" t-value="partner_shipping.street.lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n').strip()[:35].upper() if partner_shipping.street else ''"/>
+                    <t t-set="dColony" t-value="partner_shipping.l10n_mx_edi_colony.replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n').strip()[:35].upper() if partner_shipping.l10n_mx_edi_colony else ''"/>
+                    <t t-set="dState" t-value="partner_shipping.state_id.name.lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n').upper() if partner_shipping.state_id else ''"/>
+                    <t t-set="dZip" t-value="partner_shipping.zip.upper() or '' "/>
+
+                    <t t-set="walmart_notes" t-value="sumary['walmart_notes']"/>
+
+                    <t t-set="supplier_code" t-value="sumary['supplier_code']"/>
+                    <t t-set="cedis" t-value="sumary['cedis']"/>
+
+                    <t t-set="due_days" t-value="(record.invoice_date_due - record.invoice_date).days"/>
+                    <t t-set="line_details" t-value="'\''.join(['LIN+{count}++{l_barcode}:SRV::9\'IMD+F++:::{name}\'QTY+47:{qty}:EA\'MOA+203:{l_total}\'PRI+AAA:{p_unit}::::EA\'TAX+7+VAT+++:::{l_tax}+B\'MOA+124:{l_price_tax}'.format(
+                            count=index+1,
+                            l_barcode=l.product_id.barcode or '0',
+                            name=l.product_id.name,
+                            qty=l.quantity,
+                            l_total=l.price_subtotal,
+                            p_unit=l.price_unit,
+                            l_tax=l.tax_ids.amount,
+                            l_price_tax=l.price_total - l.price_subtotal
+                            ) for index,l in enumerate(record.invoice_line_ids)])"/>
+                    <t t-set="num_lines" t-value="len(record.invoice_line_ids.ids)"/>
+                    <t t-set="total" t-value="record.amount_total or 0.0"/>
+                    <t t-set="sub_t" t-value="record.amount_untaxed or 0.0"/>
+                    <t t-set="amount_tax" t-value="''.join(['TAX+7+VAT+++:::{percent}+B\''.format(percent=t.amount) for t in record.line_ids.tax_ids])"/>
+                    <t t-set="amount_taxed" t-value="record.amount_tax or 0.0"/>
+                    <t t-set="segmento" t-value="num_seg+len(record.line_ids.tax_ids)+len(record.invoice_line_ids.ids)*7"/>
+                    <Documento>UNB+UNOB:1+<t t-out="supplier_rfc"/>:ZZ+925485MX00:8+<t t-out="invoice_date"/>:<t t-out="stamp_time"/>+<t t-out="folio_number"/>'UNH+1+INVOIC:D:01B:UN:AMC002'BGM+380+<t t-out="folio_number"/>+9'DTM+137:<t t-out="date_time"/>:204'FTX+ZZZ+++<t t-out="record._l10n_mx_edi_cfdi_amount_to_text()"/>'RFF+ON:<t t-out="order_number"/>'DTM+171:<t t-out="po_date"/>:102'RFF+BT:<t t-out="serie_number"/>'NAD+BY+7507003100001::9++<t t-out="record.partner_id.name"/>+<t t-out="cStreet"/>:<t t-out="cColony"/>+<t t-out="cLocality"/>+<t t-out="cCity"/>+<t t-out="cZip"/>'RFF+GN:<t t-out="record.partner_id.vat"/>'NAD+SU+++<t t-out="record.company_id.name"/>+<t t-out="sStreet"/>:<t t-out="sColony"/>+<t t-out="sCity"/>+<t t-out="sZip"/>'RFF+GN:<t t-out="supplier_rfc"/>'RFF+IA:<t t-out="supplier_code"/>'NAD+ST+<t t-out="cedis"/>::9++<t t-out="partner_shipping.name"/>+<t t-out="dStreet"/>+<t t-out="dColony"/>+<t t-out="dState"/>+<t t-out="dZip"/>'CUX+2:MXN:4'PAT+1++5:3:D:<t t-out="due_days"/>'<t t-out="line_details"/>'UNS+S'CNT+2:<t t-out="num_lines"/>'MOA+9:<t t-out="total"/>'MOA+79:<t t-out="sub_t"/>'MOA+125:<t t-out="sub_t"/>'<t t-out="amount_tax"/>MOA+124:<t t-out="amount_taxed"/>'UNT+<t t-out="segmento"/>+1'UNZ+1+<t t-out="folio_number"/>'</Documento>
+                </t>
+            </field>
+        </record>
+
+    </data>
+</odoo>

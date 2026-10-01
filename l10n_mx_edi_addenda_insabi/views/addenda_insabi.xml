@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="l10n_mx_edi_addenda_insabi" model="l10n_mx_edi.addenda">
+            <field name="name">INSABI</field>
+            <field name="arch" type="xml">
+                <t t-xml-node="addenda">
+                    <t t-set="sale_model" t-value="'sale_line_ids' in record.invoice_line_ids._fields"/>
+                    <t t-set="sale_id" t-value="record.mapped('invoice_line_ids.sale_line_ids.order_id') if sale_model else False"/>
+                    <t t-set="pickings" t-value="sale_id.picking_ids.filtered(lambda x: x.state == 'done' and x.date_done)" />
+                    <REM>
+                        <NOS><t t-out="record.l10n_mx_edi_insabi_imss_no_orden" /></NOS>
+                        <OR><t t-out="record.l10n_mx_edi_insabi_response_orden_remi" /></OR>
+                        <CLUES><t t-out="record.l10n_mx_edi_insabi_final_destiny_clues" /> - <t t-out="record.l10n_mx_edi_insabi_clue" /> - <t t-out="record.l10n_mx_edi_insabi_send_to_name" /></CLUES>
+                        <CONTRATO><t t-out="record.l10n_mx_edi_insabi_contract_name" /></CONTRATO>
+                        <FEEX><t t-out="record.get_format_date_insabi(record.l10n_mx_edi_insabi_expedition_date)" /></FEEX>
+                        <FEEN><t t-out="record.get_format_date_insabi(record.l10n_mx_edi_insabi_incoming_date)" /></FEEN>
+                        <FERE><t t-out="record.get_format_date_insabi(record.l10n_mx_edi_insabi_reception_date)" /></FERE>
+                    </REM>
+                </t>
+            </field>
+        </record>
+    </data>
+</odoo>

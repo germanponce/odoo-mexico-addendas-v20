@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--
+            Extensión del formulario de Pagos (account.payment) para
+            mostrar los campos del CFDI de Retenciones.
+
+            Cambios de migración v14 → v19:
+              - `attrs` eliminado: se usa `invisible` directamente en el atributo.
+              - El ref del padre puede ser `account.view_account_payment_form`
+                o el equivalente activo en tu instalación.
+        -->
+        <record id="b_inherit_view_account_payment_form" model="ir.ui.view">
+            <field name="name">b.inherit.view.account.payment.form.retentions</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+
+                <!-- Inyectamos los campos de retención en el segundo grupo del header/info -->
+                <xpath expr="//group[@name='group2']" position="inside">
+
+                    <field name="require_retention_cfdi"
+                           widget="boolean_toggle"/>
+
+                    <field name="retention_type_id"
+                           invisible="not require_retention_cfdi"/>
+
+                    <!-- Estado del timbrado -->
+                    <field name="l10n_mx_edi_retention_state"
+                           invisible="not require_retention_cfdi"
+                           widget="statusbar"
+                           statusbar_visible="draft,sent,error"/>
+
+                    <!-- UUID: visible sólo cuando está timbrado -->
+                    <field name="l10n_mx_edi_retention_uuid"
+                           invisible="not require_retention_cfdi or l10n_mx_edi_retention_state != 'sent'"
+                           readonly="1"/>
+
+                    <!-- Mensaje de error -->
+                    <field name="l10n_mx_edi_retention_error_message"
+                           invisible="not require_retention_cfdi or l10n_mx_edi_retention_state != 'error'"
+                           readonly="1"
+                           widget="text"/>
+
+                </xpath>
+
+                <!-- Botones de acción en la barra de botones del formulario -->
+                <xpath expr="//div[@name='button_box']" position="inside">
+
+                    <!-- Botón: Timbrar CFDI de Retención -->
+                    <button name="action_l10n_mx_edi_retention_try_send"
+                            type="object"
+                            string="Timbrar Retención"
+                            class="oe_stat_button"
+                            icon="fa-file-text-o"
+                            invisible="not require_retention_cfdi or l10n_mx_edi_retention_state == 'sent'"/>
+
+                    <!-- Botón: Ver/descargar XML timbrado -->
+                    <button name="%(l10n_mx_edi_retentions_simple.action_report_retention_cfdi)d"
+                            type="action"
+                            string="PDF Retención"
+                            class="oe_stat_button"
+                            icon="fa-print"
+                            invisible="not require_retention_cfdi or l10n_mx_edi_retention_state != 'sent'"/>
+
+                    <!-- Botón: descargar XML timbrado (llama a método Python) -->
+                    <button name="action_download_retention_xml"
+                            type="object"
+                            string="XML Retención"
+                            class="oe_stat_button"
+                            icon="fa-download"
+                            invisible="not require_retention_cfdi or l10n_mx_edi_retention_state != 'sent'"/>
+
+                    <!-- Botón: Reintentar (sólo en error) -->
+                    <button name="action_l10n_mx_edi_retention_reset"
+                            type="object"
+                            string="Reintentar"
+                            class="oe_stat_button"
+                            icon="fa-refresh"
+                            invisible="not require_retention_cfdi or l10n_mx_edi_retention_state != 'error'"
+                            confirm="¿Seguro que deseas restablecer el estado para un nuevo intento de timbrado?"/>
+
+                </xpath>
+
+            </field>
+        </record>
+
+        <!-- ── Vista lista: columna de estado retención ─────────────────── -->
+        <record id="b_inherit_view_account_payment_tree" model="ir.ui.view">
+            <field name="name">b.inherit.view.account.payment.tree.retentions</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_supplier_payment_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//list" position="inside">
+                    <field name="l10n_mx_edi_retention_state"
+                           optional="show"
+                           invisible="not require_retention_cfdi"
+                           string="Estado Ret. CFDI"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

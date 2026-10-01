@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="account_report_expression_paid_16_rda" model="account.report.expression">
+        <field name="label">paid_16_rda</field>
+        <field name="engine">tax_tags</field>
+        <field name="formula">DIOT: 16% RDA</field>
+        <field name="report_line_id" ref="l10n_mx.diot_report_line" />
+    </record>
+
+    <record id="account_report_expression_tax_paid_16" model="account.report.expression">
+        <field name="label">tax_paid_16</field>
+        <field name="engine">tax_tags</field>
+        <field name="formula">DIOT: 16% TAX</field>
+        <field name="report_line_id" ref="l10n_mx.diot_report_line" />
+    </record>
+
+    <record id="account_report_expression_paid_8_rda" model="account.report.expression">
+        <field name="label">paid_8_rda</field>
+        <field name="engine">tax_tags</field>
+        <field name="formula">DIOT: 8% RDA</field>
+        <field name="report_line_id" ref="l10n_mx.diot_report_line" />
+    </record>
+
+    <record id="account_report_expression_importation_16_rda" model="account.report.expression">
+        <field name="label">importation_16_rda</field>
+        <field name="engine">tax_tags</field>
+        <field name="formula">DIOT: 16% IMP RDA</field>
+        <field name="report_line_id" ref="l10n_mx.diot_report_line" />
+    </record>
+
+    <record id="account_report_expression_tax_importation_16" model="account.report.expression">
+        <field name="label">tax_importation_16</field>
+        <field name="engine">tax_tags</field>
+        <field name="formula">DIOT: 16% IMP TAX</field>
+        <field name="report_line_id" ref="l10n_mx.diot_report_line" />
+    </record>
+
+</odoo>

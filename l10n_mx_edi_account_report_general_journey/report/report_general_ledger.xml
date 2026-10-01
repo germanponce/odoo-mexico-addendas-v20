@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>    
+        <template id="report_general_ledger">
+            <t t-call="web.html_container">
+                <t t-set="data_report_margin_top" t-value="12"/>
+                <t t-set="data_report_header_spacing" t-value="9"/>
+                <!--<t t-set="data_report_dpi" t-value="110"/>-->
+                <t t-call="web.internal_layout">
+                    <div class="page">
+                        <div class="row" style="font-size: 12px;">
+                            <strong><t t-out="res_company.name"/></strong><BR/>
+                            DIARIO GENERAL<br/>
+                        </div>
+                        <!--
+                        <div class="row mt32" t-if="data and data.get('date_from') != False">
+                            <div class="col-3">
+                                <strong>Fecha inicial:</strong>
+                                <p t-out="data['date_from']"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Fecha final:</strong>
+                                <p t-out="data['date_to']"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Diarios:</strong>
+                                <p t-out="', '.join(data['journal_ids'].mapped('name'))"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Ordenar por:</strong>
+                                <p t-if="data.get('sort_selection') != 'date'">Número de Póliza</p>
+                                <p t-if="data.get('sort_selection') == 'date'">Fecha</p>
+                            </div>
+                            <div class="col-3">
+                                <strong>Tomar pólizas:</strong>
+                                <p t-if="data['target_move'] == 'all'">Asentadas y No Asentadas</p>
+                                <p t-if="data['target_move'] == 'posted'">Solo Asentadas</p>
+                            </div>
+                        </div>-->
+                        <hr />
+                        <t t-set="suma_cargos" t-value="0.0"/>
+                        <t t-set="suma_abonos" t-value="0.0"/>
+                        <t t-foreach="docs" t-as="o">
+                            <!--<t t-set="o" t-value="o.with_context({'lang':o.create_uid.partner_id.lang})" />-->
+                            <table class="table table-sm" style="font-size:8px;">
+                                <tr style="text-align:center;background-color:#999999;border-top:1px solid black;border-bottom:1px solid black;">
+                                    <td style="width:10%;font-weight:bold;">Fecha</td>
+                                    <td style="width:10%;font-weight:bold;">No. Póliza</td>
+                                    <td style="width:30%;font-weight:bold;">Diario</td>
+                                    <td style="width:30%;font-weight:bold;">Referencia</td>
+                                    <td style="width:10%;font-weight:bold;">Usuario</td>
+                                    <td style="width:10%;font-weight:bold;">Estado</td>
+                                </tr>
+                                <tr style="text-align:center;">
+                                    <td><span t-field="o.date"/></td>
+                                    <td><span t-field="o.name"/></td>
+                                    <td><span t-out="o.journal_id.name"/></td>
+                                    <td><span t-field="o.ref"/></td>
+                                    <td><span t-out="o.write_uid.login"/></td>
+                                    <td><span t-field="o.state"/></td>
+                                </tr>
+                            </table>
+                            
+                            <table class="table table-sm" style="font-size:8px;">
+                                <thead>
+                                    <tr style="text-align:center;background-color:#EEEEEE;border-top:1px solid black;border-bottom:1px solid black;">
+                                        <td style="width:23%;">Cuenta Contable</td>
+                                        <td style="width:20%;">Concepto</td>
+                                        <td style="width:8%;">Vencimiento</td>
+                                        <td style="width:20%;">Empresa</td>
+                                        <td style="width:8%;">Cargo</td>
+                                        <td style="width:8%;">Abono</td>
+                                        <td style="width:5%;">Moneda</td>
+                                        <td style="width:8%;">Monto</td>
+                                    </tr>
+                                </thead>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><span t-out="l.account_id.code"/> - <span t-out="l.account_id.name"/></td>                                    
+                                    <td><span t-field="l.ref"/></td>
+                                    <td style="text-align:center;"><span t-field="l.date_maturity"/></td>
+                                    <td style="text-align:center;"><span t-out="l.partner_id.name"/></td>
+                                    <td style="text-align:right;"><span t-field="l.debit"/></td>
+                                    <td style="text-align:right;"><span t-field="l.credit"/></td>
+                                    <td style="text-align:center;"><span t-out="l.currency_id.name"/></td>
+                                    <td style="text-align:right;"><span t-field="l.amount_currency"/></td>
+                                    <t t-set="suma_cargos" t-value="suma_cargos + l.debit"/>
+                                    <t t-set="suma_abonos" t-value="suma_abonos + l.credit"/>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:right;" colspan="4">SUMAS: </td>
+                                    <td style="text-align:right;"><span t-field="o.amount_total_signed"/></td>
+                                    <td style="text-align:right;"><span t-field="o.amount_total_signed"/></td>
+                                    <td colspan="2" />
+                                </tr>
+                                
+                            </table>
+                        </t>
+                        <table class="table table-sm" style="font-size:8px;">
+                            <tr style="text-align:center;background-color:#EEEEEE;border-top:1px solid black;border-bottom:1px solid black;">
+                                <td style="width:71%;text-align:right;text-weight:bold;">SUMAS TODAS LAS POLIZAS</td>
+                                <td style="text-align:right;text-weight:bold;"><span t-out="'{:0,.2f}'.format(suma_cargos)"/></td>
+                                <td style="text-align:right;text-weight:bold;"><span t-out="'{:0,.2f}'.format(suma_abonos)"/></td>
+                                <td style="width:5%;">.</td>
+                                <td style="width:8%;">.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+    
+    
+        <record id="report_general_ledger_action" model="ir.actions.report">
+            <field name="name">Diario General</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_mx_edi_account_report_general_journey.report_general_ledger</field>
+            <field name="report_file">l10n_mx_edi_account_report_general_journey.report_general_ledger</field>
+            <!--<field name="print_report_name">'Waybill - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_purchase_order"/>
+            <field name="binding_type">report</field>-->
+        </record>
+        
+    </data>
+</odoo>
